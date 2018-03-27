@@ -20,18 +20,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
 	entry: './src/index',
 
-	devServer: {
-		contentBase: "./dev",
-		compress: true,
-		port: "9000"
-	},
-	watchOptions: {
-		aggregateTimeout: 300,
-		poll: 1000,
-		ignored: /node_modules/ // this may fuck things up
-	},
-	devtool: 'inline-source-map',
-
 	output: {
 		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, 'dev')
@@ -42,6 +30,7 @@ module.exports = {
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
+				include: path.resolve(__dirname, "src"),
 				loader: 'babel-loader',
 
 				options: {
@@ -50,7 +39,6 @@ module.exports = {
 			},
 			{
 				test: /\.(scss|css)$/,
-
 				use: [
 					{
 						loader: 'style-loader'
@@ -84,5 +72,17 @@ module.exports = {
 			title: "Output management",
 			template: 'src/assets/html/index.html'
 		}),
-	]
+	],
+
+	devServer: {
+		contentBase: "./dev",
+		compress: true,
+		port: "9000"
+	},
+	watchOptions: {
+		aggregateTimeout: 300,
+		poll: 1000,
+		ignored: /node_modules/
+	},
+	devtool: 'source-map' // CSS source not shown in devtools
 };
