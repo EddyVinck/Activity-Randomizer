@@ -1,2 +1,2 @@
 import './scss/index.scss';
-import './js/app'
+import './js/app';

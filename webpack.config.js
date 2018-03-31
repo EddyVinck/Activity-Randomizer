@@ -84,5 +84,5 @@ module.exports = {
 		poll: 1000,
 		ignored: /node_modules/
 	},
-	devtool: 'source-map' // CSS source not shown in devtools
+	// devtool: 'source-map' // CSS source not shown in devtools
 };
