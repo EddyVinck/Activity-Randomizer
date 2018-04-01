@@ -10,11 +10,12 @@
 
 <body>
   <nav class="site-nav sticky-top py-1 mb-4">
-    <div class="container d-flex flex-column flex-md-row justify-content-between">
-      <a class="py-2 d-inline-block d-sm-inline-block" href="#">
+    <div class="container d-flex flex-column flex-md-row">
+      <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
         Activity Picker<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg> -->
       </a>
-      <a class="py-2 d-inline-block d-sm-inline-block" href="#">
+      <a href="/help" class="py-2 px-2 d-inline-block d-sm-inline-block">Help</a>
+      <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
         <button class="btn btn-primary float-right" id="authorize-button" style="display: none;">Authorize</button>
         <button class="btn btn-secondary btn-sm float-right" id="signout-button" style="display: none;">Sign Out</button>
       </a>
@@ -25,7 +26,7 @@
   
     <div class="mb-2">
       <div class="row justify-content-start">
-        <div class="col-sm-12 col-md-5">
+        <div class="col-12 col-sm-10 col-md-5">
           <h1>Activity picker</h1>
           <p>Have you ever felt like doing something, but then not being able to pick an activity to do?</p>
           <p class="font-size-11"><i>This project will use the Google Sheets API, Google Calendar API and the Google Custom Search API(for random images)</i></p>         
@@ -33,44 +34,44 @@
           <div class="mb-4">            
             <div>
               <div class="form-group">
-                <label for="sheet-input">Sheet:</label>
+                <label class="d-block d-sm-inline-block" for="sheet-input">Sheet:</label>
                 <input type="text" placeholder="Enter your sheet ID" id="sheet-input" name="sheet-input">
-                <button class="btn" id="clear-input">Clear input</button>
+                <button class="btn" id="clear-input">Clear</button>
               </div>
               <div class="input-container">
                 <button id="sheet-submit" class="btn btn-primary" type="button">Import sheet</button>
                 <button class="btn btn-light" id="pick-activity">Pick an activity</button>
               </div>
             </div>            
-          </div>
-          <div sheet-content class="row d-none d-md-block"></div>          
+          </div>            
+          <div sheet-content class="row d-none d-md-block"></div>         
         </div>        
-        <div class="col-12 col-sm-10  col-md-5 offset-md-1 col-lg-4 offset-lg-1">
-          <div class="card">
-            <div class="card-img-top">
-              <!-- https://developers.google.com/custom-search/ -->
-              <img src="https://picsum.photos/200/100" width="100%" alt="">
-            </div>
-            <div class="card-body">
-              <div class="card-title">
-                <h2>Picked activity</h2>
+        <div class="col-12 col-sm-10 col-md-5 offset-md-1 col-lg-4 offset-lg-1">
+          <div class="mb-2">
+            <div class="card" id="picked-activity">
+              <div class="card-img-top">
+                <!-- https://developers.google.com/custom-search/ -->
+                <img src="https://picsum.photos/200/100" width="100%" alt="">
               </div>
-              <div class="card-text">
-                <p>Based on no search parameters.</p>
-                <a href="#" class="btn btn-primary">Add to Calendar</a>
+              <div class="card-body">
+                <div class="card-title">
+                  <h2 class="h4">Picked activity name</h2>
+                </div>
+                <div class="card-text">
+                  <p>Based on  <strike>no parameters</strike> fate.</p>
+                  <a href="#" class="btn btn-primary">Add to Calendar</a>
+                </div>
               </div>
             </div>
-          </div>
+          </div>          
         </div>        
       </div>
     </div>
-    <div class="row">
-      
-    </div>
     
-    <div class="row">
+    <div class="row d-block d-md-none">
       <div class="col-12 col-md-6">
-        <div id="content" sheet-content class="row d-block d-md-none"></div>
+        <h2 class="h4">Your activities: </h2>
+        <div id="content" sheet-content class="row "></div>
       </div>
     </div>
      
@@ -94,8 +95,9 @@
     var sheetInput = document.getElementById('sheet-input');
     var sheetSubmit = document.getElementById('sheet-submit');
     var pickBtn = document.getElementById('pick-activity');
+    var pickedActivity = document.getElementById('picked-activity');
 
-    var thingsToDo = [];
+    var activities = [];
 
     /**
      *  On load, called to load the auth2 library and API client library.
@@ -134,7 +136,7 @@
       if (isSignedIn) {
         authorizeButton.style.display = 'none';
         signoutButton.style.display = 'block';
-        listThingsToDo();
+        listactivities();
       } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
@@ -181,8 +183,8 @@
      * Print the names and majors of students in a sample spreadsheet:
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
-    function listThingsToDo(sheetID) {
-      document.getElementById('content').innerHTML = "";
+    function listactivities(sheetID) {
+      document.getElementById('content').innerHTML = '';
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: sheetID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
         range: 'A2:B',
@@ -195,6 +197,11 @@
             var row = range.values[i];
             // Print columns A and B, which correspond to indices 0 and 1.
             appendCol(row[0],row[1]);
+
+            activities.push({
+              activity: row[0],
+              time: row[1]
+            });
           }
         } else {
           appendPre('No data found.');
@@ -205,17 +212,27 @@
     }
 
     function getSheet(sheetID) {
-      listThingsToDo(sheetID);
+      listactivities(sheetID);
     }
 
-    sheetSubmit.addEventListener("click", function() {
+    function insertPickedActivity(pick) {
+      pickedActivity.querySelector(".card-title h2").innerHTML = pick.activity;
+      pickedActivity.querySelector('.card-text').innerHTML = pick.time + " minutes.";
+    }
+
+    sheetSubmit.addEventListener('click', function() {
       getSheet(sheetInput.value);
     });
 
-    pickBtn.addEventListener("click", () => {
-      let random = Math.random();
-      console.log(random);
-      // thingsToDo[]
+    pickBtn.addEventListener('click', () => {
+      // TODO: filters
+      var filteredActivities = [];
+
+      if(activities.length > 0) {
+        let random = Math.floor(Math.random()*activities.length);
+        insertPickedActivity(activities[random]);
+      }
+      
     });
 
     document.getElementById("clear-input").addEventListener("click", function() {
