@@ -43,7 +43,7 @@
               </div>
             </div>            
           </div>
-          <div id="content" class="row"></div>          
+          <div sheet-content class="row d-none d-md-block"></div>          
         </div>        
         <div class="col-12 col-sm-10  col-md-5 offset-md-1 col-lg-4 offset-lg-1">
           <div class="card">
@@ -70,7 +70,7 @@
     
     <div class="row">
       <div class="col-12 col-md-6">
-        
+        <div id="content" sheet-content class="row d-block d-md-none"></div>
       </div>
     </div>
      
@@ -162,17 +162,19 @@
      * @param {string} message Text to be placed in pre element.
      */
     function appendPre(message) {
-      var content = document.getElementById('content');
+      var content = document.querySelectorAll('content');
       var textContent = document.createTextNode(message + '\n');
       content.appendChild(textContent);
     }
     function appendCol(thing, time) {
-      var content = document.getElementById('content');
-      var col = document.createElement("div");
-      col.classList.add("col-sm-12");
-      var textContent = document.createTextNode(thing + ", " + time + " minutes." + '\n');
-      col.appendChild(textContent);
-      content.appendChild(col);
+      var ct = document.querySelectorAll('[sheet-content]');
+      ct.forEach(contentContainer => {
+        var col = document.createElement("div");
+        var textContent = document.createTextNode(thing + ", " + time + " minutes." + '\n');
+        col.classList.add("col-sm-12");
+        col.appendChild(textContent);
+        contentContainer.appendChild(col);
+      })
     }
 
     /**
