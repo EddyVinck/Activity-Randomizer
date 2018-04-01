@@ -26,7 +26,7 @@
   
     <div class="mb-2">
       <div class="row justify-content-start">
-        <div class="col-12 col-sm-10 col-md-5">
+        <div class="col-12 col-sm-10 col-md-6 col-lg-5">
           <h1>Activity picker</h1>
           <p>Have you ever felt like doing something, but then not being able to pick an activity to do?</p>
           <p class="font-size-11"><i>This project will use the Google Sheets API, Google Calendar API and the Google Custom Search API(for random images)</i></p>         
@@ -184,15 +184,15 @@
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
     function listactivities(sheetID) {
-      document.getElementById('content').innerHTML = '';
+      document.querySelectorAll('[sheet-content]').forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: sheetID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
-        range: 'A2:B',
+        range: 'A2:D',
       }).then(function (response) {
         var range = response.result;
-        console.table(range);
         if (range.values.length > 0) {
           // appendPre('Thing, Time in minutes:');
+          document.querySelectorAll('[sheet-content]').forEach(ct => ct.innerHTML = '');
           for (i = 0; i < range.values.length; i++) {
             var row = range.values[i];
             // Print columns A and B, which correspond to indices 0 and 1.
@@ -200,7 +200,9 @@
 
             activities.push({
               activity: row[0],
-              time: row[1]
+              time: row[1],
+              rating: row[2],
+              description: row[3] || "No description"
             });
           }
         } else {
@@ -217,7 +219,7 @@
 
     function insertPickedActivity(pick) {
       pickedActivity.querySelector(".card-title h2").innerHTML = pick.activity;
-      pickedActivity.querySelector('.card-text').innerHTML = pick.time + " minutes.";
+      pickedActivity.querySelector('.card-text').innerHTML = pick.time + " minutes. <br>" + pick.description;
     }
 
     sheetSubmit.addEventListener('click', function() {
