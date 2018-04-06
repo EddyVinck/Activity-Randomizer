@@ -5,14 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Activity picker</title>
+  <title>Plan a Random Activity — Google Sheets integration</title>
+  <meta description="Plan activities picked from your own Google Sheet. Add them to your Google Calendar.">
 </head>
 
 <body>
   <nav class="site-nav sticky-top py-1 mb-4">
     <div class="container d-flex flex-column flex-md-row">
       <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
-        Activity Picker<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg> -->
+        Plan Activity<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg> -->
       </a>
       <a href="/help" class="py-2 px-2 d-inline-block d-sm-inline-block">Help</a>
       <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
@@ -27,9 +28,9 @@
     <div class="mb-2">
       <div class="row justify-content-start">
         <div class="col-12 col-sm-10 col-md-6 col-lg-5">
-          <h1>Activity picker</h1>
+          <h1>Plan Activity</h1>
           <p>Have you ever felt like doing something, but then not being able to pick an activity to do?</p>
-          <p class="font-size-11"><i>This project will use the Google Sheets API, Google Calendar API and the Google Custom Search API(for random images)</i></p>         
+          <p><i>This project will use the Google Sheets API, Google Calendar API and the Google Custom Search API(for images based on the random activity)</i></p>         
           
           <div class="mb-4">            
             <div>
@@ -84,11 +85,14 @@
     var API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
 
     // Array of API discovery doc URLs for APIs used by the quickstart
-    var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+    var DISCOVERY_DOCS = [
+      "https://sheets.googleapis.com/$discovery/rest?version=v4",
+      "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    ];
 
     // Authorization scopes required by the API; multiple scopes can be
     // included, separated by spaces.
-    var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
+    var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly";
 
     var authorizeButton = document.getElementById('authorize-button');
     var signoutButton = document.getElementById('signout-button');
@@ -227,7 +231,7 @@
     });
 
     pickBtn.addEventListener('click', () => {
-      // TODO: filters
+      // TODO: filters.. Min and max time, min and max amount of people, 
       var filteredActivities = [];
 
       if(activities.length > 0) {
