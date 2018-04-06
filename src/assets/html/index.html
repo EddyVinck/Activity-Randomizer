@@ -40,6 +40,9 @@
                 <button class="btn" id="clear-input">Clear</button>
               </div>
               <div class="input-container">
+                <select name="" id="sheet-names" style="display: none;"></select>
+              </div>
+              <div class="input-container">
                 <button id="sheet-submit" class="btn btn-primary" type="button">Import sheet</button>
                 <button class="btn btn-light" id="pick-activity">Pick an activity</button>
               </div>
@@ -194,6 +197,7 @@
         range: 'A2:D',
       }).then(function (response) {
         var range = response.result;
+        console.table(response);
         if (range.values.length > 0) {
           // appendPre('Thing, Time in minutes:');
           document.querySelectorAll('[sheet-content]').forEach(ct => ct.innerHTML = '');
@@ -217,8 +221,30 @@
       });
     }
 
+    function getSheetNames(sheetID) {
+      gapi.client.sheets.spreadsheets.get({
+        spreadsheetId: sheetID
+      }).then(function(response) {
+        console.log("Sheet names response");
+        console.log(response);
+        insertSheetNames(response.result.sheets, document.getElementById("sheet-names")); // array        
+      }, function(reason) {
+        console.error('error: ' + reason.result.error.message);
+      });
+    }
+
     function getSheet(sheetID) {
       listactivities(sheetID);
+    }
+
+    function insertSheetNames(sheetNames, select) {
+      select.style.display = "block";
+      sheetNames.forEach(sheet => {
+        let option = document.createElement('option');
+          option.text = sheet.properties.title;
+          option.value = sheet.properties.title;
+          select.appendChild(option);
+      });
     }
 
     function insertPickedActivity(pick) {
@@ -228,6 +254,7 @@
 
     sheetSubmit.addEventListener('click', function() {
       getSheet(sheetInput.value);
+      getSheetNames(sheetInput.value);
     });
 
     pickBtn.addEventListener('click', () => {
