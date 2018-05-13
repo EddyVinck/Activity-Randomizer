@@ -13,7 +13,7 @@
   <nav class="site-nav sticky-top py-1 mb-4">
     <div class="container d-flex flex-column flex-md-row">
       <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
-        Activity Randomizer<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg> -->
+        Activity Randomizer [alpha]<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg> -->
       </a>
       <a href="/help" class="py-2 px-2 d-inline-block d-sm-inline-block">Help</a>
       <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
@@ -41,14 +41,29 @@
               </div>
               <!-- The dropdown with the sheets in the document -->
               <div class="input-container">
+                <button id="sheet-submit" class="btn btn-primary" type="button">Import sheet</button>
+                <button class="btn btn-light" id="pick-activity">Pick an activity</button>
+              </div>
+              <div class="input-container">
                 <label>
                   Pick a Sheet
                   <select name="" id="sheet-names" style="display: none;"></select>
                 </label>
               </div>
+              <h2>Filters:</h2>
               <div class="input-container">
-                <button id="sheet-submit" class="btn btn-primary" type="button">Import sheet</button>
-                <button class="btn btn-light" id="pick-activity">Pick an activity</button>
+                <label>
+                  Maximum time: 
+                  <input time-range disabled type="range" min="0" max>
+                </label>                
+              </div>
+              <div class="input-container">
+                <button id="filter-submit" class="btn btn-primary">
+                  Filter activities
+                </button>
+                <button id="remove-filters" class="btn btn-secondary">
+                  Remove filters
+                </button>
               </div>
             </div>            
           </div>            
@@ -67,6 +82,7 @@
                 </div>
                 <div class="card-text">
                   <p>Based on  <strike>no parameters</strike> fate.</p>
+                  <!-- TODO -->
                   <a href="#" class="btn btn-primary">Add to Calendar</a>
                 </div>
               </div>
@@ -111,8 +127,15 @@
     var pickBtn = document.getElementById('pick-activity');
     var pickedActivity = document.getElementById('picked-activity');
     var sheetContentContainer = document.querySelectorAll('[sheet-content]');
+    var timeRange = document.querySelector('[time-range]');
+    var filterSubmit = document.getElementById('filter-submit');
+    var removeFiltersBtn = document.getElementById('remove-filters');
+
+    // variable that decides if the activities should be filtered or not
+    var isUsingFilters = false;
 
     // The activities array will hold all activities from a sheet
+    var filteredActivities = [];
     var activities = [];
 
     /**
@@ -152,6 +175,7 @@
       if (isSignedIn) {
         authorizeButton.style.display = 'none';
         signoutButton.style.display = 'block';
+        getSheetNames(documentID);
         listActivities(documentID);
       } else {
         authorizeButton.style.display = 'block';
@@ -226,10 +250,13 @@
               rating: row[2],
               description: row[3] || 'No description'
             });
-            getSheetNames(documentID);
+            
           }
+          // getSheetNames(documentID);
+          setTimeRangeMaxValue();
         } else {
           sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">No data found. :(</div>');
+          disableFilters();
         }
       }, function (response) {
         appendPre('Error: ' + response.result.error.message);
@@ -276,21 +303,19 @@
     });
 
     sheetSubmit.addEventListener('click', function() {
-      getSheet(documentInput.value);
-      if(documentInput.value != '') {
-        getSheetNames(documentInput.value);
-      } else {
-        getSheetNames(documentID);
-      }
+      documentID = documentInput.value == '' ? documentID : documentInput.value;
+      getSheet(documentID);
+      getSheetNames(documentID);
     });
 
     pickBtn.addEventListener('click', () => {
-      // TODO: filters.. Min and max time, min and max amount of people, 
-      var filteredActivities = [];
+      let theArrayToFilter = isUsingFilters ? filteredActivities : activities;      
 
-      if(activities.length > 0) {
-        let random = Math.floor(Math.random()*activities.length);
-        insertPickedActivity(activities[random]);
+      if(theArrayToFilter.length > 0) {
+        let random = Math.floor(Math.random()*theArrayToFilter.length);
+        insertPickedActivity(theArrayToFilter[random]);
+      } else {
+        console.log('No activities available');
       }
       
     });
@@ -298,6 +323,58 @@
     document.getElementById('clear-input').addEventListener('click', function() {
       documentInput.value = '';
     });
+
+    function setTimeRangeMaxValue(activ) {
+      timeRange.disabled = true;
+      activ = activ || activities;
+      let maxTime = null;
+
+      maxTime = activ.reduce((accumulator, currentActivity) => {
+        let time = Number(currentActivity.time);
+        return time > accumulator ? time : accumulator;
+        
+      }, null);
+      timeRange.max = maxTime;
+      if(timeRange.disabled == true && timeRange.max != 'null') timeRange.disabled = false;
+    }
+
+    function disableFilters() {
+      timeRange.disabled = true;
+    }
+
+    filterSubmit.addEventListener('click', () => {
+      // console.log(activities);
+      // console.log(filterActivities(activities));
+      isUsingFilters = true;
+
+      filteredActivities = filterActivities(activities);
+
+      // Replace the shown activities list with the filtered list
+      sheetContentContainer.forEach(ct => ct.innerHTML = '');
+      if(filteredActivities.length > 0) {
+        for (i = 0; i < filteredActivities.length; i++) {
+          var row = filteredActivities[i];
+          appendCol(row.activity,row.time);          
+        }
+      } else {
+        sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">Every activity was filtered out. Change your filters or click the \'Remove filters\' button to view the unfiltered list.</div>');
+      }
+    });
+
+    function filterActivities(actvts) {
+      // filter based on time
+      let filtered = actvts.filter((activity) => {
+        // Because activity.time is a string it needs to be converted
+        // to a number before comparing it to the value of the time range.
+        return Number(activity.time) <= timeRange.value;
+      });
+      return filtered;
+    }
+
+    removeFiltersBtn.addEventListener('click', () => {
+      isUsingFilters = false;
+    });
+    
 
   </script>
 
