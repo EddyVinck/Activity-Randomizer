@@ -13,7 +13,7 @@
   <nav class="site-nav sticky-top py-1 mb-4">
     <div class="container d-flex flex-column flex-md-row">
       <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
-        Plan Activity<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg> -->
+        Activity Randomizer<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg> -->
       </a>
       <a href="/help" class="py-2 px-2 d-inline-block d-sm-inline-block">Help</a>
       <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
@@ -28,7 +28,7 @@
     <div class="mb-2">
       <div class="row justify-content-start">
         <div class="col-12 col-sm-10 col-md-6 col-lg-5">
-          <h1>Plan Activity</h1>
+          <h1>Activity Randomizer</h1>
           <p>Have you ever felt like doing something, but then not being able to pick an activity to do?</p>
           <p><i>This project will use the Google Sheets API, Google Calendar API and the Google Custom Search API(for images based on the random activity)</i></p>         
           
@@ -39,8 +39,12 @@
                 <input type="text" placeholder="Enter your sheet ID" id="sheet-input" name="sheet-input">
                 <button class="btn" id="clear-input">Clear</button>
               </div>
+              <!-- The dropdown with the sheets in the document -->
               <div class="input-container">
-                <select name="" id="sheet-names" style="display: none;"></select>
+                <label>
+                  Pick a Sheet
+                  <select name="" id="sheet-names" style="display: none;"></select>
+                </label>
               </div>
               <div class="input-container">
                 <button id="sheet-submit" class="btn btn-primary" type="button">Import sheet</button>
@@ -75,10 +79,10 @@
     <div class="row d-block d-md-none">
       <div class="col-12 col-md-6">
         <h2 class="h4">Your activities: </h2>
-        <div id="content" sheet-content class="row "></div>
+        <div sheet-content class="row"></div>
       </div>
     </div>
-     
+
   </div>
   
 
@@ -97,13 +101,18 @@
     // included, separated by spaces.
     var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly";
 
+    var documentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
+
     var authorizeButton = document.getElementById('authorize-button');
     var signoutButton = document.getElementById('signout-button');
-    var sheetInput = document.getElementById('sheet-input');
+    var documentInput = document.getElementById('sheet-input');
     var sheetSubmit = document.getElementById('sheet-submit');
+    var sheetDropdown = document.getElementById('sheet-names');
     var pickBtn = document.getElementById('pick-activity');
     var pickedActivity = document.getElementById('picked-activity');
+    var sheetContentContainer = document.querySelectorAll('[sheet-content]');
 
+    // The activities array will hold all activities from a sheet
     var activities = [];
 
     /**
@@ -143,7 +152,7 @@
       if (isSignedIn) {
         authorizeButton.style.display = 'none';
         signoutButton.style.display = 'block';
-        listactivities();
+        listActivities(documentID);
       } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
@@ -176,8 +185,7 @@
       content.appendChild(textContent);
     }
     function appendCol(thing, time) {
-      var ct = document.querySelectorAll('[sheet-content]');
-      ct.forEach(contentContainer => {
+      sheetContentContainer.forEach(contentContainer => {
         var col = document.createElement("div");
         var textContent = document.createTextNode(thing + ", " + time + " minutes." + '\n');
         col.classList.add("col-sm-12");
@@ -190,19 +198,25 @@
      * Print the names and majors of students in a sample spreadsheet:
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
-    function listactivities(sheetID) {
-      document.querySelectorAll('[sheet-content]').forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
+    function listActivities(documentID, sheetName) {
+      sheetName = sheetName ? (sheetName + '!') : '';
+      sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
       gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: sheetID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
-        range: 'A2:D',
+        spreadsheetId: documentID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
+        range: sheetName + 'A2:D',
       }).then(function (response) {
         var range = response.result;
-        console.table(response);
-        if (range.values.length > 0) {
-          // appendPre('Thing, Time in minutes:');
-          document.querySelectorAll('[sheet-content]').forEach(ct => ct.innerHTML = '');
+        
+        // Sometimes range.values has no values so it is not returned from the response
+        // This is why it needs to be checked before the length is checked.
+        if (range.values && range.values.length > 0) {      
+          // Reset the activities array
+          activities = [];
+
+          sheetContentContainer.forEach(ct => ct.innerHTML = '');
           for (i = 0; i < range.values.length; i++) {
             var row = range.values[i];
+
             // Print columns A and B, which correspond to indices 0 and 1.
             appendCol(row[0],row[1]);
 
@@ -210,51 +224,64 @@
               activity: row[0],
               time: row[1],
               rating: row[2],
-              description: row[3] || "No description"
+              description: row[3] || 'No description'
             });
+            getSheetNames(documentID);
           }
         } else {
-          appendPre('No data found.');
+          sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">No data found. :(</div>');
         }
       }, function (response) {
         appendPre('Error: ' + response.result.error.message);
       });
     }
 
-    function getSheetNames(sheetID) {
+    function getSheetNames(documentID) {
       gapi.client.sheets.spreadsheets.get({
-        spreadsheetId: sheetID
+        spreadsheetId: documentID
       }).then(function(response) {
-        console.log("Sheet names response");
-        console.log(response);
-        insertSheetNames(response.result.sheets, document.getElementById("sheet-names")); // array        
+        // console.log("Sheet names response");
+        // console.log(response);
+
+        insertSheetNames(response.result.sheets, sheetDropdown); // array        
       }, function(reason) {
         console.error('error: ' + reason.result.error.message);
       });
     }
 
-    function getSheet(sheetID) {
-      listactivities(sheetID);
+    function getSheet(documentID, sheetName) {
+      listActivities(documentID, sheetName);
     }
 
     function insertSheetNames(sheetNames, select) {
-      select.style.display = "block";
+      select.style.display = "inline-block";
+      select.innerHTML = '';
       sheetNames.forEach(sheet => {
         let option = document.createElement('option');
-          option.text = sheet.properties.title;
-          option.value = sheet.properties.title;
-          select.appendChild(option);
+        option.text = sheet.properties.title;
+        option.value = sheet.properties.title;
+        select.appendChild(option);
       });
     }
 
     function insertPickedActivity(pick) {
-      pickedActivity.querySelector(".card-title h2").innerHTML = pick.activity;
-      pickedActivity.querySelector('.card-text').innerHTML = pick.time + " minutes. <br>" + pick.description;
+      pickedActivity.querySelector('.card-title h2').innerHTML = pick.activity;
+      pickedActivity.querySelector('.card-text').innerHTML = pick.time + ' minutes. <br>' + pick.description;
     }
 
+    sheetDropdown.addEventListener('change', (event) => {
+      documentID = documentInput.value == '' ? documentID : documentInput.value;
+      let sheetName = event.target.value;
+      listActivities(documentID, sheetName);
+    });
+
     sheetSubmit.addEventListener('click', function() {
-      getSheet(sheetInput.value);
-      getSheetNames(sheetInput.value);
+      getSheet(documentInput.value);
+      if(documentInput.value != '') {
+        getSheetNames(documentInput.value);
+      } else {
+        getSheetNames(documentID);
+      }
     });
 
     pickBtn.addEventListener('click', () => {
@@ -268,8 +295,8 @@
       
     });
 
-    document.getElementById("clear-input").addEventListener("click", function() {
-      sheetInput.value = "";
+    document.getElementById('clear-input').addEventListener('click', function() {
+      documentInput.value = '';
     });
 
   </script>
