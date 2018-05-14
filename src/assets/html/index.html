@@ -5,18 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Plan a Random Activity — Google Sheets integration</title>
-  <meta description="Plan activities picked from your own Google Sheet. Add them to your Google Calendar.">
+  <title>Plan Random activities — Google Sheets integration</title>
+  <meta description="Plan activities picked from your own Google Sheet. Add them to your Google Calendar with ease.">
 </head>
 
 <body>
   <nav class="site-nav sticky-top py-1 mb-4">
     <div class="container d-flex flex-column flex-md-row">
-      <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
+      <a class="py-2 pr-3 d-inline-block d-sm-inline-block" href="#">
         Activity Randomizer [alpha]<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg> -->
       </a>
-      <a href="/help" class="py-2 px-2 d-inline-block d-sm-inline-block">Help</a>
-      <a class="py-2 px-2 d-inline-block d-sm-inline-block" href="#">
+      <a href="/help" class="py-2 px-3 d-inline-block d-sm-inline-block">Help</a>
+      <a href="/example-sheet" class="py-2 px-3 d-inline-block d-sm-inline-block">Example Sheet</a>
+      <a href="/settings" class="py-2 px-3 d-inline-block d-sm-inline-block">Settings</a>
+      <a class="py-2 px-3 d-inline-block d-sm-inline-block" href="#">
         <button class="btn btn-primary float-right" id="authorize-button" style="display: none;">Authorize</button>
         <button class="btn btn-secondary btn-sm float-right" id="signout-button" style="display: none;">Sign Out</button>
       </a>
@@ -27,50 +29,79 @@
   
     <div class="mb-2">
       <div class="row justify-content-start">
-        <div class="col-12 col-sm-10 col-md-6 col-lg-5">
+        <div class="col-12 col-sm-10 col-md-6 col-lg-7">
           <h1>Activity Randomizer</h1>
-          <p>Have you ever felt like doing something, but then not being able to pick an activity to do?</p>
-          <p><i>This project will use the Google Sheets API, Google Calendar API and the Google Custom Search API(for images based on the random activity)</i></p>         
-          
+          <h2>Insert a Google Sheet link to get started!</h2>
+
           <div class="mb-4">            
             <div>
+              <div class="step">
+                <h3>Step 1/4: add a document link</h3>
+              </div>
               <div class="form-group">
                 <label class="d-block d-sm-inline-block" for="sheet-input">Sheet:</label>
                 <input type="text" placeholder="Enter your sheet ID" id="sheet-input" name="sheet-input">
+                <button id="sheet-submit" class="btn btn-primary" type="button">Import sheet</button>
                 <button class="btn" id="clear-input">Clear</button>
               </div>
+              <div class="input-container checkbox-container">
+                <label>
+                  <span>Remember link (settings)</span>
+                  <input type="checkbox" name="" id="">
+                </label>
+              </div>              
               <!-- The dropdown with the sheets in the document -->
-              <div class="input-container">
-                <button id="sheet-submit" class="btn btn-primary" type="button">Import sheet</button>
-                <button class="btn btn-light" id="pick-activity">Pick an activity</button>
-              </div>
+              <div class="step">
+                <h3>Step 2/4: pick a sheet</h3>
+              </div>              
               <div class="input-container">
                 <label>
                   Pick a Sheet
                   <select name="" id="sheet-names" style="display: none;"></select>
                 </label>
               </div>
-              <h2>Filters:</h2>
-              <div class="input-container">
+              <div class="input-container checkbox-container">
                 <label>
-                  Maximum time: 
-                  <input time-range disabled type="range" min="0" max>
-                </label>                
+                  <span>Remember sheet (settings)</span>
+                  <input type="checkbox" name="" id="">
+                </label>
+              </div> 
+              <div class="step">
+                <h3>Step 3/4: filter (optional)</h3>
               </div>
               <div class="input-container">
-                <button id="filter-submit" class="btn btn-primary">
+                <label class="d-block">
+                  Maximum time (minutes) 
+                </label>
+                <span class="min">0</span>
+                <input time-range disabled type="range" min="0" max>
+                <span class="max">240</span>             
+              </div>
+              <div class="input-container">
+                <!-- <button id="filter-submit" class="btn btn-primary">
                   Filter activities
-                </button>
-                <button id="remove-filters" class="btn btn-secondary">
+                </button> -->
+                <button id="remove-filters" class="btn">
                   Remove filters
                 </button>
+                <button class="btn">
+                  View list
+                </button>
+              </div>
+              <div class="step">
+                <h3>Generate random activity</h3>
+              </div>
+              <div class="input-container">
+                
+                <button class="btn btn-primary" id="pick-activity">Randomize activity</button>
               </div>
             </div>            
           </div>            
           <div sheet-content class="row d-none d-md-block"></div>         
         </div>        
-        <div class="col-12 col-sm-10 col-md-5 offset-md-1 col-lg-4 offset-lg-1">
+        <div class="col-12 col-sm-10 col-md-5 offset-md-1 col-lg-4 offset-lg-0">
           <div class="mb-2">
+            <div class="h3">Your randomized activity:</div>
             <div class="card" id="picked-activity">
               <div class="card-img-top">
                 <!-- https://developers.google.com/custom-search/ -->
@@ -81,9 +112,9 @@
                   <h2 class="h4">Picked activity name</h2>
                 </div>
                 <div class="card-text">
-                  <p>Based on  <strike>no parameters</strike> fate.</p>
+
                   <!-- TODO -->
-                  <a href="#" class="btn btn-primary">Add to Calendar</a>
+                  <a href="#" disabled class="btn btn-primary disabled">Add to Google Calendar</a>
                 </div>
               </div>
             </div>
