@@ -1,10 +1,13 @@
 
 @import 
   // Framework / library
-  "~bootstrap/dist/css/bootstrap.css",
+  "~bootstrap/scss/bootstrap",
   "./includes/responsive",
   "./includes/typography",
-  "./includes/form",
-  "./components/nav",
-  "./includes/body";
+  "./includes/ads",
+  "./includes/body",
+  "./components/forms/form",
+  "./components/forms/range",
+  "./components/activity-wrapper",
+  "./components/nav";
 
