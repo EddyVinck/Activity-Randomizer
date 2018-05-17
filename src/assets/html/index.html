@@ -9,7 +9,28 @@
   <meta description="Plan activities picked from your own Google Sheet. Add them to your Google Calendar with ease.">
 </head>
 
-<body>
+<body>    
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div sheet-content=""></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal -->
+
   <nav class="site-nav sticky-top py-1 mb-3">
     <div class="container d-flex flex-column flex-md-row">
       <a class="py-2 pr-3 d-inline-block d-sm-inline-block" href="#">
@@ -24,7 +45,20 @@
       </a>
     </div>
   </nav>
+  <!-- <div class="modal-overlay">
+    <div class="modal-wrapper">
+      <div class="modal">
+        <div class="modal-content">
+          <div sheet-content>
 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- Button trigger modal -->
+  
+  
   <div class="container">
     <div class="spaceholder-top mb-4">
       
@@ -41,9 +75,15 @@
                 <h3>Step 1/4: add a document link</h3>
               </div>
               <div class="">
+                <div class="form-row">
+                  <div class="col-9">
+                    <input class="form-control" type="text" placeholder="docs.google.com/spreadsheets/. . ." id="sheet-input" name="sheet-input">
+                  </div>
+                  <div class="col-3">
+                    <button id="sheet-submit" class="btn btn-primary" type="button">Import</button>
+                  </div>
+                </div>
                 <!-- <label class="d-block d-sm-inline-block" for="sheet-input">Sheet:</label> -->
-                <input type="text" placeholder="docs.google.com/spreadsheets/. . ." id="sheet-input" name="sheet-input">
-                <button id="sheet-submit" class="btn btn-primary" type="button">Import</button>
                 <!-- <button class="btn" id="clear-input">Clear</button> -->
                 <div class="input-container checkbox-container">
                   <label>
@@ -86,23 +126,22 @@
                 <!-- <button id="filter-submit" class="btn btn-primary">
                   Filter activities
                 </button> -->
-                <button id="remove-filters" class="btn">
-                  Remove filters
+                <!-- Button trigger modal -->
+                <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
+                  View your current list
                 </button>
-                <button class="btn">
-                  View list
+                <button id="remove-filters" class="btn btn-secondary">
+                  Remove filters
                 </button>
               </div>
               <div class="step">
                 <h3>Step 4: Generate random activity</h3>
               </div>
               <div class="input-container mt-3">
-                
                 <button class="btn btn-primary" id="pick-activity">Randomize activity</button>
               </div>
             </div>            
-          </div>            
-          <div sheet-content class="row d-none d-md-block"></div>         
+          </div>                     
         </div>        
         <div class="col-12 col-sm-10 col-md-5 offset-md-1 col-lg-4 offset-lg-0">
           <div class="activity-wrapper">
@@ -140,13 +179,6 @@
           </div>
 
         </div>        
-      </div>
-    </div>
-    
-    <div class="row d-block d-md-none">
-      <div class="col-12 col-md-6">
-        <h2 class="h4">Your activities: </h2>
-        <div sheet-content class="row"></div>
       </div>
     </div>
 

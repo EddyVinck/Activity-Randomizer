@@ -47,15 +47,16 @@ p a {
 
 .help-text {
   position: relative;
-  padding-left: 27px;
+  padding-left: 30px;
   &:before {
     content: '?';
     position: absolute;
     left: 0;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
+    font-weight: bold;
     border-radius: 100%;
-    border: 1px solid #000;
+    border: 2px solid rgb(73, 73, 73);
     display: flex;
     align-items: center;
     justify-content: center;
