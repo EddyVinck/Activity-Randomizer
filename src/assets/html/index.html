@@ -92,7 +92,7 @@
                   </label>
                 </div>
                 <div class="help-text">
-                  <p>Need help? The <a href="#">Google Sheet Import turorial</a> will guide you.</p>
+                  <p>Need help? The <a href="/sheets-import-tutorial">Google Sheet Import turorial</a> will guide you.</p>
                 </div>              
               </div>
               <!-- The dropdown with the sheets in the document -->
@@ -116,7 +116,7 @@
               </div>
               <div class="input-container range-container">
                 <label class="d-block">
-                  Maximum time (minutes) 
+                  Maximum time: <span time-range-value></span> (minutes) 
                 </label>
                 <span class="min">0</span>
                 <input time-range disabled type="range" min="0" max>
@@ -211,6 +211,7 @@
     var pickedActivity = document.getElementById('picked-activity');
     var sheetContentContainer = document.querySelectorAll('[sheet-content]');
     var timeRange = document.querySelector('[time-range]');
+    var timeRangeValue = document.querySelector('[time-range-value]');
     var filterSubmit = document.getElementById('filter-submit');
     var removeFiltersBtn = document.getElementById('remove-filters');
 
@@ -376,7 +377,7 @@
 
     function insertPickedActivity(pick) {
       pickedActivity.querySelector('.card-title h2').innerHTML = pick.activity;
-      pickedActivity.querySelector('.card-text').innerHTML = pick.time + ' minutes. <br>' + pick.description;
+      pickedActivity.querySelector('.card-text').innerHTML = pick.description + '<br>' + pick.time + ' minutes.';
     }
 
     sheetDropdown.addEventListener('change', (event) => {
@@ -418,12 +419,19 @@
         
       }, null);
       timeRange.max = maxTime;
+      timeRange.value = maxTime;
+      timeRangeValue.textContent = timeRange.value;
       if(timeRange.disabled == true && timeRange.max != 'null') timeRange.disabled = false;
     }
 
     function disableFilters() {
       timeRange.disabled = true;
     }
+
+    timeRange.addEventListener('change', function(e) {
+      var rangeValue = e.target.value;
+      timeRangeValue.textContent = rangeValue;
+    });
 
     filterSubmit.addEventListener('click', () => {
       // console.log(activities);
