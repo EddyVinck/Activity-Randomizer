@@ -1,5 +1,6 @@
-
 @import 
+  "./includes/palette",
+  
   // Frameworks & libraries
   "~bootstrap/scss/bootstrap",
   
@@ -11,6 +12,8 @@
   "./components/modal",
   "./components/forms/form",
   "./components/forms/range",
+  "./components/forms/select",
   "./components/activity-wrapper",
   "./components/nav";
+
 

@@ -87,10 +87,10 @@
                 <h3>Step 2/4: pick a sheet</h3>
               </div>              
               <div class="input-container">
-                <label>
+                <!-- <label> -->
                   <!-- Pick a Sheet -->
                   <select class="custom-select" name="" id="sheet-names" style="display: none;"></select>
-                </label>
+                <!-- </label> -->
                 <div class="input-container checkbox-container">
                   <label>
                     <span>Remember sheet (settings)</span>
@@ -294,13 +294,15 @@
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
     function listActivities(documentID, sheetName) {
-      sheetName = sheetName ? (sheetName + '!') : '';
+      let sheetPrefix = sheetName ? (sheetName + '!') : '';
       sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
+
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: documentID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
-        range: sheetName + 'A2:D',
+        range: sheetPrefix + 'A2:D',
       }).then(function (response) {
         var range = response.result;
+        console.log(range);
         
         // Sometimes range.values has no values so it is not returned from the response
         // This is why it needs to be checked before the length is checked.
@@ -322,7 +324,7 @@
               description: row[3] || 'No description'
             });
             
-          }          
+          }      
           setTimeRangeMaxValue();
           documentInput.classList.remove('is-invalid');
         } else {
@@ -360,15 +362,20 @@
       select.style.display = "inline-block";
       select.innerHTML = '';
       sheetNames.forEach(sheet => {
-        let option = document.createElement('option');
-        option.text = sheet.properties.title;
-        option.value = sheet.properties.title;
-        select.appendChild(option);
-        if(option.value.toLowerCase() === 'example template') {
-          select.value = option.value;
-          // Manually dispatch a change event
-          select.dispatchEvent(new Event('change'));
-        }
+        let sheetName = sheet.properties.title;
+
+        if(sheetName.toLowerCase() !== 'info') {
+          let option = document.createElement('option');
+          option.text = sheetName;
+          option.value = sheetName;
+          select.appendChild(option);
+
+          if(option.value.toLowerCase() === 'example template') {
+            select.value = option.value;
+            // Manually dispatch a change event
+            select.dispatchEvent(new Event('change'));
+          }
+        }        
       });
     }
 
@@ -380,6 +387,7 @@
     sheetDropdown.addEventListener('change', (event) => {
       // documentID = documentInput.value == '' ? documentID : documentInput.value;
       let sheetName = event.target.value;
+      console.log(sheetName);
       listActivities(documentID, sheetName);
     });
 
@@ -426,8 +434,7 @@
 
       maxTime = activ.reduce((accumulator, currentActivity) => {
         let time = Number(currentActivity.time);
-        return time > accumulator ? time : accumulator;
-        
+        return time > accumulator ? time : accumulator;        
       }, null);
       timeRange.max = maxTime;
       timeRange.value = maxTime;
@@ -444,24 +451,6 @@
       timeRangeValue.textContent = rangeValue;
     });
 
-    // filterSubmit.addEventListener('click', () => {
-    //   // console.log(activities);
-    //   // console.log(filterActivities(activities));
-
-    //   filteredActivities = filterActivities(activities);
-
-    //   // Replace the shown activities list with the filtered list
-    //   sheetContentContainer.forEach(ct => ct.innerHTML = '');
-    //   if(filteredActivities.length > 0) {
-    //     for (i = 0; i < filteredActivities.length; i++) {
-    //       var row = filteredActivities[i];
-    //       appendCol(row.name,row.time);          
-    //     }
-    //   } else {
-    //     sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">Every activity was filtered out. Change your filters or click the \'Remove filters\' button to view the unfiltered list.</div>');
-    //   }
-    // });
-
     function filterActivities(actvts, filters) {
       // filter based on time
       let filtered = actvts.filter((activity) => {
@@ -474,6 +463,7 @@
 
     removeFiltersBtn.addEventListener('click', () => {
       // restore to the original state of the filters
+      setTimeRangeMaxValue(activities);
     });
     
     function checkFilters() {
@@ -486,6 +476,7 @@
     viewListBtns.forEach(function(btn) {
       btn.addEventListener('click', function(e){
         var filtered =  filterActivities(activities, checkFilters());
+        console.log(filtered);
         if(filtered.length > 0) {
           sheetContentContainer.forEach(ct => ct.innerHTML = '');
           filtered.forEach(function(activity){

@@ -1,0 +1,12 @@
+/* Remove the arrow that browsers put on a select by default. */
+/* It's replaced by Bootstrap anyway */
+select::-ms-expand {
+  display: none;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
