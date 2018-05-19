@@ -60,7 +60,13 @@ module.exports = {
 			{
 				test: /\.(woff|woff2|eot|ttf|otf)$/,
 				use: [
-					'file-loader'
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].[ext]',
+							outputPath: 'fonts/'
+						}
+					}
 				]
 			},
 		]
@@ -84,5 +90,10 @@ module.exports = {
 		poll: 1000,
 		ignored: /node_modules/
 	},
+	resolve: {
+		alias: {
+			fontello: path.resolve(__dirname, 'src/assets/icons/fontello-icons')
+		}
+	}
 	// devtool: 'source-map' // CSS source not shown in devtools
 };

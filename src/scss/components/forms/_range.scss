@@ -1,8 +1,11 @@
 $rangeBarColor: $deepGreenCyanTurquoise;
 $rangeThumbColor: #FFF;
+$thumbHeight: 20px;
+$thumbWidth: 16px;
+$trackHeight: 6px;
 
 .range-container {
-  padding: 10px 0px 30px;
+  padding: 10px 0px 20px;
   margin-bottom: 10px;
   // display: inline-block;
 }
@@ -11,6 +14,7 @@ input[type=range] {
   -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
   width: 75%; /* Specific width is required for Firefox. */
   background: transparent; /* Otherwise white in Chrome */
+  padding-bottom: 2px;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -35,21 +39,21 @@ input[type=range]::-ms-track {
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
+  height: $thumbHeight;
+  width: $thumbWidth;
   border-radius: 3px;
   background: $rangeThumbColor;
   cursor: pointer;
-  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+  margin-top: -6px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  //box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
 }
 
 /* All the same stuff for Firefox */
 input[type=range]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  // box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
+  height: $thumbHeight;
+  width: $thumbWidth;
   border-radius: 3px;
   background: $rangeThumbColor;
   cursor: pointer;
@@ -57,10 +61,10 @@ input[type=range]::-moz-range-thumb {
 
 /* All the same stuff for IE */
 input[type=range]::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  // box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
+  height: $thumbHeight;
+  width: $thumbWidth;
   border-radius: 3px;
   background: $rangeThumbColor;
   cursor: pointer;
@@ -68,9 +72,9 @@ input[type=range]::-ms-thumb {
 /* Range Track */
 input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 8.4px;
+  height: $trackHeight;
   cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  // box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   background: $rangeBarColor;
   border-radius: 1.3px;
   border: 0.2px solid #010101;
@@ -82,7 +86,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 
 input[type=range]::-moz-range-track {
   width: 100%;
-  height: 8.4px;
+  height: $trackHeight;
   cursor: pointer;
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   background: $rangeBarColor;
@@ -92,7 +96,7 @@ input[type=range]::-moz-range-track {
 
 input[type=range]::-ms-track {
   width: 100%;
-  height: 8.4px;
+  height: $trackHeight;
   cursor: pointer;
   background: transparent;
   border-color: transparent;

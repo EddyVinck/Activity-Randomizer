@@ -66,13 +66,13 @@ fieldset:disabled a.btn {
   @if $color == 'light' {
     .btn-#{$color} {
       // darken
-      @include button-variant($value, $value);
+      @include button-variant-darken($value, $value);
     }
   }
   @else {
     .btn-#{$color} {
       // lighten
-      @include button-variant($value, $value);
+      @include button-variant-lighten($value, $value);
     }
   }
   

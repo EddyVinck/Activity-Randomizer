@@ -9,3 +9,12 @@
     font-weight: 500;
   }
 }
+
+@include media-breakpoint-down(xs) {
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+  .navbar-toggler {
+    padding: 0.25rem 0.5rem;
+  }
+}

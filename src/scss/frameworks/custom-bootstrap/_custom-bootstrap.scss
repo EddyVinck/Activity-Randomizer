@@ -5,6 +5,16 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
+// Bootstrap color overwrites
+$primary:       $deepGreenCyanTurquoise;
+$secondary:     $graniteGray;
+// $success:       $green;
+// $info:          $cyan;
+// $warning:       $yellow;
+// $danger:        $red;
+$light:         $platinum;
+$dark:          $gunMetal;
+
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "mixins";
