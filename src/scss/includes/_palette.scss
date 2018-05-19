@@ -14,3 +14,22 @@ $deepGreenCyanTurquoise: rgba(26, 131, 107, 1);
 $springGreen: rgba(0, 255, 135, 1);
 $mintCream: rgba(247, 255, 247, 1);
 $seaSerpent: rgba(73, 198, 229, 1);
+
+/* Modified from Bootstrap source */
+$palette: () !default;
+$palette: map-merge((
+  "richblack":      $richBlack,
+  "deepgreen":      $deepGreenCyanTurquoise,
+  "springgreen":    $springGreen,
+  "mintcream":      $mintCream,
+  "seaserpent":     $seaSerpent
+), $palette);
+
+@each $color, $value in $palette {
+  .text-#{$color} {
+    color: $value;
+  }
+  .background-#{$color} {
+    background-color: $value;
+  }
+}

@@ -15,6 +15,9 @@ $secondary:     $graniteGray;
 $light:         $platinum;
 $dark:          $gunMetal;
 
+$body-bg: #fdfdfd;
+$body-color: $richBlack;
+
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "mixins";

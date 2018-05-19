@@ -13,9 +13,11 @@
   }
   .no-activity {
     display: block;
-    border: 1px solid #000;
+    border: 2px solid $gunMetal;
     padding: 30px;
+    border-radius: 3px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     text-align: center;
     align-items: center;
@@ -26,6 +28,11 @@
       line-height: 26px;
     }
   }
+
+    .icon-wrapper {
+      font-size: 23px;
+    }
+
   .randomized-activity {
     
   }
