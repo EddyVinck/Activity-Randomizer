@@ -1,8 +1,9 @@
 @import 
   "./includes/palette",
-  
+
   // Frameworks & libraries
-  "~bootstrap/scss/bootstrap",
+  // "~bootstrap/scss/bootstrap",
+  "./frameworks/custom-bootstrap",
   
   // ActivityRandomizer styles
   "./includes/responsive",
