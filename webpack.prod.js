@@ -1,72 +1,95 @@
 const webpack = require('webpack');
 const path = require('path');
-
-/*
- * We've enabled UglifyJSPlugin for you! This minifies your app
- * in order to load faster and run less javascript.
- *
- * https://github.com/webpack-contrib/uglifyjs-webpack-plugin
- *
- */
-
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const devMode = process.env.NODE_ENV !== 'production';
 
-/*
- * We've enabled ExtractTextPlugin for you. This allows your app to
- * use css modules that will be moved into a separate CSS file instead of inside
- * one of your module entries!
- *
- * https://github.com/webpack-contrib/extract-text-webpack-plugin
- *
- */
+module.exports = (env, argv) => { 
+	console.log(`mode: ${argv.mode}`);
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+	return {
+		entry: './src/index',
 
-module.exports = {
-	entry: './src/index',
+		output: {
+			filename: '[name].bundle.js',
+			path: path.resolve(__dirname, 'dist')
+		},
 
-	output: {
-		filename: '[name].bundle.js',
-		path: path.resolve(__dirname, 'dist')
-	},
+		plugins: [
+			new MiniCssExtractPlugin({
+				filename: 'styles/[name].[hash].css',
+				chunkFilename: 'styles/[id].[hash].css',
+			}),
+			new UglifyJSPlugin(),
+			new HtmlWebpackPlugin({
+				title: "Output management",
+				template: 'src/assets/html/index.html'
+			}),
+		],
 
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				loader: 'babel-loader',
+		module: {
+			rules: [
+				{
+					test: /\.js$/,
+					exclude: /node_modules/,
+					include: path.resolve(__dirname, "src"),
+					loader: 'babel-loader',
 
-				options: {
-					presets: ['env']
-				}
-			},
-			{
-				test: /\.(scss|css)$/,
-
-				use: ExtractTextPlugin.extract({
+					options: {
+						presets: ['env']
+					}
+				},
+				{
+					test: /\.(png|svg|jpg|gif)$/,
+					use: [
+						'file-loader'
+					]
+				},
+				{
+					test: /\.(woff|woff2|eot|ttf|otf)$/,
 					use: [
 						{
-							loader: 'css-loader',
+							loader: 'file-loader',
 							options: {
-								sourceMap: true
-							}
-						},
-						{
-							loader: 'sass-loader',
-							options: {
-								sourceMap: true
+								name: '[name].[ext]',
+								outputPath: 'assets/fonts/'
 							}
 						}
-					],
-					fallback: 'style-loader'
-				})
-			}
-		]
-	},
+					]
+				},
+				{
+					test: /\.(scss|css)$/,
+					use: [
+						{ loader: MiniCssExtractPlugin.loader,
+							options: { publicPath: '../' } 
+						},
+						{
+							loader: 'css-loader'
+						},
+						{
+							loader: 'sass-loader'
+						}
+					]
+				}
+			]
+		},
 
-	plugins: [
-		new UglifyJSPlugin(),
-		new ExtractTextPlugin('bundle.[contentHash].css')
-	]
+		devServer: {
+			contentBase: "./dev",
+			compress: true,
+			port: "9000"
+		},
+		watchOptions: {
+			aggregateTimeout: 300,
+			poll: 1000,
+			ignored: /node_modules/
+		},
+		resolve: {
+			alias: {
+				fontello: path.resolve(__dirname, 'src/assets/icons/fontello-icons')
+			}
+		}
+		// devtool: 'source-map' // CSS source not shown in devtools
+	}
 };
