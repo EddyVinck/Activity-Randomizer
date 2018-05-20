@@ -12,10 +12,13 @@ const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 /*
- * I've added HtmlWebpackPlugin
+ * I've added HtmlWebpackPlugin and MiniCssExtractPlugin
  */
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+// const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
 	entry: './src/index',
@@ -24,6 +27,17 @@ module.exports = {
 		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, 'dist')
 	},
+
+	plugins: [
+		new MiniCssExtractPlugin({
+			filename: 'styles/[name].css'
+		}),
+		new UglifyJSPlugin(),
+		new HtmlWebpackPlugin({
+			title: "Output management",
+			template: 'src/assets/html/index.html'
+		}),
+	],
 
 	module: {
 		rules: [
@@ -42,6 +56,9 @@ module.exports = {
 				use: [
 					{
 						loader: 'style-loader'
+					},
+					{
+						loader: MiniCssExtractPlugin.loader
 					},
 					{
 						loader: 'css-loader'
@@ -71,14 +88,6 @@ module.exports = {
 			},
 		]
 	},
-
-	plugins: [
-		new UglifyJSPlugin(),
-		new HtmlWebpackPlugin({
-			title: "Output management",
-			template: 'src/assets/html/index.html'
-		}),
-	],
 
 	devServer: {
 		contentBase: "./dev",
