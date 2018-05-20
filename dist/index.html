@@ -7,7 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Activity Randomizer — Google Sheets integration</title>
   <meta description="Plan activities picked from your own Google Sheet.">
-<link href="styles/main.aaa6457b0a98264a6b4d.css" rel="stylesheet"></head>
+  <link rel="stylesheet" href="styles/main.29600910e9409554cf1b.css?29600910e9409554cf1b">
+</head>
 
 <body>    
   <!-- Activities Modal -->
@@ -517,7 +518,6 @@
     viewListBtns.forEach(function(btn) {
       btn.addEventListener('click', function(e){
         var filtered =  filterActivities(activities, checkFilters());
-        console.log(filtered);
         if(filtered.length > 0) {
           sheetContentContainer.forEach(ct => ct.innerHTML = '');
           filtered.forEach(function(activity){
@@ -530,9 +530,9 @@
     });
 
   </script>
-
+  <script src="main.bundle.js?29600910e9409554cf1b"></script>
   <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
   </script>
-<script type="text/javascript" src="main.bundle.js"></script></body>
+</body>
 
 </html>

@@ -18,8 +18,10 @@ module.exports = (env, argv) => {
 		plugins: [			
 			new UglifyJSPlugin(),
 			new HtmlWebpackPlugin({
-				title: "Output management",
-				template: 'src/assets/html/index.html'
+				filename: 'index.html',				
+				template: 'src/assets/html/index.html',
+				hash: true,
+				inject: false
 			}),
 		],
 
@@ -37,12 +39,19 @@ module.exports = (env, argv) => {
 				},
 				{
 					test: /\.(png|svg|jpg|gif)$/,
+					include: [
+						path.resolve(__dirname, 'src/assets/img')
+					],
 					use: [
 						'file-loader'
 					]
 				},
 				{
-					test: /\.(woff|woff2|eot|ttf|otf)$/,
+					test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
+					include: [
+						path.resolve(__dirname, 'src/assets/icons'),
+						path.resolve(__dirname, 'src/assets/fonts')
+					],
 					use: [
 						{
 							loader: 'file-loader',
