@@ -80,9 +80,9 @@ module.exports = (env, argv) => {
 		},
 
 		devServer: {
-			contentBase: "./dev",
+			contentBase: "./dist",
 			compress: true,
-			port: "9000"
+			port: "9000",
 		},
 		watchOptions: {
 			aggregateTimeout: 300,

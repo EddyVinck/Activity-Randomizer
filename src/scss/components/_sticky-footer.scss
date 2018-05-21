@@ -8,7 +8,7 @@ html {
 body {
   margin-bottom: $footer-height; /* Margin bottom by footer height */
 }
-.footer {
+.footer-sticky {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -17,3 +17,4 @@ body {
   background-color: $richBlack;
   color: #FFF;
 }
+
