@@ -8,9 +8,20 @@
   <title>Activity Randomizer — Google Sheets integration</title>
   <meta description="Plan activities picked from your own Google Sheet.">
   <link rel="stylesheet" href="<%=htmlWebpackPlugin.files.chunks.main.css %>">
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-N4LQPZ8');</script>
+  <!-- End Google Tag Manager -->
 </head>
 
-<body>    
+<body> 
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N4LQPZ8"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->   
   <!-- Activities Modal -->
   <div class="modal fade" id="viewCurrentActivities" tabindex="-1" role="dialog" aria-labelledby="viewCurrentActivities" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -81,7 +92,7 @@
   </nav>  
   
   <div class="container">
-    <div class="spaceholder-top mb-4">
+    <div class="spaceholder-top mb-2">
       
     </div>
     <div class="mb-2">
@@ -211,6 +222,11 @@
     </div>
 
   </div>
+  <footer class="footer">
+    <div class="container">
+      <span class="text-muted">© Eddy Vinck 2018-2019</span>
+    </div>
+  </footer>
   
   <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
   <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>

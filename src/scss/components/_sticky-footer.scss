@@ -1,0 +1,19 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+$footer-height: 40px;
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: $footer-height; /* Margin bottom by footer height */
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: $footer-height; /* Set the fixed height of the footer here */
+  line-height: $footer-height; /* Vertically center the text there */
+  background-color: $richBlack;
+  color: #FFF;
+}

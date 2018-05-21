@@ -173,7 +173,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #022f40;
+  color: #293132;
   text-align: left;
   background-color: #fdfdfd; }
 
@@ -2205,7 +2205,7 @@ tbody.collapse.show {
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
   font-size: 1rem;
-  color: #022f40;
+  color: #293132;
   text-align: left;
   list-style: none;
   background-color: #fff;
@@ -3569,7 +3569,7 @@ tbody.collapse.show {
     text-decoration: none;
     background-color: #f8f9fa; }
   .list-group-item-action:active {
-    color: #022f40;
+    color: #293132;
     background-color: #e9ecef; }
 
 .list-group-item {
@@ -4036,7 +4036,7 @@ button.close {
 
 .popover-body {
   padding: 0.5rem 0.75rem;
-  color: #022f40; }
+  color: #293132; }
 
 .carousel {
   position: relative; }
@@ -6210,6 +6210,27 @@ body {
 .modal-title {
   font-weight: 500;
   font-size: 1.25rem; }
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%; }
+
+body {
+  margin-bottom: 40px;
+  /* Margin bottom by footer height */ }
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  /* Set the fixed height of the footer here */
+  line-height: 40px;
+  /* Vertically center the text there */
+  background-color: #022f40;
+  color: #FFF; }
 
 .input-container {
   margin-bottom: 10px; }
