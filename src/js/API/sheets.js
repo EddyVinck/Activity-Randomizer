@@ -185,7 +185,7 @@ function getSheet(documentID, sheetName) {
 function insertSheetNames(sheetNames, select) {
   // select.style.display = "inline-block";
   select.disabled = true;
-  select.innerHTML = '<option>Loading sheet names...</option>';
+  select.innerHTML = '<option class="loading-option">Loading sheet names...</option>';
   sheetNames.forEach(sheet => {
     let sheetName = sheet.properties.title;
 
@@ -202,6 +202,8 @@ function insertSheetNames(sheetNames, select) {
       }
     }        
   });
+  // Remove the loading option
+  select.removeChild(select.querySelector('.loading-option'));
   select.disabled = false;
 }
 
