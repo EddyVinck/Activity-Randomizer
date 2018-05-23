@@ -41,9 +41,42 @@
       </div>
     </div>
   </div>
+  <div class="cookie-modal-wrapper">
+    <div class="cookie-modal-container">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="cookie-modal">
+              <div class="cookie-modal-content">
+                <span class="h5">Activity Randomizer uses cookies.</span>
+                <p>Some cookies are necessary, while others are not but will improve your experience.</p>
+                <span class="h6">Necessary Cookies</span>
+                <p>Necessary cookies are required for the site to work properly or cookies required to provide online services you as a user request.</p>
+                <span class="h6">Preference Cookies</span>                
+                <p>Preference cookies will allow us to improve your experience on the website.</p>
+                <div class="custom-control custom-checkbox mb-4">
+                  <input data-cookie-preferences type="checkbox" class="custom-control-input" id="customCheck1">
+                  <label class="custom-control-label" for="customCheck1">Allow preference cookies</label>
+                </div>
+                <div class="mb-3">
+                  <button data-cookies-submit class="btn btn-primary">Submit Cookie Settings</button>
+                  <button data-cookie-modal-close type="button" class="btn-light btn" aria-label="Close">
+                    <span class="close">
+                      <span aria-hidden="true">&times;</span>
+                    </span>
+                  </button>
+                </div>
+                <p>You can read the <a href="/privacy-policy">Privacy & Cookie Policy</a> to learn more.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- end modal -->
   <!-- Settings Modal -->
-  <!-- <div class="modal fade" id="viewSettings" tabindex="-1" role="dialog" aria-labelledby="viewSettings" aria-hidden="true">
+  <div class="modal fade" id="viewSettings" tabindex="-1" role="dialog" aria-labelledby="viewSettings" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -64,7 +97,7 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
   <!-- end modal -->
 
   <nav class="navbar navbar-expand-md navbar-light site-nav sticky-top py-1 mb-3">
@@ -79,7 +112,7 @@
         <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
         <li class="nav-item"><a href="/help" class="nav-link">Help</a></li>
         <li class="nav-item"><a href="/example-sheet" class="nav-link">Example Sheet</a></li>
-        <!-- <li class="nav-item"><a data-toggle="modal" data-target="#viewSettings" href="/" class="nav-link">Settings</a></li> -->
+        <li class="nav-item"><a data-toggle="modal" data-target="#viewSettings" href="/" class="nav-link">Settings</a></li>
       </ul>
       <ul class="navbar-nav ml-md-auto d-md-flex">
         <li class="nav-item">
