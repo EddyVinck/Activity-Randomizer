@@ -15,7 +15,11 @@ module.exports = (env, argv) => {
 			path: path.resolve(__dirname, 'dist')
 		},
 
-		plugins: [			
+		plugins: [		
+			new webpack.ProvidePlugin({
+				$: 'jquery',
+				// ...
+			}),	
 			new UglifyJSPlugin(),
 			new HtmlWebpackPlugin({
 				filename: 'index.html',				

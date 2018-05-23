@@ -1,3 +1,6 @@
 import './api/sheets';
-// import 'bootstrap/js/dist/modal'; 
-import 'bootstrap';
+import 'jquery';
+import 'bootstrap/js/src/util';
+import 'bootstrap/js/src/modal'; 
+// import 'bootstrap';
+import 'js-cookie';
