@@ -17,10 +17,9 @@ module.exports = (env, argv) => {
 
 		plugins: [		
 			new webpack.ProvidePlugin({
-				$: 'jquery',
-				// ...
+				$: 'jquery'
 			}),	
-			new UglifyJSPlugin(),
+			// new UglifyJSPlugin(),
 			new HtmlWebpackPlugin({
 				filename: 'index.html',				
 				template: 'src/assets/html/index.html',
@@ -97,7 +96,7 @@ module.exports = (env, argv) => {
 			alias: {
 				fontello: path.resolve(__dirname, 'src/assets/icons/fontello-icons')
 			}
-		}
-		// devtool: 'source-map' // CSS source not shown in devtools
+		},
+		devtool: 'source-map' // CSS source not shown in devtools
 	}
 };

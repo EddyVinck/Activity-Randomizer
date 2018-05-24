@@ -23,9 +23,7 @@ let checkCookiePreferences = (cookies) => {
 }
 
 let showCookiePopUp = () => {
-  console.log('show cookie popup');
-  let cookiePopUp = document.querySelector('.cookie-modal-wrapper');
-  
+  let cookiePopUp = document.querySelector('.cookie-modal-wrapper');  
 
   cookiePopUp.classList.add('opened');  
   removeBodyScroll();

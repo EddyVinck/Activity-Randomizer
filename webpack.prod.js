@@ -3,6 +3,7 @@ const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = (env, argv) => { 
@@ -17,9 +18,18 @@ module.exports = (env, argv) => {
 		},
 
 		plugins: [
+			new webpack.ProvidePlugin({
+				$: 'jquery'
+			}),
 			new MiniCssExtractPlugin({
 				filename: 'styles/[name].[hash].css',
 				chunkFilename: 'styles/[id].[hash].css',
+			}),
+			new OptimizeCssAssetsPlugin({
+				assetNameRegExp: /\.css$/g,
+				cssProcessor: require('cssnano'),
+				cssProcessorOptions: { discardComments: { removeAll: true } },
+				canPrint: true
 			}),
 			new UglifyJSPlugin(),
 			new HtmlWebpackPlugin({

@@ -251,10 +251,6 @@ randomizeBtn.addEventListener('click', () => {
   
 });
 
-// document.getElementById('clear-input').addEventListener('click', function() {
-//   documentInput.value = '';
-// });
-
 function setTimeRangeMaxValue(activ) {
   timeRange.disabled = true;
   activ = activ || activities;
