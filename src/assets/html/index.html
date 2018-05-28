@@ -8,11 +8,11 @@
   <title>Activity Randomizer — Google Sheets integration</title>
   <meta description="Plan activities picked from your own Google Sheet.">
   <link rel="stylesheet" href="<%=htmlWebpackPlugin.files.chunks.main.css %>">
-  <%= require('html-loader!./other/tagmanagerscript.html') %>
+  <%= require('html-loader!./scripts/tagmanagerscript.html') %>
 </head>
 
 <body> 
-  <%= require('html-loader!./other/tagmanageriframe.html') %>  
+  <%= require('html-loader!./scripts/tagmanageriframe.html') %>  
   <%= require('html-loader!./partials/modals/activities-modal.html') %>  
   <%= require('html-loader!./partials/modals/cookie-modal.html') %>  
   <%= require('html-loader!./partials/modals/settings-modal.html') %>    
@@ -50,10 +50,30 @@
                     <input type="checkbox" name="" id="">
                   </label>
                 </div>
-                <div class="help-text">
-                  <p>Need help? The <a href="/sheet-import-tutorial">Google Sheet Import turorial</a> will guide you.</p>
-                </div>              
-              </div>
+                <div data-toggle="height-expand" data-target=".help-card" class="help-text">
+                  <p><button class="btn btn-dark btn-circle"><i class="icon-help"></i></button> <span>Need help? click here!</span></p>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-10">
+                    <div class="help-card">
+                      <div class="card-content">
+                        <ol>
+                          <li>Do you have a Google or Gmail account? You can create an account <a href="https://accounts.google.com/signup">here</a>.</li>
+                          <li>Authorize your account for Activity Randomizer by clicking <a href="">here</a>.</li>
+                          <li>Go to <a href="">this example sheet template</a> and follow the 'Getting Started' steps.</li>
+                          <li>Copy the link of your document into the input field above and click 'import.'</li>
+                          <li>Continue at step 2/4.</li>
+                        </ol>
+                        <p>Click <a href="/sheet-import-tutorial">here</a> for a more detailed tutorial with pictures.</p>
+                      </div>
+                      <div class="card-bottom">
+                        <button class="btn btn-primary btn-circle btn-circle-large btn-floating"><i class="icon-up-open"></i></button>
+                      </div>
+                    </div>              
+                  </div>
+                  </div>
+                </div>
               <!-- The dropdown with the sheets in the document -->
               <div class="step">
                 <h3>Step 2/4: pick a sheet</h3>

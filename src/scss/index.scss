@@ -4,6 +4,7 @@
   // Frameworks & libraries
   "./frameworks/custom-bootstrap/custom-bootstrap",
   "~fontello/css/fontello.css",
+  "./includes/_fontello-variables.scss",
   
   // ActivityRandomizer styles
   "./includes/responsive",
@@ -16,6 +17,8 @@
   "./components/forms/form",
   "./components/forms/range",
   "./components/forms/select",
+  "./components/buttons/button-floating",
+  "./components/cards/help-card",
   "./components/activity-wrapper",
   "./components/nav";
 

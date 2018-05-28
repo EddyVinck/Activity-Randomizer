@@ -1,0 +1,42 @@
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 0px 0px;
+  border-radius: 100%;
+  text-align: center;
+  font-size: 12px;
+  line-height: 30px;
+  position: relative;
+  text-align: center;
+  transition: 0.12s ease-in-out;
+
+  &-large {
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 25px;
+  }
+
+  i {
+    position: relative;
+  }
+  i::before {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// Floats bottom center of a relative container
+.btn-floating {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+}
+
+p .btn-circle {
+  top: -2px;
+}

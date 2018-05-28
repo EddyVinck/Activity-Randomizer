@@ -1,0 +1,51 @@
+.help-text {
+  position: relative;
+
+  i[class*='icon'] {
+    transition: 0.2s ease-in-out; 
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    span {
+      color: $primary;
+      text-decoration: underline;
+    }
+
+    i[class*='icon']::before {
+      content: $icon-down-open;
+    }
+  }
+}
+
+.help-card {
+  // height: 0;
+  transition: all 0.35s ease-in;
+  border: 2px solid $gunMetal;
+  padding: 20px 15px 30px;
+  margin-bottom: 30px;
+  position: relative;
+
+  ol {
+    // padding: 0;
+    counter-reset: orderedList;
+    list-style: none;
+    padding-left: 0;
+    li {
+      position: relative;
+      padding-left: 25px;
+      counter-increment: orderedList;
+      &:before {
+        content: counter(orderedList)".";
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+  }
+}
+
+// .js-height-toggled {
+//   max-height: none;
+// }

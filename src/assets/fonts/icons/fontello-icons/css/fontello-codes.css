@@ -11,6 +11,9 @@
 .icon-cog:before { content: '\e809'; } /* '' */
 .icon-help-circled:before { content: '\e80a'; } /* '' */
 .icon-megaphone:before { content: '\e80b'; } /* '' */
+.icon-down-open:before { content: '\e80c'; } /* '' */
+.icon-up-open:before { content: '\e80d'; } /* '' */
+.icon-help:before { content: '\e80f'; } /* '' */
 .icon-link-ext:before { content: '\f08e'; } /* '' */
 .icon-github-circled:before { content: '\f09b'; } /* '' */
 .icon-list-bullet:before { content: '\f0ca'; } /* '' */

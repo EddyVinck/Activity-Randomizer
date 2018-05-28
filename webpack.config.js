@@ -52,7 +52,6 @@ module.exports = (env, argv) => {
 				{
 					test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
 					include: [
-						path.resolve(__dirname, 'src/assets/icons'),
 						path.resolve(__dirname, 'src/assets/fonts')
 					],
 					use: [
