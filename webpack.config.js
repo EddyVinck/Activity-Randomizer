@@ -94,7 +94,7 @@ module.exports = (env, argv) => {
 		},
 		resolve: {
 			alias: {
-				fontello: path.resolve(__dirname, 'src/assets/icons/fontello-icons')
+				fontello: path.resolve(__dirname, 'src/assets/fonts/icons/fontello-icons')
 			}
 		},
 		devtool: 'source-map' // 	CSS source not shown in devtools
