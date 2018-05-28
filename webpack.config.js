@@ -97,6 +97,6 @@ module.exports = (env, argv) => {
 				fontello: path.resolve(__dirname, 'src/assets/icons/fontello-icons')
 			}
 		},
-		devtool: 'source-map' // CSS source not shown in devtools
+		devtool: 'source-map' // 	CSS source not shown in devtools
 	}
 };
