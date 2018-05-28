@@ -16,6 +16,8 @@
 .icon-list-bullet:before { content: '\f0ca'; } /* '' */
 .icon-smile:before { content: '\f118'; } /* '' */
 .icon-doc-inv:before { content: '\f15b'; } /* '' */
+.icon-thumbs-up-alt:before { content: '\f164'; } /* '' */
+.icon-thumbs-down-alt:before { content: '\f165'; } /* '' */
 .icon-map:before { content: '\f279'; } /* '' */
 .icon-twitter-circled:before { content: '\f30a'; } /* '' */
 .icon-facebook-circled:before { content: '\f30d'; } /* '' */
