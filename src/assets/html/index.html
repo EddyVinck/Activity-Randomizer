@@ -50,13 +50,12 @@
                     <input type="checkbox" name="" id="">
                   </label>
                 </div>
-                <div data-toggle="height-expand" data-target=".help-card" class="help-text">
+                <div data-toggle="collapse" data-target="#helpCard"  aria-expanded="false"   aria-controls="helpCard" class="help-text">
                   <p><button class="btn btn-dark btn-circle"><i class="icon-help"></i></button> <span>Need help? click here!</span></p>
                 </div>
-
                 <div class="row">
                   <div class="col-lg-10">
-                    <div class="help-card">
+                    <div id="helpCard" class="collapse help-card">
                       <div class="card-content">
                         <ol>
                           <li>Do you have a Google or Gmail account? You can create an account <a href="https://accounts.google.com/signup">here</a>.</li>
@@ -66,10 +65,8 @@
                           <li>Continue at step 2/4.</li>
                         </ol>
                         <p>Click <a href="/sheet-import-tutorial">here</a> for a more detailed tutorial with pictures.</p>
-                      </div>
-                      <div class="card-bottom">
-                        <button class="btn btn-primary btn-circle btn-circle-large btn-floating"><i class="icon-up-open"></i></button>
-                      </div>
+                        <button data-toggle="collapse" data-target="#helpCard" class="btn btn-primary btn-circle btn-circle-large btn-floating"><i class="icon-up-open"></i></button>
+                      </div>                      
                     </div>              
                   </div>
                   </div>

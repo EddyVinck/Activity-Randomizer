@@ -1,5 +1,10 @@
 .help-text {
+  display: inline-block;
   position: relative;
+
+  p {
+    display: inline-block;
+  }
 
   i[class*='icon'] {
     transition: 0.2s ease-in-out; 
@@ -19,13 +24,30 @@
   }
 }
 
+.height-expand-wrapper {
+  overflow:hidden;
+  position:relative;
+}
+.height-expand-content {
+  overflow: hidden;
+  line-height:0em; opacity:0;
+}
+.height-expand-wrapper.js-height-toggled {
+  line-height:1.2em; opacity:1;
+}
+
 .help-card {
   // height: 0;
   transition: all 0.35s ease-in;
   border: 2px solid $gunMetal;
-  padding: 20px 15px 30px;
+  padding: 0 20px;
   margin-bottom: 30px;
   position: relative;
+
+  .card-content {
+    padding-top: 20px;
+    padding-bottom: 30px;
+  }
 
   ol {
     // padding: 0;
