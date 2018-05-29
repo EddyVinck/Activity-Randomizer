@@ -37,7 +37,8 @@ module.exports = (env, argv) => {
 					loader: 'babel-loader',
 
 					options: {
-						presets: ['env']
+						presets: ['env'],
+						"plugins": ["syntax-dynamic-import"]
 					}
 				},
 				{

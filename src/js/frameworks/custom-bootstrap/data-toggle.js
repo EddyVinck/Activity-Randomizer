@@ -1,6 +1,6 @@
 // Custom data-toggle handlers in a way similar to how bootstrap does them
 const heightExpander = () => {
-  let dataToggleHeights = document.querySelectorAll('[data-toggle=height-expand');
+  let dataToggleHeights = document.querySelectorAll('[data-toggle=height-expand]');
   console.log(dataToggleHeights);
 
   dataToggleHeights.forEach(el => {
