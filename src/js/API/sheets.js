@@ -1,38 +1,38 @@
 // Client ID and API key from the Developer Console
-var CLIENT_ID = '855790869281-iie5tqafurs5179pmr8s236n595o4460.apps.googleusercontent.com';
-var API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
+const CLIENT_ID = '855790869281-iie5tqafurs5179pmr8s236n595o4460.apps.googleusercontent.com';
+const API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
 
 // Array of API discovery doc URLs for APIs used by the quickstart
-var DISCOVERY_DOCS = [
+const DISCOVERY_DOCS = [
   "https://sheets.googleapis.com/$discovery/rest?version=v4",
   "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
 ];
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly";
+const SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly";
 
-var documentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
+// documentID is changed when sheetSubmit is clicked. It is the document ID from the google sheets URL.
+let documentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
 
-var authorizeButton = document.getElementById('authorize-button');
-var signoutButton = document.getElementById('signout-button');
-var documentInput = document.getElementById('sheet-input');
-var sheetSubmit = document.getElementById('sheet-submit');
-var sheetDropdown = document.getElementById('sheet-names');
-var randomizeBtn = document.getElementById('pick-activity');
-var pickedActivity = document.getElementById('picked-activity');
-var sheetContentContainer = document.querySelectorAll('[sheet-content]');
-var timeRange = document.querySelector('[time-range]');
-var timeRangeValue = document.querySelector('[time-range-value]');
-var filterSubmit = document.getElementById('filter-submit');
-var removeFiltersBtn = document.getElementById('remove-filters');
-var noActivityContainers = document.querySelectorAll('.no-activity');
-var randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
-var viewListBtns = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
+const authorizeButton = document.getElementById('authorize-button');
+const signoutButton = document.getElementById('signout-button');
+const documentInput = document.getElementById('sheet-input');
+const sheetSubmit = document.getElementById('sheet-submit');
+const sheetDropdown = document.getElementById('sheet-names');
+const randomizeBtn = document.getElementById('pick-activity');
+const pickedActivity = document.getElementById('picked-activity');
+const sheetContentContainer = document.querySelectorAll('[sheet-content]');
+const timeRange = document.querySelector('[time-range]');
+const timeRangeValue = document.querySelector('[time-range-value]');
+const filterSubmit = document.getElementById('filter-submit');
+const removeFiltersBtn = document.getElementById('remove-filters');
+const noActivityContainers = document.querySelectorAll('.no-activity');
+const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
+const viewListBtns = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
 
 // The activities array will hold all activities from a sheet
-var filteredActivities = [];
-var activities = [];
+let activities = [];
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -100,14 +100,14 @@ function handleSignoutClick(event) {
  * @param {string} message Text to be placed in pre element.
  */
 function appendPre(message) {
-  var content = document.querySelectorAll('content');
-  var textContent = document.createTextNode(message + '\n');
+  const content = document.querySelectorAll('content');
+  const textContent = document.createTextNode(message + '\n');
   content.appendChild(textContent);
 }
 function appendCol(activity, time) {
   sheetContentContainer.forEach(contentContainer => {
-    var col = document.createElement("div");
-    var textContent = document.createTextNode(activity + ", " + time + " minutes." + '\n');
+    const col = document.createElement("div");
+    const textContent = document.createTextNode(activity + ", " + time + " minutes." + '\n');
     col.classList.add("col-sm-12");
     col.appendChild(textContent);
     contentContainer.appendChild(col);
@@ -126,7 +126,7 @@ function listActivities(documentID, sheetName) {
     spreadsheetId: documentID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
     range: sheetPrefix + 'A2:D',
   }).then(function (response) {
-    var range = response.result;
+    const range = response.result;
     
     // Sometimes range.values has no values so it is not returned from the response
     // This is why it needs to be checked before the length is checked.
@@ -136,7 +136,7 @@ function listActivities(documentID, sheetName) {
 
       sheetContentContainer.forEach(ct => ct.innerHTML = '');
       for (let i = 0; i < range.values.length; i++) {
-        var row = range.values[i];
+        const row = range.values[i];
 
         // Print columns A and B, which correspond to indices 0 and 1.
         appendCol(row[0],row[1]);
@@ -159,7 +159,6 @@ function listActivities(documentID, sheetName) {
   }, function (response) {
     documentInput.classList.add('is-invalid');
     disableFilters();
-    // documentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
     console.log('error: ' + response.result.error.message);
     appendPre('Error: ' + response.result.error.message);
   });
@@ -169,9 +168,6 @@ function getSheetNames(documentID) {
   gapi.client.sheets.spreadsheets.get({
     spreadsheetId: documentID
   }).then(function(response) {
-    // console.log("Sheet names response");
-    // console.log(response);
-
     insertSheetNames(response.result.sheets, sheetDropdown); // array        
   }, function(reason) {
     console.error('error: ' + reason.result.error.message);
@@ -213,16 +209,15 @@ function insertRandomizedActivity(pick) {
 }
 
 sheetDropdown.addEventListener('change', (event) => {
-  // documentID = documentInput.value == '' ? documentID : documentInput.value;
   let sheetName = event.target.value;
   listActivities(documentID, sheetName);
 });
 
 sheetSubmit.addEventListener('click', function() {      
   if((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
-    var googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
     // sheet link
-    var regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
+    const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
     documentID = regexResult[1];
   } else {
     documentID = documentInput.value == '' ? documentID : documentInput.value;
@@ -271,13 +266,13 @@ function disableFilters() {
 }
 
 timeRange.addEventListener('change', function(e) {
-  var rangeValue = e.target.value;
+  const rangeValue = e.target.value;
   timeRangeValue.textContent = rangeValue;
 });
 
 function filterActivities(actvts, filters) {
   // filter based on time
-  let filtered = actvts.filter((activity) => {
+  const filtered = actvts.filter((activity) => {
     // Because activity.time is a string it needs to be converted
     // to a number before comparing it to the value of the time range.
     return Number(activity.time) <= filters.maxTime;
@@ -291,7 +286,7 @@ removeFiltersBtn.addEventListener('click', () => {
 });
 
 function checkFilters() {
-  var filters = {};
+  const filters = {};
   filters.maxTime = timeRange.value;
 
   return filters;
@@ -299,7 +294,7 @@ function checkFilters() {
 
 viewListBtns.forEach(function(btn) {
   btn.addEventListener('click', function(e){
-    var filtered =  filterActivities(activities, checkFilters());
+    const filtered =  filterActivities(activities, checkFilters());
     if(filtered.length > 0) {
       sheetContentContainer.forEach(ct => ct.innerHTML = '');
       filtered.forEach(function(activity){
