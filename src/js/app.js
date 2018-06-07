@@ -1,4 +1,4 @@
-import './api/sheets';
+import './activity-randomizer';
 import 'jquery';
 import 'bootstrap/js/src/util';
 import 'bootstrap/js/src/modal'; 
