@@ -26,28 +26,29 @@ main {
       text-decoration: underline;
     }
   }
+  // iPad
+  @media (min-width: 1024px) {
+    h1 {
+      font-size: 48px;
+      line-height: 56px;
+    }
+    h2 {
+      font-size: 30px;
+      line-height: 36px;
+    }
+    h3 {
+      font-size: 24px;
+      line-height: 30px;
+      font-weight: bold;
+    }
+    p, li {
+      font-size: 16px;
+      line-height: 20px;
+    }
+  }
 }
 
-// iPad
-@media (min-width: 1024px) {
-  h1 {
-    font-size: 48px;
-    line-height: 56px;
-  }
-  h2 {
-    font-size: 30px;
-    line-height: 36px;
-  }
-  h3 {
-    font-size: 24px;
-    line-height: 30px;
-    font-weight: bold;
-  }
-  p, li {
-    font-size: 16px;
-    line-height: 20px;
-  }
-}
+
 
 .block {
   display: block;

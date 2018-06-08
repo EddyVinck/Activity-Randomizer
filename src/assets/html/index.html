@@ -27,7 +27,7 @@
         <div class="row justify-content-start">
           <div class="col-12 col-sm-10 col-md-6 col-lg-7">
             <h1>Activity Randomizer</h1>
-            <h2>Insert a Google Sheet link to get started!</h2>
+            <p class="h2">Insert a Google Sheet link to get started!</p>
   
             <div class="mb-4">            
               <div>
@@ -45,10 +45,12 @@
                   </div>
                   <!-- <label class="d-block d-sm-inline-block" for="sheet-input">Sheet:</label> -->
                   <div class="input-container checkbox-container">
-                    <label>
-                      <span>Remember link (settings)</span>
-                      <input type="checkbox" name="" id="">
-                    </label>
+                    <div class="custom-control custom-checkbox">
+                      <input class="custom-control-input" type="checkbox" name="" id="remember-sheets-link">
+                      <label for="remember-sheets-link" class="custom-control-label">
+                        <span>Remember Sheets link (settings)</span>
+                      </label>
+                    </div>
                   </div>
                   <div data-toggle="collapse" data-target="#helpCard"  aria-expanded="false"   aria-controls="helpCard" class="help-text">
                     <p><button class="btn btn-dark btn-circle"><i class="icon-help"></i></button> <span>Need help? click here!</span></p>
@@ -65,7 +67,7 @@
                             <li>Continue at step 2/4.</li>
                           </ol>
                           <p>Want a more detailed tutorial with pictures?</p>
-                          <a class="btn btn-primary btn-sm" href="/sheet-import-tutorial">Go to detailed tutorial</a>
+                          <a class="btn btn-info btn-sm" href="/sheet-import-tutorial">Detailed tutorial</a>
                           <button data-toggle="collapse" data-target="#helpCard" class="btn btn-primary btn-circle btn-circle-large btn-floating"><i class="icon-up-open"></i></button>
                         </div>                      
                       </div>              
@@ -83,14 +85,16 @@
                         <option value="">Loading sheet names...</option>
                       </select>
                     </div>
-                    <!-- <div class="col-12">
+                    <div class="col-12">
                       <div class="input-container checkbox-container">
-                        <label>
-                          <span>Remember sheet (settings)</span>
-                          <input type="checkbox" name="" id="">
-                        </label>
+                        <div class="custom-control custom-checkbox">
+                          <input class="custom-control-input" type="checkbox" name="remember-sheet-name" id="remember-sheet-name">
+                          <label for="remember-sheet-name" class="custom-control-label">
+                            <span>Remember sheet (settings)</span>
+                          </label>
+                        </div>
                       </div> 
-                    </div> -->
+                    </div>
                   </div>
                 </div>
                 <div class="step">
