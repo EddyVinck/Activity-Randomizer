@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,23 @@
   <title>Activity Randomizer — Google Sheets integration</title>
   <meta description="Plan activities picked from your own Google Sheet.">
   <link rel="stylesheet" href="<%=htmlWebpackPlugin.files.chunks.main.css %>">
-  
+  <%= require('html-loader!./scripts/tagmanagerscript.html') %>
 </head>
-<body>
-  <%= require('html-loader!./partial.html') %>
+
+<body> 
+  <%= require('html-loader!./scripts/tagmanageriframe.html') %>  
+  <%= require('html-loader!./partials/modals/cookie-modal.html') %>  
+  <%= require('html-loader!./partials/modals/settings-modal.html') %>    
+
+  <%= require('html-loader!./partials/navbar.html') %>  
+
+  <main>
+
+  </main>
+
+  <%= require('html-loader!./partials/footer.html') %>
+  
   <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
 </body>
+
 </html>

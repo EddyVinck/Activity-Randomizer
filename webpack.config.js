@@ -15,19 +15,6 @@ module.exports = (env, argv) => {
 			path: path.resolve(__dirname, 'dist')
 		},
 
-		plugins: [		
-			new webpack.ProvidePlugin({
-				$: 'jquery'
-			}),	
-			// new UglifyJSPlugin(),
-			new HtmlWebpackPlugin({
-				filename: 'index.html',				
-				template: 'src/assets/html/index.html',
-				hash: true,
-				inject: false
-			}),
-		],
-
 		module: {
 			rules: [
 				{
@@ -94,9 +81,28 @@ module.exports = (env, argv) => {
 		},
 		resolve: {
 			alias: {
-				fontello: path.resolve(__dirname, 'src/assets/fonts/icons/fontello-icons')
+				fontello: path.resolve(__dirname, 'src/assets/fonts/icons/fontello-icons'),
+				img: path.resolve(__dirname, 'src/assets/img')				
 			}
 		},
-		devtool: 'source-map' // 	CSS source not shown in devtools
+		devtool: 'source-map', // 	CSS source not shown in devtools
+		plugins: [		
+			new webpack.ProvidePlugin({
+				$: 'jquery'
+			}),	
+			// new UglifyJSPlugin(),
+			new HtmlWebpackPlugin({
+				filename: 'index.html',				
+				template: 'src/assets/html/index.html',
+				hash: true,
+				inject: false
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'google-sheet-tutorial.html',				
+				template: 'src/assets/html/google-sheet-tutorial.html',
+				hash: true,
+				inject: false
+			}),
+		]
 	}
 };

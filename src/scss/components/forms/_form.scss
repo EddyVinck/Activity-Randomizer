@@ -11,6 +11,10 @@
   }
 }
 
+.custom-control-label {
+  user-select: none;
+}
+
 @import './checkbox';
 @import './range';
 @import './select';
