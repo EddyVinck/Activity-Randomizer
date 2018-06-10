@@ -59,6 +59,7 @@ typings/
 
 # Dev output directory
 dev/
+dist/
 
 # General stuff to be ignored
 idea/
