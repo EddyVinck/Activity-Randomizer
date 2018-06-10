@@ -8,10 +8,13 @@ module.exports = (env, argv) => {
 	console.log(`mode: ${argv.mode}`);
 
 	return {
-		entry: './src/index',
+		entry: {
+			'activityrandomizer': './src/js/activity-randomizer.js',
+			common: './src/js/common.js'
+		},
 
 		output: {
-			filename: '[name].bundle.js',
+			filename: '[name].entry.js',
 			path: path.resolve(__dirname, 'dist')
 		},
 
