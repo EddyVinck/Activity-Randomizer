@@ -10,20 +10,22 @@ let handleCookies = (cookies) => {
     // check preferences    
     checkCookiePreferences(cookies);
   } else {
-    // cookies probably edited
+    // cookies probably edited or removed
   }
 }
 
 let checkCookiePreferences = (cookies) => {
-  if (cookies.allowPreferences === true) {
-    console.log('true');
-  } else {
-    console.log('not true');
-  }
+  handleCookieReliantElements(cookies);
 }
 
-let showCookiePopUp = () => {
-  let cookiePopUp = document.querySelector('.cookie-modal-wrapper');  
+let showCookiePopUp = (cookies) => {
+  let cookiePopUp = document.querySelector('.cookie-modal-wrapper');
+
+  if(cookies.allowPreferences === 'true') {
+    cookiePopUp.querySelector('[data-cookie-preferences-checkbox]').checked = true;
+  } else {
+    cookiePopUp.querySelector('[data-cookie-preferences-checkbox]').checked = false;    
+  }
 
   cookiePopUp.classList.add('opened');  
   removeBodyScroll();
@@ -47,15 +49,16 @@ let addCookieModalEventListeners = (cookiePopUp) => {
 }
 
 let checkCookieCheckboxes = cookiePopUp => {
-  let cookiePreferenceCheckbox = cookiePopUp.querySelector('[data-cookie-preferences]');
+  let cookiePreferenceCheckbox = cookiePopUp.querySelector('[data-cookie-preferences-checkbox]');
   let preferencesAllowed = cookiePreferenceCheckbox.checked;
-  if(preferencesAllowed) {
-    Cookies.set('_allow_preferences', true);
-  }
 
-  showCookieReliantElements(getCookies());
+  Cookies.set('_allow_preferences', preferencesAllowed);
+  handleCookieReliantElements(getCookies());
 }
 
+/**
+ * TODO: Return cookies as a boolean if possible so you don't have to check for === 'true' instead of === true
+ */ 
 let getCookies = () => {
   const cookies = {};
 
@@ -63,19 +66,26 @@ let getCookies = () => {
   cookies.allowPreferences = Cookies.get('_allow_preferences');
   cookies.preferredDoc = Cookies.get('_ra_preference_doc');
   cookies.preferredSheet = Cookies.get('_ra_preference_sheet');
-  
+
   return cookies;
 };
 
-let showCookieReliantElements = cookies => {
+let handleCookieReliantElements = cookies => {
   if(cookies.hasConfiguredCookies !== undefined) {
-    if(cookies.allowPreferences === true) {
-      document.querySelectorAll('[data-gdpr-preference]').forEach(element => {
+    /** Remove hidden class if preference cookies are allowed
+     *  Else add the class
+     */ 
+    if(cookies.allowPreferences === 'true') {
+      document.querySelectorAll('[data-preference-cookie]').forEach(element => {
         element.classList.remove('hidden');
+      });
+    } else {
+      document.querySelectorAll('[data-preference-cookie]').forEach(element => {
+        element.classList.add('hidden');
       });
     }
   } else {
-    console.log(cookies.hasConfiguredCookies !== undefined);
+    // hasConfiguredCookies === undefined
   }
 }
 
@@ -92,3 +102,9 @@ let allowBodyScroll = () => {
 
 handleCookies(getCookies());
 
+const openCookies = document.querySelectorAll('[open-cookies]');
+openCookies.forEach((openCookiesButton) => {
+  openCookiesButton.addEventListener('click', () => {
+    showCookiePopUp(getCookies());
+  });
+}); 
