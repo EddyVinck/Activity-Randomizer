@@ -76,6 +76,12 @@ const getCookies = () => {
   return cookies;
 };
 
+
+/**
+ * @param {*} cookies
+ * 
+ * @description shows or hides elements based on a user's cookies 
+ */
 const handleCookieElements = cookies => {
   if(cookies.hasConfiguredCookies !== undefined) {
     /** Remove hidden class if preference cookies are allowed
