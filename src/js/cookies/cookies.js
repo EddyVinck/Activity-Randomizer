@@ -1,65 +1,71 @@
 import Cookies from 'js-cookie';
 
-let handleCookies = (cookies) => {
-  if (cookies.hasConfiguredCookies === undefined) {
-    // show cookie popup
-    if(Cookies.get('_cookies_configured') !== true) {
-      showCookiePopUp();
+/**
+ * 
+ * @param {} cookies from the getCookies function
+ * 
+ * It is called when the page loads.
+ */
+const handleCookies = (cookies) => {
+  if (cookies) {
+    if (cookies.hasConfiguredCookies === undefined) {
+      if(Cookies.get('_cookies_configured') !== true) {
+        showCookieModal();
+      }
+    } else if (cookies.hasConfiguredCookies === 'true') {   
+      handleCookieElements(cookies);
+    } else {
+      // cookies probably edited or removed
     }
-  } else if (cookies.hasConfiguredCookies === 'true') {
-    // check preferences    
-    checkCookiePreferences(cookies);
-  } else {
-    // cookies probably edited or removed
   }
 }
 
-let checkCookiePreferences = (cookies) => {
-  handleCookieReliantElements(cookies);
+const showCookieModal = cookies => {
+  let cookieModal = document.querySelector('.cookie-modal-wrapper');
+
+  fillInCurrentCookieSettings(cookies, cookieModal);
+  disableScrolling();
+  addCookieModalEventListeners(cookieModal);
+  cookieModal.classList.add('opened');  
 }
 
-let showCookiePopUp = (cookies) => {
-  let cookiePopUp = document.querySelector('.cookie-modal-wrapper');
-
-  if(cookies.allowPreferences === 'true') {
-    cookiePopUp.querySelector('[data-cookie-preferences-checkbox]').checked = true;
-  } else {
-    cookiePopUp.querySelector('[data-cookie-preferences-checkbox]').checked = false;    
-  }
-
-  cookiePopUp.classList.add('opened');  
-  removeBodyScroll();
-  addCookieModalEventListeners(cookiePopUp);
-}
-
-let addCookieModalEventListeners = (cookiePopUp) => {
-  let cookieClose = cookiePopUp.querySelector('[data-cookie-modal-close]');
-  let cookieSubmit = cookiePopUp.querySelector('[data-cookies-submit]');
+const addCookieModalEventListeners = cookieModal => {
+  const cookieClose = cookieModal.querySelector('[data-cookie-modal-close]');
+  const cookieSubmit = cookieModal.querySelector('[data-cookies-submit]');
   
   cookieClose.addEventListener('click',(e) => {
-    cookiePopUp.classList.remove('opened');
-    allowBodyScroll();
+    cookieModal.classList.remove('opened');
+    enableScrolling();
   });
   cookieSubmit.addEventListener('click',(e) => {
     Cookies.set('_cookies_configured', true);
-    checkCookieCheckboxes(cookiePopUp);
-    cookiePopUp.classList.remove('opened');
-    allowBodyScroll();
+    const cookieSettings = checkCookieCheckboxes(cookieModal);
+    setNewCookieSettings(cookieSettings);
+    handleCookieElements(getCookies());
+    enableScrolling();
+    cookieModal.classList.remove('opened');
   });
 }
 
-let checkCookieCheckboxes = cookiePopUp => {
-  let cookiePreferenceCheckbox = cookiePopUp.querySelector('[data-cookie-preferences-checkbox]');
-  let preferencesAllowed = cookiePreferenceCheckbox.checked;
+const checkCookieCheckboxes = cookieModal => {
+  const cookiePreferenceCheckbox = cookieModal.querySelector('[data-cookie-preferences-checkbox]');
+  const preferencesAllowed = cookiePreferenceCheckbox.checked;
 
-  Cookies.set('_allow_preferences', preferencesAllowed);
-  handleCookieReliantElements(getCookies());
+  const cookieSettingsFromPopUp = {
+    preferences: preferencesAllowed
+  }
+
+  return cookieSettingsFromPopUp;
+}
+
+const setNewCookieSettings = settings => {
+  Cookies.set('_allow_preferences', settings.preferences);  
 }
 
 /**
  * TODO: Return cookies as a boolean if possible so you don't have to check for === 'true' instead of === true
  */ 
-let getCookies = () => {
+const getCookies = () => {
   const cookies = {};
 
   cookies.hasConfiguredCookies = Cookies.get('_cookies_configured');
@@ -70,7 +76,7 @@ let getCookies = () => {
   return cookies;
 };
 
-let handleCookieReliantElements = cookies => {
+const handleCookieElements = cookies => {
   if(cookies.hasConfiguredCookies !== undefined) {
     /** Remove hidden class if preference cookies are allowed
      *  Else add the class
@@ -89,22 +95,32 @@ let handleCookieReliantElements = cookies => {
   }
 }
 
-let showCookieMessage = () => {
-
-}
-
-let removeBodyScroll = () => {
+const disableScrolling = () => {
   document.querySelector('body').style.overflow = 'hidden';
 }
-let allowBodyScroll = () => {
+const enableScrolling = () => {
   document.querySelector('body').style.overflow = '';
 }
 
-handleCookies(getCookies());
-
+/** 
+ * Event listener for every element that has the 
+ * open-cookies attribute.
+ * It opens the cookie modal.
+ * */
 const openCookies = document.querySelectorAll('[open-cookies]');
 openCookies.forEach((openCookiesButton) => {
   openCookiesButton.addEventListener('click', () => {
-    showCookiePopUp(getCookies());
+    showCookieModal(getCookies());
   });
 }); 
+
+const fillInCurrentCookieSettings = (cookies, cookieModal) => {
+  if (cookies.allowPreferences === 'true') {
+    cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = true;
+  }
+  else {
+    cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = false;
+  }
+}
+
+handleCookies(getCookies());
