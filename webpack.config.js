@@ -68,7 +68,12 @@ module.exports = (env, argv) => {
 							loader: 'sass-loader'
 						}
 					]
-				}
+				},
+				{
+					test: /\.hbs$/,
+					loader: 'handlebars-loader',
+					query: { inlineRequires: '/img/' }
+				},
 			]
 		},
 
@@ -105,6 +110,12 @@ module.exports = (env, argv) => {
 				template: 'src/assets/html/google-sheet-tutorial.html',
 				hash: true,
 				inject: false
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'hbs-google-sheet-tutorial.html',				
+				template: 'src/assets/html/hbs-google-sheet-tutorial.hbs',
+				hash: true,
+				inject: true
 			}),
 		]
 	}
