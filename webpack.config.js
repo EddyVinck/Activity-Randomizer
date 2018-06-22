@@ -115,7 +115,7 @@ module.exports = (env, argv) => {
 				filename: 'hbs-google-sheet-tutorial.html',				
 				template: 'src/assets/html/hbs-google-sheet-tutorial.hbs',
 				hash: true,
-				inject: true
+				inject: false
 			}),
 		]
 	}

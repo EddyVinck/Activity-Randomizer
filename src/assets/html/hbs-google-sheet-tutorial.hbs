@@ -7,16 +7,16 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Activity Randomizer — Google Sheets integration</title>
   <meta description="Plan activities picked from your own Google Sheet.">
-  {{!-- <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.common.css %>">
-  <%= require('html-loader!./scripts/tagmanagerscript.html') %> --}}
+  <link rel="stylesheet" href="{{ htmlWebpackPlugin.files.chunks.common.css }}">
+  {{> ./scripts/tagmanagerscript }}
 </head>
 
 <body> 
-  {{!-- <%= require('html-loader!./scripts/tagmanageriframe.html') %>  
-  <%= require('html-loader!./partials/modals/cookie-modal.html') %>  
-  <%= require('html-loader!./partials/modals/settings-modal.html') %>    
+  {{> ./scripts/tagmanageriframe }}  
+  {{> ./partials/modals/cookie-modal }}  
+  {{> ./partials/modals/settings-modal }}
 
-  <%= require('html-loader!./partials/navbar.html') %>   --}}
+  {{> ./partials/navbar }}
 
   <main>
     
@@ -48,7 +48,7 @@
               Then click on ‘make a copy.’ You can change the location where your sheet is saved in Google Drive if you want to. Click the blue ‘Ok’ button and your document will now open in a new window.
             </p>
             <p>
-              <img src="../img/tut-copy-document-ok.jpg" alt="Click 'ok' to save a copy of the example document"> --}}
+              <img src="../img/tut-copy-document-ok.jpg" alt="Click 'ok' to save a copy of the example document">
             </p>
             <p>
               Congratulations! You now have your own personal copy of the Activity Randomizer Template! You can always find your sheets at <a href="https://docs.google.com/spreadsheets/">https://docs.google.com/spreadsheets/</a> or at <a href="https://drive.google.com">https://drive.google.com</a>.
@@ -73,9 +73,10 @@
 
   </main>
 
-  {{!-- <%= require('html-loader!./partials/footer.html') %>
+  {{> ./partials/footer }}
   
-  <script src="<%= htmlWebpackPlugin.files.chunks.common.entry %>"></script> --}}
+  <script src="{{ htmlWebpackPlugin.files.chunks.common.entry }}"></script>
+  
 </body>
 
 </html>
