@@ -8,16 +8,17 @@
   <title>Activity Randomizer — Google Sheets integration</title>
   <meta description="Plan activities picked from your own Google Sheet.">
   <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.common.css %>">
-  <%= require('html-loader!./scripts/tagmanagerscript.html') %>
+  {{> ./scripts/tagmanagerscript }}
 </head>
 
 <body> 
-  <%= require('html-loader!./scripts/tagmanageriframe.html') %>  
-  <%= require('html-loader!./partials/modals/activities-modal.html') %>  
-  <%= require('html-loader!./partials/modals/cookie-modal.html') %>  
-  <%= require('html-loader!./partials/modals/settings-modal.html') %>    
+  {{> ./scripts/tagmanageriframe }}  
+  {{> ./partials/modals/cookie-modal }}  
+  {{> ./partials/modals/settings-modal }}
+  {{> ./partials/modals/activities-modal }}
 
-  <%= require('html-loader!./partials/navbar.html') %>  
+  {{> ./partials/navbar }}
+
   <main>
     <div class="container">
       <div class="spaceholder-top mb-2">
@@ -172,12 +173,11 @@
   
     </div>
   </main>
-  
 
-  <%= require('html-loader!./partials/footer.html') %>
+  {{> ./partials/footer }}
   
-  <script src="<%= htmlWebpackPlugin.files.chunks.common.entry %>"></script>
-  <script src="<%= htmlWebpackPlugin.files.chunks.activityrandomizer.entry %>"></script>
+  <script src="{{ htmlWebpackPlugin.files.chunks.common.entry }}"></script>
+  <script src="{{ htmlWebpackPlugin.files.chunks.activityrandomizer.entry }}"></script>
   <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
 </body>
 

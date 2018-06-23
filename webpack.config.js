@@ -97,23 +97,16 @@ module.exports = (env, argv) => {
 		plugins: [		
 			new webpack.ProvidePlugin({
 				$: 'jquery'
-			}),	
-			// new UglifyJSPlugin(),
-			new HtmlWebpackPlugin({
-				filename: 'index.html',				
-				template: 'src/assets/html/index.html',
-				hash: true,
-				inject: false
 			}),
 			new HtmlWebpackPlugin({
-				filename: 'google-sheet-tutorial.html',				
-				template: 'src/assets/html/google-sheet-tutorial.html',
+				filename: 'hbs-index.html',				
+				template: 'src/assets/html/index.hbs',
 				hash: true,
 				inject: false
 			}),
 			new HtmlWebpackPlugin({
 				filename: 'hbs-google-sheet-tutorial.html',				
-				template: 'src/assets/html/hbs-google-sheet-tutorial.hbs',
+				template: 'src/assets/html/google-sheet-tutorial.hbs',
 				hash: true,
 				inject: false
 			}),
