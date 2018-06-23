@@ -23,7 +23,13 @@
     </div>
     <div class="row mt-2">
       <div class="col-12">
-        <span class="text-muted">© Eddy Vinck 2018-2019</span>
+        {{!-- 
+          (unregistered?) Handlebars helpers must receive a parameter. 
+          Helpers don't work otherwise. 
+          This is because the compiler has no other way of distinguishing the variables from the helpers.
+          In this case, a dot will do the trick.  
+        --}}
+        <span class="text-muted">© Eddy Vinck {{[../helpers/current-year.js] . }}</span>
       </div>
     </div>
   </div>

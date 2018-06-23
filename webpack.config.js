@@ -79,6 +79,7 @@ module.exports = (env, argv) => {
 						precompileOptions: {
 							knownHelpersOnly: false,
 						},
+						helpersDirs: ['src/assets/html/helpers']
 					}
 				},
 			]
