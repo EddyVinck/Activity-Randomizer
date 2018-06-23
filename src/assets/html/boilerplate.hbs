@@ -1,30 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+<script id="entry-template" type="text/x-handlebars-template">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Activity Randomizer — Google Sheets integration</title>
-  <meta description="Plan activities picked from your own Google Sheet.">
-  <link rel="stylesheet" href="<%=htmlWebpackPlugin.files.chunks.common.css %>">
-  {{> ./scripts/tagmanagerscript }}
-</head>
+  <!DOCTYPE html>
+  <html lang="en">
 
-<body> 
-  {{> ./scripts/tagmanageriframe }}  
-  {{> ./partials/modals/cookie-modal }}  
-  {{> ./partials/modals/settings-modal }}
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Activity Randomizer — Google Sheets integration</title>
+    <meta description="Plan activities picked from your own Google Sheet.">
+    <link rel="stylesheet" href="{{ htmlWebpackPlugin.files.chunks.common.css }}">
+    {{> ./scripts/tagmanagerscript }}
+  </head>
 
-  {{> ./partials/navbar }}
+  <body> 
+    {{> ./scripts/tagmanageriframe }}  
+    {{> ./partials/modals/cookie-modal }}  
+    {{> ./partials/modals/settings-modal }}
 
-  <main>
+    {{> ./partials/navbar }}
 
-  </main>
+    <main>
 
-  {{> ./partials/footer }}
-  
-  <script src="{{ htmlWebpackPlugin.files.chunks.common.entry }}"></script>
-</body>
+      {{#> body-block}}
+        {{!-- Body content goes here. --}}
+      {{/body-block}}
 
-</html>
+    </main>
+
+    {{> ./partials/footer }}
+    
+    <script src="{{ htmlWebpackPlugin.files.chunks.common.entry }}"></script>
+  </body>
+
+  </html>
+
+</script>

@@ -2,12 +2,13 @@ const webpack = require('webpack');
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const createPages = require('./webpack.functions');	
 // const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = (env, argv) => { 
-	console.log(`mode: ${argv.mode}`);
+	console.log(`mode: ${argv.mode}`);	
 
-	return {
+	let myWebpackConfig = {
 		entry: {
 			'activityrandomizer': './src/js/activity-randomizer.js',
 			common: './src/js/common.js'
@@ -72,7 +73,13 @@ module.exports = (env, argv) => {
 				{
 					test: /\.hbs$/,
 					loader: 'handlebars-loader',
-					query: { inlineRequires: '/img/' }
+					
+					options: { 
+						inlineRequires: '/img/',
+						precompileOptions: {
+							knownHelpersOnly: false,
+						},
+					}
 				},
 			]
 		},
@@ -97,19 +104,9 @@ module.exports = (env, argv) => {
 		plugins: [		
 			new webpack.ProvidePlugin({
 				$: 'jquery'
-			}),
-			new HtmlWebpackPlugin({
-				filename: 'hbs-index.html',				
-				template: 'src/assets/html/index.hbs',
-				hash: true,
-				inject: false
-			}),
-			new HtmlWebpackPlugin({
-				filename: 'hbs-google-sheet-tutorial.html',				
-				template: 'src/assets/html/google-sheet-tutorial.hbs',
-				hash: true,
-				inject: false
-			}),
-		]
-	}
+			}),			
+		].concat(createPages())
+	};
+
+	return myWebpackConfig;
 };

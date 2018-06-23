@@ -1,16 +1,33 @@
 import Cookies from 'js-cookie';
 
 /**
+ * TODO: Return cookies as a boolean if possible so you don't have to check for === 'true' instead of === true
+ */ 
+const getCookies = () => {
+  const cookies = {};
+
+  cookies.hasConfiguredCookies = Cookies.get('_cookies_configured');
+  cookies.allowPreferences = Cookies.get('_allow_preferences');
+  cookies.preferredDoc = Cookies.get('_ra_preference_doc');
+  cookies.preferredSheet = Cookies.get('_ra_preference_sheet');
+
+  return cookies;
+};
+
+/**
  * 
  * @param {} cookies from the getCookies function
  * 
  * It is called when the page loads.
  */
 const handleCookies = (cookies) => {
+  console.log('handleCookies');
+  console.log(cookies);
+  // debugger;
   if (cookies) {
     if (cookies.hasConfiguredCookies === undefined) {
-      if(Cookies.get('_cookies_configured') !== true) {
-        showCookieModal();
+      if(Cookies.get('_cookies_configured') !== 'true') {
+        showCookieModal(cookies);
       }
     } else if (cookies.hasConfiguredCookies === 'true') {   
       handleCookieElements(cookies);
@@ -20,16 +37,19 @@ const handleCookies = (cookies) => {
   }
 }
 
-const showCookieModal = cookies => {
+const showCookieModal = (cookies) => {
   let cookieModal = document.querySelector('.cookie-modal-wrapper');
 
-  fillInCurrentCookieSettings(cookies, cookieModal);
+  console.log('show cookie modal');
+  console.log(cookies);
+
+  fillCurrentCookieSettings(cookies, cookieModal);
   disableScrolling();
   addCookieModalEventListeners(cookieModal);
   cookieModal.classList.add('opened');  
 }
 
-const addCookieModalEventListeners = cookieModal => {
+const addCookieModalEventListeners = (cookieModal) => {
   const cookieClose = cookieModal.querySelector('[data-cookie-modal-close]');
   const cookieSubmit = cookieModal.querySelector('[data-cookies-submit]');
   
@@ -47,7 +67,7 @@ const addCookieModalEventListeners = cookieModal => {
   });
 }
 
-const checkCookieCheckboxes = cookieModal => {
+const checkCookieCheckboxes = (cookieModal) => {
   const cookiePreferenceCheckbox = cookieModal.querySelector('[data-cookie-preferences-checkbox]');
   const preferencesAllowed = cookiePreferenceCheckbox.checked;
 
@@ -58,31 +78,16 @@ const checkCookieCheckboxes = cookieModal => {
   return cookieSettingsFromPopUp;
 }
 
-const setNewCookieSettings = settings => {
+const setNewCookieSettings = (settings) => {
   Cookies.set('_allow_preferences', settings.preferences);  
 }
-
-/**
- * TODO: Return cookies as a boolean if possible so you don't have to check for === 'true' instead of === true
- */ 
-const getCookies = () => {
-  const cookies = {};
-
-  cookies.hasConfiguredCookies = Cookies.get('_cookies_configured');
-  cookies.allowPreferences = Cookies.get('_allow_preferences');
-  cookies.preferredDoc = Cookies.get('_ra_preference_doc');
-  cookies.preferredSheet = Cookies.get('_ra_preference_sheet');
-
-  return cookies;
-};
-
 
 /**
  * @param {*} cookies
  * 
  * @description shows or hides elements based on a user's cookies 
  */
-const handleCookieElements = cookies => {
+const handleCookieElements = (cookies) => {
   if(cookies.hasConfiguredCookies !== undefined) {
     /** Remove hidden class if preference cookies are allowed
      *  Else add the class
@@ -114,13 +119,15 @@ const enableScrolling = () => {
  * It opens the cookie modal.
  * */
 const openCookies = document.querySelectorAll('[open-cookies]');
+
 openCookies.forEach((openCookiesButton) => {
   openCookiesButton.addEventListener('click', () => {
     showCookieModal(getCookies());
   });
 }); 
 
-const fillInCurrentCookieSettings = (cookies, cookieModal) => {
+const fillCurrentCookieSettings = (cookies, cookieModal) => {
+  console.log(cookies);
   if (cookies.allowPreferences === 'true') {
     cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = true;
   }
@@ -128,5 +135,7 @@ const fillInCurrentCookieSettings = (cookies, cookieModal) => {
     cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = false;
   }
 }
+
+console.log(getCookies());
 
 handleCookies(getCookies());
