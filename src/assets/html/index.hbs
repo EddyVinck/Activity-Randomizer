@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+{{#>  layouts/default 
+      meta-title="Activity Randomizer — Google Sheets integration" 
+      meta-description="Plan activities picked from your own Google Sheet."
+}}
+  {{#*inline "before-nav" }}
+    {{> ./partials/modals/activities-modal }}
+  {{/inline}}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Activity Randomizer — Google Sheets integration</title>
-  <meta description="Plan activities picked from your own Google Sheet.">
-  <link rel="stylesheet" href="{{ htmlWebpackPlugin.files.chunks.common.css }}">
-  {{> ./scripts/tagmanagerscript }}
-</head>
-
-<body> 
-  {{> ./scripts/tagmanageriframe }}  
-  {{> ./partials/modals/cookie-modal }}  
-  {{> ./partials/modals/settings-modal }}
-  {{> ./partials/modals/activities-modal }}
-
-  {{> ./partials/navbar }}
-
-  <main>
+  {{#*inline "body-block" }}
     <div class="container">
       <div class="spaceholder-top mb-2">
         
@@ -29,7 +16,7 @@
           <div class="col-12 col-sm-10 col-md-6 col-lg-7">
             <h1>Activity Randomizer</h1>
             <p class="h2">Insert a Google Sheet link to get started!</p>
-  
+
             <div class="mb-4">            
               <div>
                 <div class="step">
@@ -143,7 +130,7 @@
                   </div>
               </div>
               <div class="randomized-activity" style="display: none;">
-  
+
                 <div class="mt-3 mb-2">
                   <h2 class="card-explanation">Your randomized activity:</h2>
                   <div class="card" id="picked-activity">
@@ -163,22 +150,19 @@
                     </div>
                   </div>
                 </div> 
-  
+
               </div>
             </div>
-  
+
           </div>        
         </div>
       </div>
-  
+
     </div>
-  </main>
+  {{/inline}}
 
-  {{> ./partials/footer }}
-  
-  <script src="{{ htmlWebpackPlugin.files.chunks.common.entry }}"></script>
-  <script src="{{ htmlWebpackPlugin.files.chunks.activityrandomizer.entry }}"></script>
-  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
-</body>
-
-</html>
+  {{#*inline "after-scripts" }}
+    <script src="{{ htmlWebpackPlugin.files.chunks.activityrandomizer.entry }}"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
+  {{/inline}}
+{{/layouts/default}}

@@ -21,9 +21,6 @@ const getCookies = () => {
  * It is called when the page loads.
  */
 const handleCookies = (cookies) => {
-  console.log('handleCookies');
-  console.log(cookies);
-  // debugger;
   if (cookies) {
     if (cookies.hasConfiguredCookies === undefined) {
       if(Cookies.get('_cookies_configured') !== 'true') {
@@ -39,9 +36,6 @@ const handleCookies = (cookies) => {
 
 const showCookieModal = (cookies) => {
   let cookieModal = document.querySelector('.cookie-modal-wrapper');
-
-  console.log('show cookie modal');
-  console.log(cookies);
 
   fillCurrentCookieSettings(cookies, cookieModal);
   disableScrolling();
@@ -127,7 +121,6 @@ openCookies.forEach((openCookiesButton) => {
 }); 
 
 const fillCurrentCookieSettings = (cookies, cookieModal) => {
-  console.log(cookies);
   if (cookies.allowPreferences === 'true') {
     cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = true;
   }
@@ -135,7 +128,5 @@ const fillCurrentCookieSettings = (cookies, cookieModal) => {
     cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = false;
   }
 }
-
-console.log(getCookies());
 
 handleCookies(getCookies());

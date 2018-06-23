@@ -34,12 +34,6 @@ const createPages = () => {
 			hash: true,
 			inject: false
 		}),
-		new HtmlWebpackPlugin({
-			filename: 'boilerplated-tutorial.html',				
-			template: 'src/assets/html/boilerplated-tutorial.hbs',
-			hash: true,
-			inject: false
-		}),
 	];
 }
 

@@ -1,0 +1,53 @@
+{{!-- 
+
+  This default layout utilizes partial-blocks that can be replaced by inline-blocks.
+  See: http://handlebarsjs.com/partials.html and 
+  https://cloudfour.com/thinks/the-hidden-power-of-handlebars-partials/ 
+
+  Usage: check page-boilerplate.hbs
+
+--}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{meta-title}}</title>
+  <meta description="{{meta-description}} Plan activities picked from your own Google Sheet.">
+  <link rel="stylesheet" href="{{ htmlWebpackPlugin.files.chunks.common.css }}">
+  {{> ../scripts/tagmanagerscript }}
+</head>
+
+<body> 
+  {{> ../scripts/tagmanageriframe }}  
+  {{> ../partials/modals/cookie-modal }}  
+  {{> ../partials/modals/settings-modal }}
+
+  {{#> before-nav}}
+    {{!-- Content such as page specific modals comes here --}}
+  {{/before-nav}}
+
+  {{> ../partials/navbar }}
+
+  <main>
+
+    {{#> body-block}}
+      {{!-- Body content goes here. --}}
+      <h1>If you can see this text then you forgot the body-block partial-block in your template. <br>See <a href="http://handlebarsjs.com/partials.html">http://handlebarsjs.com/partials.html</a> for more info.</h1>
+    {{/body-block}}
+
+  </main>
+
+  {{> ../partials/footer }}
+  
+  <script src="{{ htmlWebpackPlugin.files.chunks.common.entry }}"></script>
+
+  {{#> after-scripts}}
+    {{!-- scripts that come after the common entry script come here --}}
+  {{/after-scripts}}
+</body>
+
+</html>
+
