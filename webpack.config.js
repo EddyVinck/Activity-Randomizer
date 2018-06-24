@@ -79,7 +79,7 @@ module.exports = (env, argv) => {
 						precompileOptions: {
 							knownHelpersOnly: false,
 						},
-						helpersDirs: ['src/assets/html/views/helpers']
+						helpersDirs: ['src/views/helpers']
 					}
 				},
 			]

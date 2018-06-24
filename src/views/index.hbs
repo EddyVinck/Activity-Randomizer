@@ -1,9 +1,9 @@
-{{#>  views/layouts/default 
+{{#>  layouts/default 
       meta-title="Activity Randomizer — Google Sheets integration" 
       meta-description="Plan activities picked from your own Google Sheet."
 }}
   {{#*inline "before-nav" }}
-    {{> views/partials/modals/activities-modal.hbs }}
+    {{> partials/modals/activities-modal.hbs }}
   {{/inline}}
 
   {{#*inline "body-block" }}
@@ -165,4 +165,4 @@
     <script src="{{ htmlWebpackPlugin.files.chunks.activityrandomizer.entry }}"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
   {{/inline}}
-{{/views/layouts/default}}
+{{/layouts/default}}

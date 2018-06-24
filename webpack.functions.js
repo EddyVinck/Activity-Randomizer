@@ -15,22 +15,22 @@ const getFilesInFolder = (folder) => {
 // getFilesInFolder('./src/assets/html');
 
 const pages = [
-	'src/assets/html/boilerplated-tutorial.hbs',
-	'src/assets/html/google-sheet-tutorial.hbs',
-	'src/assets/html/index.hbs'
+	'src/views/boilerplated-tutorial.hbs',
+	'src/views/google-sheet-tutorial.hbs',
+	'src/views/index.hbs'
 ];
 
 const createPages = () => {
   return [
 		new HtmlWebpackPlugin({
 			filename: 'index.html',				
-			template: 'src/assets/html/index.hbs',
+			template: 'src/views/index.hbs',
 			hash: true,
 			inject: false
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'google-sheet-tutorial.html',				
-			template: 'src/assets/html/google-sheet-tutorial.hbs',
+			template: 'src/views/google-sheet-tutorial.hbs',
 			hash: true,
 			inject: false
 		}),
