@@ -8,6 +8,7 @@
 
   {{#*inline "body-block" }}
     
+    {{!-- intro block --}}
     <div class="background-lightgray pt-4 pb-3">
       <div class="container">
         <div class="row">
@@ -38,6 +39,9 @@
         </div>
       </div>
     </div>
+    {{!-- end intro block --}}
+
+    {{!-- Activity Randomizer block --}}
     <div class="pt-4 pb-3">
       <div class="container mb-4">
         <div class="row">
@@ -45,9 +49,34 @@
             <h2>Start here.</h2>
           </div>
           <div class="col-12 col-sm-10 col-md-6 col-lg-7">
-            <div class="step">
-              <h3>Step 1/4: add a document link <i class="icon-link"></i></h3>
+            <h3>Step 1/5: Copy <a href="">this</a> Google Sheet</h3>
+            <p>
+              <a href="">The Activity Randomizer Example Sheet</a>
+            </p>
+            <div data-toggle="collapse" data-target="#helpCard"  aria-expanded="false"   aria-controls="helpCard" class="help-text">
+              <p><button class="btn btn-dark btn-circle"><i class="icon-help"></i></button> <span>Need <strong>help</strong>? click here!</span></p>
             </div>
+            <div class="row">
+              <div class="col-lg-10">
+                <div id="helpCard" class="collapse help-card">
+                  <div class="card-content">
+                    <ol>
+                      <li>Do you have a Google or Gmail account? You can create an account <a href="https://accounts.google.com/signup">here</a>.</li>
+                      <li>Authorize your account for Activity Randomizer by clicking <a href="">here</a>.</li>
+                      <li>Go to <a href="">this example sheet template</a> and follow the 'Getting Started' steps.</li>
+                      <li>Copy the link of your document into the input field at step 1 above and click 'Load Sheets link.'</li>
+                      <li>Continue at step 2/4.</li>
+                    </ol>
+                    <p>Want a more detailed tutorial with pictures?</p>
+                    <a class="btn btn-info btn-sm" href="/sheet-import-tutorial">Detailed tutorial with pictures</a>
+                    <button data-toggle="collapse" data-target="#helpCard" class="btn btn-primary btn-circle btn-circle-large btn-floating"><i class="icon-up-open"></i></button>
+                  </div>                      
+                </div>              
+              </div>
+            </div>
+
+            <h3>Step 2/5: add a document link <i class="icon-link"></i></h3>
+            
             <div class="form-row mb-3">
               <div class="col-12 col-md-7 mb-2 mb-md-0">
                 <input class="form-control" type="text" placeholder="docs.google.com/spreadsheets/. . ." id="sheet-input" name="sheet-input">
@@ -65,31 +94,9 @@
                 </label>
               </div>
             </div>
-            <div data-toggle="collapse" data-target="#helpCard"  aria-expanded="false"   aria-controls="helpCard" class="help-text">
-              <p><button class="btn btn-dark btn-circle"><i class="icon-help"></i></button> <span>Need help? click here!</span></p>
-            </div>
-            <div class="row">
-              <div class="col-lg-10">
-                <div id="helpCard" class="collapse help-card">
-                  <div class="card-content">
-                    <ol>
-                      <li>Do you have a Google or Gmail account? You can create an account <a href="https://accounts.google.com/signup">here</a>.</li>
-                      <li>Authorize your account for Activity Randomizer by clicking <a href="">here</a>.</li>
-                      <li>Go to <a href="">this example sheet template</a> and follow the 'Getting Started' steps.</li>
-                      <li>Copy the link of your document into the input field at step 1 above and click 'Load Sheets link.'</li>
-                      <li>Continue at step 2/4.</li>
-                    </ol>
-                    <p>Want a more detailed tutorial with pictures?</p>
-                    <a class="btn btn-info btn-sm" href="/sheet-import-tutorial">Detailed tutorial</a>
-                    <button data-toggle="collapse" data-target="#helpCard" class="btn btn-primary btn-circle btn-circle-large btn-floating"><i class="icon-up-open"></i></button>
-                  </div>                      
-                </div>              
-              </div>
-            </div>
+            
             <!-- The dropdown with the sheets in the document -->
-            <div class="step">
-              <h3>Step 2/4: pick a sheet</h3>
-            </div>              
+            <h3>Step 3/5: pick a sheet</h3>              
             <div class="input-container">
               <div class="form-row">
                 <div class="col-12 col-md-8">
@@ -109,9 +116,8 @@
                 </div>
               </div>
             </div>
-            <div class="step">
-              <h3>Step 3/4: filter (optional)</h3>
-            </div>
+
+            <h3>Step 4/5: filter (optional)</h3>
             <div class="input-container range-container">
               <label class="d-block">
                 Maximum time: <span time-range-value></span> (minutes) 
@@ -128,15 +134,17 @@
               <button id="remove-filters" class="btn btn-secondary mb-2">
                 Reset filters
               </button>
-            </div>
-            <div class="step">
-              <h3>Step 4: Generate random activity</h3>
-            </div>
-            <div class="input-container mt-3">
-              <button class="btn btn-primary" id="pick-activity">Randomize activity<i class="icon-shuffle"></i></button>
-            </div>
-          </div> {{!-- end col --}}
+            </div>           
+          </div> 
+          {{!-- end left col --}}
           <div class="col-12 col-sm-10 col-md-6 offset-md-0 col-lg-5 offset-lg-0">
+            <h3>Step 5: Generate random activity</h3>            
+            <div class="input-container mt-3">
+              <button class="btn btn-primary" id="pick-activity">Random<i class="icon-shuffle"></i></button>
+              <button type="button" class="btn btn-light" data-toggle="modal" data-target="#viewCurrentActivities">
+                <i class="icon-list-bullet"></i>Choose from list
+              </button>
+            </div>
             <div class="activity-wrapper mb-4">
               <div class="no-activity mt-3">
                 <p>
@@ -164,8 +172,7 @@
                       <div class="card-title">
                         <h2 class="activity-title">Picked activity name</h2>
                       </div>
-                      <div class="card-text">
-      
+                      <div class="card-text">      
                         <!-- TODO -->
                         <!-- <a href="#" disabled class="btn btn-primary btn-block disabled">Add to Google Calendar</a> -->
                       </div>
@@ -176,10 +183,12 @@
               </div>
             </div>
 
-          </div>        
+          </div> {{!-- end right col--}}       
         </div> {{!-- end row --}}   
       </div> {{!-- end container--}}
     </div>
+    {{!-- end activity randomizer block --}}
+
   {{/inline}}
 
   {{#*inline "after-scripts" }}
