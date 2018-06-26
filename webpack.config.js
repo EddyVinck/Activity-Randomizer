@@ -38,7 +38,13 @@ module.exports = (env, argv) => {
 						path.resolve(__dirname, 'src/assets/img')
 					],
 					use: [
-						'file-loader'
+						{
+							loader: 'file-loader',
+							options: {
+								name: '[name].[ext]',
+								outputPath: 'assets/img/'
+							}
+						}
 					]
 				},
 				{
