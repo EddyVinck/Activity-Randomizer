@@ -10,7 +10,7 @@ module.exports = (env, argv) => {
 
 	let myWebpackConfig = {
 		entry: {
-			'activityrandomizer': './src/js/activity-randomizer.js',
+			activityrandomizer: './src/js/activity-randomizer.js',
 			common: './src/js/common.js'
 		},
 
@@ -33,7 +33,7 @@ module.exports = (env, argv) => {
 					}
 				},
 				{
-					test: /\.(png|svg|jpg|gif)$/,
+					test: /\.(png|svg|jpg|gif|ico|webmanifest)$/,
 					include: [
 						path.resolve(__dirname, 'src/assets/img')
 					],
@@ -75,7 +75,7 @@ module.exports = (env, argv) => {
 					loader: 'handlebars-loader',
 					
 					options: { 
-						inlineRequires: '/img/',
+						inlineRequires: '/assets/img',
 						precompileOptions: {
 							knownHelpersOnly: false,
 						},
