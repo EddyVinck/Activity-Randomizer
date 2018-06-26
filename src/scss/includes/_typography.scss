@@ -26,11 +26,11 @@ main {
     line-height: 20px;
   }
   
-  p, li {
+  
     a:not(.btn) {
       text-decoration: underline;
     }
-  }
+
   // iPad and larger
   @media (min-width: 1024px) {
     h1, .h1 {

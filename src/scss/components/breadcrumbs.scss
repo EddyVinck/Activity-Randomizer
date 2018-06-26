@@ -1,0 +1,43 @@
+.breadcrumbs ol {
+  list-style: none;
+  padding-left: 0;
+
+  a, li {
+    font-size: 13px;
+  }
+
+  a {
+    color: #b0b0b0;
+    text-decoration: none;
+    text-transform: capitalize;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  li {
+    padding-right: 10px;
+    display: inline-block;
+    
+    &::after {
+      display: inline-block;
+      right: -5px;
+      position: relative;
+      content: '>';
+    }
+
+    &:last-of-type {
+
+      a {
+        color: rgb(100, 100, 100);
+        font-weight: 600;
+      }
+
+      &::after {
+        content: none;
+      }
+    }
+    
+  }
+}

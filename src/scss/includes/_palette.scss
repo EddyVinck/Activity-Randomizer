@@ -7,6 +7,7 @@ $majorelleBlue: #623CEA;
 $graniteGray: rgba(97, 97, 99, 1);
 $platinum: #e8e8e8;
 $gunMetal: #293132;
+$lightGray: #f6f6f6;
 
 // Coolors Exported Palette - coolors.co/022f40-1c9075-00ff87-f7fff7-49c6e5
 $richBlack: rgba(2, 47, 64, 1);
@@ -22,7 +23,11 @@ $palette: map-merge((
   "deepgreen":      $deepGreenCyanTurquoise,
   "springgreen":    $springGreen,
   "mintcream":      $mintCream,
-  "seaserpent":     $seaSerpent
+  "seaserpent":     $seaSerpent,
+  "granitegray":    $graniteGray,
+  "platinum":       $platinum,
+  "gunmetal":       $gunMetal,
+  "lightgray":      $lightGray
 ), $palette);
 
 @each $color, $value in $palette {
