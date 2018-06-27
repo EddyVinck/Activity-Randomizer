@@ -204,7 +204,7 @@ function insertSheetNames(sheetNames, select) {
       }
 
       // Add the sheets as buttons
-      sheetButtonContainer.innerHTML += `<button class="btn" value="${sheetName}">${sheetName}</button>`;
+      sheetButtonContainer.innerHTML += `<button class="btn btn-sm" value="${sheetName}">${sheetName}</button>`;
 
       // add event listeners to those buttons
       const sheetButtons = sheetButtonContainer.querySelectorAll('button');
