@@ -180,8 +180,14 @@ function getSheet(documentID, sheetName) {
 
 function insertSheetNames(sheetNames, select) {
   // select.style.display = "inline-block";
+
+  
   select.disabled = true;
   select.innerHTML = '<option class="loading-option">Loading sheet names...</option>';
+
+  const sheetButtonContainer = document.querySelector('.sheet-button-container');
+  sheetButtonContainer.innerHTML = "";
+
   sheetNames.forEach(sheet => {
     let sheetName = sheet.properties.title;
 
@@ -196,7 +202,34 @@ function insertSheetNames(sheetNames, select) {
         // Manually dispatch a change event
         select.dispatchEvent(new Event('change'));
       }
-    }        
+
+      // Add the sheets as buttons
+      sheetButtonContainer.innerHTML += `<button class="btn" value="${sheetName}">${sheetName}</button>`;
+
+      // add event listeners to those buttons
+      const sheetButtons = sheetButtonContainer.querySelectorAll('button');
+
+      sheetButtons.forEach((btn, index, buttons) => {
+        btn.addEventListener('click', (e) => {
+          // Load activities based on active button
+          buttons.forEach((btn) => {
+            btn.classList.remove('btn-primary');
+          });
+          btn.classList.add('btn-primary');
+
+          let sheetName = e.target.value;
+          listActivities(documentID, sheetName);
+        });
+
+        if(index === 0) {          
+          // Manually dispatch a change event
+          btn.dispatchEvent(new Event('click'));
+          btn.classList.add('btn-primary');
+        }
+      });
+    }
+    
+    
   });
   // Remove the loading option
   select.removeChild(select.querySelector('.loading-option'));
