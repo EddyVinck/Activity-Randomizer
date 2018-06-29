@@ -38,7 +38,7 @@ let activities = [];
  *  On load, called to load the auth2 library and API client library.
  *  Calls initClient.
  */
-window.handleClientLoad = function() {
+window.handleClientLoad = () => {
   gapi.load('client:auth2', initClient);
 }
 
@@ -46,13 +46,13 @@ window.handleClientLoad = function() {
  *  Initializes the API client library and sets up sign-in state
  *  listeners.
  */
-function initClient() {
+const initClient = () => {
   gapi.client.init({
     apiKey: API_KEY,
     clientId: CLIENT_ID,
     discoveryDocs: DISCOVERY_DOCS,
     scope: SCOPES
-  }).then(function () {
+  }).then(() => {
     // Listen for sign-in state changes.
     gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
@@ -67,7 +67,7 @@ function initClient() {
  *  Called when the signed in status changes, to update the UI
  *  appropriately. After a sign-in, the API is called.
  */
-function updateSigninStatus(isSignedIn) {
+const updateSigninStatus = (isSignedIn) => {
   if (isSignedIn) {
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'block';
@@ -82,14 +82,14 @@ function updateSigninStatus(isSignedIn) {
 /**
  *  Sign in the user upon button click.
  */
-function handleAuthClick(event) {
+const handleAuthClick = (event) => {
   gapi.auth2.getAuthInstance().signIn();
 }
 
 /**
  *  Sign out the user upon button click.
  */
-function handleSignoutClick(event) {
+const handleSignoutClick = (event) => {
   gapi.auth2.getAuthInstance().signOut();
 }
 
@@ -99,12 +99,12 @@ function handleSignoutClick(event) {
  *
  * @param {string} message Text to be placed in pre element.
  */
-function appendPre(message) {
+const appendPre = (message) => {
   const content = document.querySelectorAll('content');
   const textContent = document.createTextNode(message + '\n');
   content.appendChild(textContent);
 }
-function appendCol(activity, time) {
+const appendCol = (activity, time) => {
   sheetContentContainer.forEach(contentContainer => {
     const col = document.createElement("div");
     const textContent = document.createTextNode(activity + ", " + time + " minutes." + '\n');
@@ -118,14 +118,14 @@ function appendCol(activity, time) {
  * Print the names and majors of students in a sample spreadsheet:
  * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
  */
-function listActivities(documentID, sheetName) {
+const listActivities = (documentID, sheetName) => {
   let sheetPrefix = sheetName ? (sheetName + '!') : '';
   sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
 
   gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: documentID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
     range: sheetPrefix + 'A2:D',
-  }).then(function (response) {
+  }).then((response) => {
     const range = response.result;
     
     // Sometimes range.values has no values so it is not returned from the response
@@ -152,11 +152,10 @@ function listActivities(documentID, sheetName) {
       setTimeRangeMaxValue();
       documentInput.classList.remove('is-invalid');
     } else {
-
       sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">No data found. :(</div>');
       disableFilters();
     }
-  }, function (response) {
+  }, (response) => {
     documentInput.classList.add('is-invalid');
     disableFilters();
     console.log('error: ' + response.result.error.message);
@@ -164,21 +163,21 @@ function listActivities(documentID, sheetName) {
   });
 }
 
-function getSheetNames(documentID) {
+const getSheetNames = (documentID) => {
   gapi.client.sheets.spreadsheets.get({
     spreadsheetId: documentID
-  }).then(function(response) {
+  }).then((response) => {
     insertSheetNames(response.result.sheets); // array        
-  }, function(reason) {
+  }, (reason) => {
     console.error('error: ' + reason.result.error.message);
   });
 }
 
-function getSheet(documentID, sheetName) {
+const getSheet = (documentID, sheetName) => {
   listActivities(documentID, sheetName);
 }
 
-function insertSheetNames(sheetNames) {
+const insertSheetNames = (sheetNames) => {
   const sheetButtonContainer = document.querySelector('.sheet-button-container');
   sheetButtonContainer.innerHTML = "";
 
@@ -217,7 +216,7 @@ function insertSheetNames(sheetNames) {
   });
 }
 
-function insertRandomizedActivity(pick) {
+const insertRandomizedActivity = (pick) => {
   pickedActivity.querySelector('.card-title h2').innerHTML = pick.name;
   pickedActivity.querySelector('.card-text').innerHTML = pick.description + '<br>' + pick.time + ' minutes.';
 }
@@ -237,7 +236,7 @@ sheetSubmit.addEventListener('click', function() {
 });
 
 randomizeBtn.addEventListener('click', () => {
-  let filteredActivities = filterActivities(activities, checkFilters()); 
+  let filteredActivities = filterActivities(activities, getFilters()); 
 
   if(filteredActivities.length > 0) {
     let random = Math.floor(Math.random()*filteredActivities.length);
@@ -255,7 +254,7 @@ randomizeBtn.addEventListener('click', () => {
   
 });
 
-function setTimeRangeMaxValue(activ) {
+const setTimeRangeMaxValue = (activ) => {
   timeRange.disabled = true;
   activ = activ || activities;
   let maxTime = null;
@@ -274,7 +273,7 @@ function setTimeRangeMaxValue(activ) {
   } 
 }
 
-function disableFilters() {
+const disableFilters = () => {
   timeRange.disabled = true;
 }
 
@@ -286,8 +285,10 @@ timeRange.addEventListener('change', function(e) {
 function filterActivities(actvts, filters) {
   // filter based on time
   const filtered = actvts.filter((activity) => {
-    // Because activity.time is a string it needs to be converted
-    // to a number before comparing it to the value of the time range.
+    /**
+     * Because activity.time is a string it needs to be converted
+     * to a number before comparing it to the value of the time range. 
+     */
     return Number(activity.time) <= filters.maxTime;
   });
   return filtered;
@@ -298,23 +299,31 @@ removeFiltersBtn.addEventListener('click', () => {
   setTimeRangeMaxValue(activities);
 });
 
-function checkFilters() {
+function getFilters() {
   const filters = {};
   filters.maxTime = timeRange.value;
 
   return filters;
 }
 
-viewListBtns.forEach(function(btn) {
+/**
+ * Add a click event listener to every button in viewListBtns
+ * Fill the sheetContentContainers (containers that should have the list of activities)
+ * with the filtered activities.
+ */
+viewListBtns.forEach((btn) => {
   btn.addEventListener('click', function(e){
-    const filtered =  filterActivities(activities, checkFilters());
-    if(filtered.length > 0) {
+    const filteredActivities =  filterActivities(activities, getFilters());
+
+    if(filteredActivities.length > 0) {
       sheetContentContainer.forEach(ct => ct.innerHTML = '');
-      filtered.forEach(function(activity){
+      filteredActivities.forEach((activity) => {
         appendCol(activity.name, activity.time);
       });
     } else {
-      sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>');
+      sheetContentContainer.forEach((ct) => {
+        ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>';
+      });
     }
   });
 });
