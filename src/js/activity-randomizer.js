@@ -19,7 +19,6 @@ const authorizeButton = document.getElementById('authorize-button');
 const signoutButton = document.getElementById('signout-button');
 const documentInput = document.getElementById('sheet-input');
 const sheetSubmit = document.getElementById('sheet-submit');
-const sheetDropdown = document.getElementById('sheet-names');
 const randomizeBtn = document.getElementById('pick-activity');
 const pickedActivity = document.getElementById('picked-activity');
 const sheetContentContainer = document.querySelectorAll('[sheet-content]');
@@ -30,6 +29,7 @@ const removeFiltersBtn = document.getElementById('remove-filters');
 const noActivityContainers = document.querySelectorAll('.no-activity');
 const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
 const viewListBtns = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
+const timeRangeMaxValueIndicator = document.querySelector('.max');
 
 // The activities array will hold all activities from a sheet
 let activities = [];
@@ -111,7 +111,7 @@ function appendCol(activity, time) {
     col.classList.add("col-sm-12");
     col.appendChild(textContent);
     contentContainer.appendChild(col);
-  })
+  });
 }
 
 /**
@@ -168,7 +168,7 @@ function getSheetNames(documentID) {
   gapi.client.sheets.spreadsheets.get({
     spreadsheetId: documentID
   }).then(function(response) {
-    insertSheetNames(response.result.sheets, sheetDropdown); // array        
+    insertSheetNames(response.result.sheets); // array        
   }, function(reason) {
     console.error('error: ' + reason.result.error.message);
   });
@@ -178,73 +178,49 @@ function getSheet(documentID, sheetName) {
   listActivities(documentID, sheetName);
 }
 
-function insertSheetNames(sheetNames, select) {
-  // select.style.display = "inline-block";
-
-  
-  select.disabled = true;
-  select.innerHTML = '<option class="loading-option">Loading sheet names...</option>';
-
+function insertSheetNames(sheetNames) {
   const sheetButtonContainer = document.querySelector('.sheet-button-container');
   sheetButtonContainer.innerHTML = "";
 
   sheetNames.forEach(sheet => {
-    let sheetName = sheet.properties.title;
+    let sheetName = sheet.properties.title.toLowerCase();
 
-    if(sheetName.toLowerCase() !== 'info') {
-      let option = document.createElement('option');
-      option.text = sheetName;
-      option.value = sheetName;
-      select.appendChild(option);
-
-      if(option.value.toLowerCase() === 'example template') {
-        select.value = option.value;
-        // Manually dispatch a change event
-        select.dispatchEvent(new Event('change'));
-      }
-
-      // Add the sheets as buttons
-      sheetButtonContainer.innerHTML += `<button class="btn btn-sm" value="${sheetName}">${sheetName}</button>`;
-
-      // add event listeners to those buttons
-      const sheetButtons = sheetButtonContainer.querySelectorAll('button');
-
-      sheetButtons.forEach((btn, index, buttons) => {
-        btn.addEventListener('click', (e) => {
-          // Load activities based on active button
-          buttons.forEach((btn) => {
-            btn.classList.remove('btn-primary');
-          });
-          btn.classList.add('btn-primary');
-
-          let sheetName = e.target.value;
-          listActivities(documentID, sheetName);
-        });
-
-        if(index === 0) {          
-          // Manually dispatch a change event
-          btn.dispatchEvent(new Event('click'));
-          btn.classList.add('btn-primary');
-        }
-      });
+    // Add the sheets as buttons
+    if(sheetName !== 'info') {
+      sheetButtonContainer.innerHTML += `<button class="btn btn-sm" value="${sheetName}">${sheetName}</button>`;      
     }
-    
-    
+
+    let sheetButtons = sheetButtonContainer.querySelectorAll('button');
+
+    // Add the click listeners for the buttons
+    sheetButtons.forEach((btn, index, buttons) => {
+      btn.addEventListener('click', (e) => {
+        /**
+         * Change the active button
+         * Load activities based on active button
+        */
+        buttons.forEach((btn) => {
+          btn.classList.remove('btn-primary');
+        });
+        btn.classList.add('btn-primary');
+
+        let sheetName = e.target.value;
+        listActivities(documentID, sheetName);
+      });
+
+      if(index === 0) {          
+        // Manually dispatch a click event
+        btn.dispatchEvent(new Event('click'));
+        btn.classList.add('btn-primary');
+      }
+    });   
   });
-  // Remove the loading option
-  select.removeChild(select.querySelector('.loading-option'));
-  select.disabled = false;
 }
 
 function insertRandomizedActivity(pick) {
   pickedActivity.querySelector('.card-title h2').innerHTML = pick.name;
   pickedActivity.querySelector('.card-text').innerHTML = pick.description + '<br>' + pick.time + ' minutes.';
 }
-
-sheetDropdown.addEventListener('change', (event) => {
-  let sheetName = event.target.value;
-  listActivities(documentID, sheetName);
-});
 
 sheetSubmit.addEventListener('click', function() {      
   if((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
@@ -261,11 +237,11 @@ sheetSubmit.addEventListener('click', function() {
 });
 
 randomizeBtn.addEventListener('click', () => {
-  let theArrayToFilter = filterActivities(activities, checkFilters()); 
+  let filteredActivities = filterActivities(activities, checkFilters()); 
 
-  if(theArrayToFilter.length > 0) {
-    let random = Math.floor(Math.random()*theArrayToFilter.length);
-    insertRandomizedActivity(theArrayToFilter[random]);
+  if(filteredActivities.length > 0) {
+    let random = Math.floor(Math.random()*filteredActivities.length);
+    insertRandomizedActivity(filteredActivities[random]);
     noActivityContainers.forEach(function(el) {
       el.style.display = 'none';
     });
@@ -290,8 +266,12 @@ function setTimeRangeMaxValue(activ) {
   }, null);
   timeRange.max = maxTime;
   timeRange.value = maxTime;
+  timeRangeMaxValueIndicator.innerHTML = maxTime;
   timeRangeValue.textContent = timeRange.value;
-  if(timeRange.disabled == true && timeRange.max != 'null') timeRange.disabled = false;
+
+  if(timeRange.disabled == true && timeRange.max != 'null') {
+    timeRange.disabled = false;
+  } 
 }
 
 function disableFilters() {
