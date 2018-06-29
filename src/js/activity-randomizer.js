@@ -221,7 +221,7 @@ const insertRandomizedActivity = (pick) => {
   pickedActivity.querySelector('.card-text').innerHTML = pick.description + '<br>' + pick.time + ' minutes.';
 }
 
-sheetSubmit.addEventListener('click', function() {      
+sheetSubmit.addEventListener('click', () => {      
   if((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
     const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
     // sheet link
@@ -241,10 +241,10 @@ randomizeBtn.addEventListener('click', () => {
   if(filteredActivities.length > 0) {
     let random = Math.floor(Math.random()*filteredActivities.length);
     insertRandomizedActivity(filteredActivities[random]);
-    noActivityContainers.forEach(function(el) {
+    noActivityContainers.forEach((el) => {
       el.style.display = 'none';
     });
-    randomizedActivityContainers.forEach(function(el) {
+    randomizedActivityContainers.forEach((el) => {
       el.style.display = 'block';
     });
   } else {
@@ -277,12 +277,12 @@ const disableFilters = () => {
   timeRange.disabled = true;
 }
 
-timeRange.addEventListener('change', function(e) {
+timeRange.addEventListener('change', (e) => {
   const rangeValue = e.target.value;
   timeRangeValue.textContent = rangeValue;
 });
 
-function filterActivities(actvts, filters) {
+filterActivities = (actvts, filters) => {
   // filter based on time
   const filtered = actvts.filter((activity) => {
     /**
@@ -299,7 +299,7 @@ removeFiltersBtn.addEventListener('click', () => {
   setTimeRangeMaxValue(activities);
 });
 
-function getFilters() {
+const getFilters = () => {
   const filters = {};
   filters.maxTime = timeRange.value;
 
@@ -312,7 +312,7 @@ function getFilters() {
  * with the filtered activities.
  */
 viewListBtns.forEach((btn) => {
-  btn.addEventListener('click', function(e){
+  btn.addEventListener('click', (e) => {
     const filteredActivities =  filterActivities(activities, getFilters());
 
     if(filteredActivities.length > 0) {

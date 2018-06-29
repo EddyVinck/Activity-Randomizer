@@ -17,3 +17,96 @@
     padding: 0.25rem 0.5rem;
   }
 }
+
+.navigation {
+  padding: 10px 0 0;
+}
+
+.nav-items {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li a:not(.btn) {    
+    color: $gunMetal;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  > ul > li {
+    display: inline-block;
+    margin-right: -5px; // counters whitespace caused by inline-block
+    vertical-align: top;
+    
+    a {
+      font-size: 16px;
+    }
+
+    > a {
+      position: relative;
+      display: block;
+      height: 45px;
+      line-height: 45px;
+      vertical-align: middle;
+      padding: 0 11px;
+      
+      &:not(.btn) {
+        &.active, &:hover {
+          &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background-color: $primary;
+          }
+        }
+      }
+    }
+
+  }
+}
+
+.navigation-top-row, .navigation-bottom-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navigation-top-row {
+  
+  .nav-items {
+    ul > li {
+      margin-right: 11px;
+    }
+    
+    a {
+      font-size: 14px;
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+
+}
+
+.branding {
+  .logo {
+    max-width: 50px;
+    margin-right: 5px;
+  }
+  .logo, .name-slogan {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .name {
+    display: block;
+    font-size: 26px;
+    line-height: 32px;
+  }
+  .slogan {
+    display: block;
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
