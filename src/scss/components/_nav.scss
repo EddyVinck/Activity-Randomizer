@@ -157,6 +157,7 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
     }
   [nav-contents] {
     display: none;
+    padding-top: 5px;
   }
   [nav-contents].open {
     display: block;
