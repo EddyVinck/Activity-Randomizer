@@ -1,3 +1,8 @@
+/*
+  TODO: style active state on <li> instead of <a>
+*/
+$hamburger-breakpoint-down: "(max-width: 992px)";
+
 .site-nav {
   background-color: $mintCream;
   -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.1);
@@ -64,6 +69,9 @@
             background-color: $primary;
           }
         }
+        &.active {
+          font-weight: bold;
+        }
       }
     }
 
@@ -126,5 +134,45 @@
   }
   .branding .logo {
     max-width: 50px;
+  }
+  
+}
+
+.hamburger-wrapper {
+  display: none;
+}
+
+@media #{$hamburger-breakpoint-down} {
+  .navigation {
+    padding-bottom: 8px;
+  }
+  .hamburger-wrapper {
+    display: inline-flex;
+    float: right;
+    align-items: center;
+    height: 100%;
+  }
+    .hamburger {
+
+    }
+  [nav-contents] {
+    display: none;
+  }
+  [nav-contents].open {
+    display: block;
+  }
+  .navigation-top-row, .navigation-bottom-row {
+    justify-content: flex-start;
+  }
+  .nav-items {
+    padding-top: 5px;
+    ul li {
+      display: block;
+      margin-bottom: 3px;
+    }
+  }
+  .branding.row > [class*="col"] {
+    max-width: 100%;
+    flex: 0 0 100%;
   }
 }
