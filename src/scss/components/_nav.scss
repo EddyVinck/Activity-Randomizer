@@ -19,10 +19,11 @@
 }
 
 .navigation {
-  padding: 10px 0 0;
+  padding: 8px 0 0;
 }
 
 .nav-items {
+  $bottomRowNavItemHeight: 38px;
   ul {
     list-style: none;
     padding: 0;
@@ -46,8 +47,8 @@
     > a {
       position: relative;
       display: block;
-      height: 45px;
-      line-height: 45px;
+      height: $bottomRowNavItemHeight;
+      line-height: $bottomRowNavItemHeight;
       vertical-align: middle;
       padding: 0 11px;
       
@@ -86,14 +87,19 @@
       height: 30px;
       line-height: 30px;
     }
+
+    ul li:last-of-type a {
+
+    }
   }
 
 }
 
 .branding {
   .logo {
-    max-width: 50px;
-    margin-right: 5px;
+    max-width: 60px;
+    // margin-right: 5px;
+    padding: 4px;
   }
   .logo, .name-slogan {
     display: inline-block;
@@ -101,12 +107,24 @@
   }
   .name {
     display: block;
-    font-size: 26px;
+    font-size: 25px;
     line-height: 32px;
   }
   .slogan {
     display: block;
     font-size: 14px;
     line-height: 18px;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .branding .name {
+    font-size: 22px;
+  }
+  .branding .slogan {
+    font-size: 13px;
+  }
+  .branding .logo {
+    max-width: 50px;
   }
 }
