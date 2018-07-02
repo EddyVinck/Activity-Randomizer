@@ -78,12 +78,12 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
   }
 }
 
-.navigation-top-row, .navigation-bottom-row {
+.navigation-primary, .navigation-secondary {
   display: flex;
   justify-content: flex-end;
 }
 
-.navigation-top-row {
+.navigation-secondary {
   
   .nav-items {
     ul > li {
@@ -177,7 +177,7 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
     display: flex;
     flex-direction: column-reverse;
   }
-  .navigation-top-row, .navigation-bottom-row {
+  .navigation-primary, .navigation-secondary {
     justify-content: flex-start;
   }
   .nav-items {
