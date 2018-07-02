@@ -88,6 +88,10 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
   .nav-items {
     ul > li {
       margin-right: 11px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
     }
     
     a {
@@ -131,9 +135,10 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
   }
 }
 
-@include media-breakpoint-down(lg) {
+@include media-breakpoint-down(md) {
   .branding .name {
     font-size: 22px;
+    line-height: 22px;
   }
   .branding .slogan {
     font-size: 13px;
