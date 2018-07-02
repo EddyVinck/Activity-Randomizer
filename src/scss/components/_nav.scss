@@ -125,6 +125,12 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
   }
 }
 
+@include media-breakpoint-up(lg) {
+  [nav-contents].collapse {
+    display: block;
+  }
+}
+
 @include media-breakpoint-down(lg) {
   .branding .name {
     font-size: 22px;
@@ -134,8 +140,7 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
   }
   .branding .logo {
     max-width: 50px;
-  }
-  
+  }  
 }
 
 .hamburger-wrapper {
@@ -145,6 +150,10 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
 @media #{$hamburger-breakpoint-down} {
   .navigation {
     padding-bottom: 8px;
+
+    .container {
+      max-width: 100%;
+    }
   }
   .hamburger-wrapper {
     display: inline-flex;
@@ -155,12 +164,18 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
     .hamburger {
 
     }
-  [nav-contents] {
-    display: none;
-    padding-top: 5px;
+  [nav-contents]:not(.show) {
+    height: 0;
+    overflow: hidden;
   }
-  [nav-contents].open {
-    display: block;
+  [nav-contents] {
+    &.show, &.collapsing {
+      padding-top: 5px;
+    }
+  }
+  .navigation-mobile-flex-wrapper {
+    display: flex;
+    flex-direction: column-reverse;
   }
   .navigation-top-row, .navigation-bottom-row {
     justify-content: flex-start;
@@ -176,4 +191,17 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
     max-width: 100%;
     flex: 0 0 100%;
   }
+}
+
+@include media-breakpoint-down(xs) {
+  .branding .name {
+    font-size: 18px;
+    line-height: 22px;
+  }
+  .branding .slogan {
+    font-size: 11px;
+  }
+  .branding .logo {
+    max-width: 44px;
+  }  
 }

@@ -3,7 +3,8 @@ const initNav = () => {
   const hamburger = document.querySelector('.hamburger');
 
   hamburger.addEventListener('click', (e) => {
-    navContents.classList.toggle('open');
+    $(navContents).collapse('toggle');
+    e.preventDefault();
   });
 }
 
