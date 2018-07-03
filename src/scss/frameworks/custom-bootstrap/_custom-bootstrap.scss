@@ -17,6 +17,7 @@ $dark:          $gunMetal;
 
 $body-bg: #fdfdfd;
 $body-color: $gunMetal;
+$spacer: 2rem;
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
@@ -51,5 +52,5 @@ $body-color: $gunMetal;
 @import "~bootstrap/scss/tooltip";
 @import "~bootstrap/scss/popover";
 @import "~bootstrap/scss/carousel";
-@import "~bootstrap/scss/utilities";
+@import "utilities";
 @import "~bootstrap/scss/print"; 
