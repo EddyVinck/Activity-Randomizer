@@ -282,7 +282,7 @@ timeRange.addEventListener('change', (e) => {
   timeRangeValue.textContent = rangeValue;
 });
 
-filterActivities = (actvts, filters) => {
+const filterActivities = (actvts, filters) => {
   // filter based on time
   const filtered = actvts.filter((activity) => {
     /**

@@ -1,17 +1,23 @@
 <nav class="navigation">
   <div class="main-nav">
     <div class="container">
-      <div class="branding row">
-        <div class="col-12 col-md-12 col-lg-4">
-          <div class="logo">
-            <img src="../../assets/img/activity-randomizer-logo.png" alt="Activity Randomizer logo">
-          </div>
-          <div class="name-slogan">
-            <a class="name">Activity Randomizer</a>
-            <span class="slogan">Helps you pick something to do.</span>
-          </div>
+      <div class="row">
+        <div class="branding col-12 col-md-12 col-lg-4">
+          <a href="/">
+            <div class="logo">
+              <img src="../../assets/img/activity-randomizer-logo.png" alt="Activity Randomizer logo">
+            </div>
+            <div class="name-slogan">
+              <span class="name">Activity Randomizer</span>
+              <span class="slogan">Helps you pick something to do.</span>
+            </div>            
+          </a>
           <div class="hamburger-wrapper">
-            <a href="#hamburger-toggle" class="hamburger">MENU</a>
+            {{!-- <a href="#hamburger-toggle" class="hamburger"><span></span><span></span><span></span></a> --}}
+            <input hamburger-toggle type="checkbox" name="" id="">
+            <div class="bun">
+              <div class="burger"></div>
+            </div>
           </div>
         </div>
         <div nav-contents class="col-12 col-md-12 col-lg-8">
@@ -22,7 +28,12 @@
                 <div class="navigation-secondary">
                   <div class="nav-items">
                     <ul>
-                      <li><a class="btn btn-primary" href="">Allow Google services</a></li>
+                      <li><a href="">Example Sheet</a></li>
+                      <li><a href=""><i class="icon-cog"></i></a></li>
+                      <li>
+                        <a id="authorize-button" class="btn btn-primary" href="">Allow Google services</a>
+                        <a id="signout-button" style="display: none;" class="btn btn-primary" href="">Sign out of Google services</a>
+                      </li>
                       <li><a class="btn btn-primary" href="">Get newsletters</a></li>
                       {{!-- <li>
                         <div class="language-dropdown">
@@ -50,12 +61,11 @@
                     <ul>
                       <li><a href="">Profile</a></li>
                       <li class="active"><a href="">Pricing</a></li>
-                      <li><a href="">Example Sheet</a></li>
+                      <li><a href="">Features</a></li>
                       <li><a href="">Help</a></li>
-                      <li><a href="">News</a></li>
-                      <li><a href=""><i class="icon-cog"></i></a></li>
-                      <li><a href="">Log in</a></li>
-                      <li><a href="">Sign up</a></li>
+                      <li><a href="">News</a></li>                      
+                      <li><a class="btn btn-outline-primary" href="">Log in</a></li>
+                      <li><a class="btn btn-primary" href="">Sign up</a></li>
                     </ul>
                   </div>
                 </div>

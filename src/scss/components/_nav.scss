@@ -1,7 +1,10 @@
 /*
   TODO: style active state on <li> instead of <a>
+  TODO: style hover states of links that aren't buttons 
+  or the first level of the primary navigation
 */
 $hamburger-breakpoint-down: "(max-width: 992px)";
+$hamburger-breakpoint-up: "(min-width: 993px)";
 
 .site-nav {
   background-color: $mintCream;
@@ -28,53 +31,23 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
 }
 
 .nav-items {
-  $bottomRowNavItemHeight: 38px;
   ul {
+    display: flex;
     list-style: none;
     padding: 0;
     margin: 0;
   }
+
   li a:not(.btn) {    
     color: $gunMetal;
     &:hover {
       text-decoration: none;
     }
   }
-  > ul > li {
-    display: inline-block;
-    margin-right: -5px; // counters whitespace caused by inline-block
-    vertical-align: top;
-    
+  > ul > li {    
     a {
       font-size: 16px;
     }
-
-    > a {
-      position: relative;
-      display: block;
-      height: $bottomRowNavItemHeight;
-      line-height: $bottomRowNavItemHeight;
-      vertical-align: middle;
-      padding: 0 11px;
-      
-      &:not(.btn) {
-        &.active, &:hover {
-          &::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 4px;
-            width: 100%;
-            background-color: $primary;
-          }
-        }
-        &.active {
-          font-weight: bold;
-        }
-      }
-    }
-
   }
 }
 
@@ -83,8 +56,17 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
   justify-content: flex-end;
 }
 
+.navigation-primary li li a:not(.btn), .navigation-secondary li a:not(.btn):hover {
+  transition: 0.1s;
+  color: $primary;
+  text-decoration: underline;
+}
+
+
+
 .navigation-secondary {
-  
+  margin-bottom: 8px;
+
   .nav-items {
     ul > li {
       margin-right: 11px;
@@ -93,25 +75,46 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
         margin-right: 0;
       }
     }
-    
+
     a {
       font-size: 14px;
+    }
+    
+    a:not(.btn) {
       height: 30px;
       line-height: 30px;
     }
 
-    ul li:last-of-type a {
-
+    a.btn {
+      padding-top: 3px;
+      padding-bottom: 3px;
+      line-height: 20px;
     }
   }
-
 }
 
 .branding {
+  display: flex;
+  align-items: center;
+
+  > a:first-of-type {
+    display: inline-block;
+    color: $gunMetal;
+
+    &:hover {
+      text-decoration: none;
+
+      &::before {
+        content: none;
+      }
+    }
+  }
+
   .logo {
     max-width: 60px;
-    // margin-right: 5px;
+    margin-right: 5px;
     padding: 4px;
+    margin-left: -4px;
   }
   .logo, .name-slogan {
     display: inline-block;
@@ -160,11 +163,15 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
       max-width: 100%;
     }
   }
+  a.btn {
+    margin-left: 0;
+  }
   .hamburger-wrapper {
     display: inline-flex;
     float: right;
     align-items: center;
     height: 100%;
+    margin-left: auto;
   }
     .hamburger {
 
@@ -185,16 +192,163 @@ $hamburger-breakpoint-down: "(max-width: 992px)";
   .navigation-primary, .navigation-secondary {
     justify-content: flex-start;
   }
-  .nav-items {
+  .navigation-secondary {
+    margin-bottom: 0;
+  }
+  .navigation-primary .nav-items, .navigation-secondary .nav-items {
     padding-top: 5px;
+    ul {
+      flex-direction: column;
+    }
     ul li {
       display: block;
-      margin-bottom: 3px;
+      margin-bottom: 10px;
+
+      a {
+        font-size: 16px;
+        &:not(.btn):hover {
+          transition: 0.1s;
+          color: $primary;
+          text-decoration: underline;
+        }
+      }
     }
   }
   .branding.row > [class*="col"] {
     max-width: 100%;
     flex: 0 0 100%;
+  }
+
+  // Hamburger stuff
+  $hamburger-background-color: #fff;
+  $hamburger-color: $primary;
+  $hamburger-size: 40px;
+
+  @mixin pill(){
+    content:'';
+    position:absolute;
+    width: 100%;
+    height: 12%;
+    background: $hamburger-background-color;
+    box-shadow:0 0 0 $hamburger-size/10 lighten($hamburger-background-color,35);
+    border-radius: $hamburger-size;
+    transition: all .5s cubic-bezier(.1, .9, 0, 1.2);
+  }
+
+  .hamburger-wrapper{
+    
+    display: block;
+    position:relative;
+    width: $hamburger-size;
+    height: $hamburger-size;
+  
+    .bun{
+      &:before{
+        @include pill();
+        top: 10%;
+        right:0;
+        background-color: $hamburger-color;
+
+      }
+
+      &:after{
+        @include pill();
+        bottom: 10%;
+        left:0;
+        background-color: $hamburger-color;
+
+      }
+
+      .burger{
+        position: absolute;
+        display: flex;
+        align-items: center;
+        height: $hamburger-size;
+        width: $hamburger-size;
+        // background-color: $hamburger-color;
+
+        &:before, &:after{
+          @include pill();
+        background-color: $hamburger-color;
+
+        }
+      }
+    }
+    
+    input{
+      display:block;
+      position: absolute;
+      opacity: 0;
+      z-index: 1;
+      width:$hamburger-size;
+      height:$hamburger-size;
+      cursor:pointer;
+      
+      &:hover ~ .bun{
+        &:before, &:after, :before, :after{
+          background: $hamburger-color;
+        }
+      }
+      
+      &:checked ~ .bun{
+        &:before, &:after{
+          width:0;
+        }
+
+        .burger{
+          &:before{
+            transform:rotate(135deg);
+          }
+          &:after{
+            transform:rotate(45deg);
+            box-shadow:0 0 0 0 lighten($hamburger-background-color,35);
+          }
+        }
+      }
+    }
+    
+  }
+}
+
+
+
+@media #{$hamburger-breakpoint-up} {
+  .navigation-primary .nav-items li a.btn {
+    margin-left: 11px;
+  }
+  .branding {
+    padding-bottom: 8px;
+  }
+  
+  .navigation-primary .nav-items {
+    $primaryItemHeight: 46px;
+    $primaryItemLineHeight: 35px;
+  
+    ul > li > a:not(.btn) {
+      position: relative;
+      display: block;
+      height: $primaryItemHeight;
+      line-height: $primaryItemLineHeight;
+      padding: 0 11px;
+      
+      &:not(.btn) {
+        &.active, &:hover {
+          &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background-color: $primary;
+          }
+        }
+        &.active {
+          font-weight: bold;
+        }
+      }
+    }
+  
   }
 }
 
