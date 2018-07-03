@@ -6,6 +6,30 @@
 $hamburger-breakpoint-down: "(max-width: 992px)";
 $hamburger-breakpoint-up: "(min-width: 993px)";
 
+
+
+
+@media #{$hamburger-breakpoint-down} {
+  body {
+    $navigation-height: 67px;
+    padding-top: $navigation-height;
+  }
+}
+
+body {
+  @include media-breakpoint-down(xs) {
+    $navigation-height: 50px;
+    padding-top: $navigation-height;
+  }
+}
+
+@media #{$hamburger-breakpoint-up} {
+  body {
+    $navigation-height: 92px;
+    padding-top: $navigation-height;
+  }
+}
+
 .site-nav {
   background-color: $mintCream;
   -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.1);
@@ -27,7 +51,15 @@ $hamburger-breakpoint-up: "(min-width: 993px)";
 }
 
 .navigation {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: white;
+  z-index: 1;
   padding: 8px 0 0;
+  -webkit-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.2);
 }
 
 .nav-items {
