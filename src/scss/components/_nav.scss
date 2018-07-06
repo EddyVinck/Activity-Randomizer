@@ -68,6 +68,8 @@ body {
   }
 
   li a:not(.btn) {    
+    display: block;
+    height: 100%;
     color: $gunMetal;
     &:hover {
       text-decoration: none;
