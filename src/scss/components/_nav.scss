@@ -6,9 +6,6 @@
 $hamburger-breakpoint-down: "(max-width: 992px)";
 $hamburger-breakpoint-up: "(min-width: 993px)";
 
-
-
-
 @media #{$hamburger-breakpoint-down} {
   body {
     $navigation-height: 67px;
