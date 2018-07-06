@@ -88,13 +88,12 @@ body {
   justify-content: flex-end;
 }
 
+// Regular links and deeper levels of navigation in the primary nav
 .navigation-primary li li a:not(.btn), .navigation-secondary li a:not(.btn):hover {
   transition: 0.1s;
   color: $primary;
   text-decoration: underline;
 }
-
-
 
 .navigation-secondary {
   margin-bottom: 8px;
@@ -342,47 +341,50 @@ body {
   }
 }
 
-
-
 @media #{$hamburger-breakpoint-up} {
-  .navigation-primary .nav-items li a.btn {
-    margin-left: 11px;
-  }
   .branding {
     padding-bottom: 8px;
   }
   
   .navigation-primary .nav-items {
     $primaryItemHeight: 46px;
-    $primaryItemLineHeight: 35px;
+    $primaryItemLineHeight: 34px;
+    $navItemXPadding: 11px;
+
+    // Remove the extra space on the right side of the list
+    ul {
+      margin-right: -$navItemXPadding;
+    }
   
-    ul > li > a:not(.btn) {
+    ul > li {
       position: relative;
       display: block;
       height: $primaryItemHeight;
       line-height: $primaryItemLineHeight;
-      padding: 0 11px;
-      
-      &:not(.btn) {
-        &.active, &:hover {
-          &::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 4px;
-            width: 100%;
-            background-color: $primary;
-          }
+      padding: 0 $navItemXPadding;
+
+      &:hover, &.active {
+        // Bar under nav item, relative to parent <li>
+        > a:not(.btn)::before {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 4px;
+          width: 100%;
+          background-color: $primary;
         }
-        &.active {
+      }
+
+      &.active {
+        > a:not(.btn) {
           font-weight: bold;
         }
       }
-    }
-  
-  }
+    }      
+  }  
 }
+
 
 @include media-breakpoint-down(xs) {
   .branding .name {
