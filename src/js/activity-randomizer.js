@@ -1,3 +1,7 @@
+/**
+ * TODO: figure out what noActivityContainers does
+ */
+
 // Client ID and API key from the Developer Console
 const CLIENT_ID = '855790869281-iie5tqafurs5179pmr8s236n595o4460.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
@@ -15,28 +19,20 @@ const SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly https://ww
 // documentID is changed when sheetSubmit is clicked. It is the document ID from the google sheets URL.
 let documentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
 
-const authorizeButton = document.getElementById('authorize-button');
-const signoutButton = document.getElementById('signout-button');
-const documentInput = document.getElementById('sheet-input');
-const sheetSubmit = document.getElementById('sheet-submit');
-const randomizeBtn = document.getElementById('pick-activity');
-const pickedActivity = document.getElementById('picked-activity');
-const sheetContentContainer = document.querySelectorAll('[sheet-content]');
-const timeRange = document.querySelector('[time-range]');
-const timeRangeValue = document.querySelector('[time-range-value]');
-const filterSubmit = document.getElementById('filter-submit');
-const removeFiltersBtn = document.getElementById('remove-filters');
-const noActivityContainers = document.querySelectorAll('.no-activity');
-const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
-const viewListBtns = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
-const timeRangeMaxValueIndicator = document.querySelector('.max');
-
 // The activities array will hold all activities from a sheet
 let activities = [];
+
+// Elements with eventlisteners
+const viewListButtons = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
+const timeRange = document.querySelector('[time-range]');
+const randomizeButton = document.getElementById('pick-activity');
+const sheetSubmit = document.getElementById('sheet-submit');
+const removeFiltersButton = document.getElementById('remove-filters');
 
 /**
  *  On load, called to load the auth2 library and API client library.
  *  Calls initClient.
+ *  It's on the window object because it needs to be accessible to the Google Sheets script.
  */
 window.handleClientLoad = () => {
   gapi.load('client:auth2', initClient);
@@ -47,6 +43,9 @@ window.handleClientLoad = () => {
  *  listeners.
  */
 const initClient = () => {
+  const authorizeButton = document.getElementById('authorize-button');
+  const signoutButton = document.getElementById('signout-button');
+
   gapi.client.init({
     apiKey: API_KEY,
     clientId: CLIENT_ID,
@@ -68,6 +67,9 @@ const initClient = () => {
  *  appropriately. After a sign-in, the API is called.
  */
 const updateSigninStatus = (isSignedIn) => {
+  const authorizeButton = document.getElementById('authorize-button');
+  const signoutButton = document.getElementById('signout-button');
+
   if (isSignedIn) {
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'inline-block';
@@ -105,7 +107,9 @@ const appendPre = (message) => {
   content.appendChild(textContent);
 }
 const appendCol = (activity, time) => {
-  sheetContentContainer.forEach(contentContainer => {
+  const sheetContentContainers = document.querySelectorAll('[sheet-content]');
+
+  sheetContentContainers.forEach(contentContainer => {
     const col = document.createElement("div");
     const textContent = document.createTextNode(activity + ", " + time + " minutes." + '\n');
     col.classList.add("col-sm-12");
@@ -119,8 +123,11 @@ const appendCol = (activity, time) => {
  * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
  */
 const listActivities = (documentID, sheetName) => {
+  const documentInput = document.getElementById('sheet-input');
+  const sheetContentContainers = document.querySelectorAll('[sheet-content]');
+
   let sheetPrefix = sheetName ? (sheetName + '!') : '';
-  sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
+  sheetContentContainers.forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
 
   gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: documentID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
@@ -134,7 +141,7 @@ const listActivities = (documentID, sheetName) => {
       // Reset the activities array
       activities = [];
 
-      sheetContentContainer.forEach(ct => ct.innerHTML = '');
+      sheetContentContainers.forEach(ct => ct.innerHTML = '');
       for (let i = 0; i < range.values.length; i++) {
         const row = range.values[i];
 
@@ -152,7 +159,7 @@ const listActivities = (documentID, sheetName) => {
       setTimeRangeMaxValue();
       documentInput.classList.remove('is-invalid');
     } else {
-      sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">No data found. :(</div>');
+      sheetContentContainers.forEach(ct => ct.innerHTML = '<div class="col">No data found. :(</div>');
       disableFilters();
     }
   }, (response) => {
@@ -217,44 +224,16 @@ const insertSheetNames = (sheetNames) => {
 }
 
 const insertRandomizedActivity = (pick) => {
+  const pickedActivity = document.getElementById('picked-activity');
+
   pickedActivity.querySelector('.card-title h2').innerHTML = pick.name;
   pickedActivity.querySelector('.card-text').innerHTML = pick.description + '<br>' + pick.time + ' minutes.';
 }
 
-sheetSubmit.addEventListener('click', () => {      
-  if((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
-    const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-    // sheet link
-    const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
-    documentID = regexResult[1];
-  } else {
-    documentID = documentInput.value == '' ? documentID : documentInput.value;
-  }
-
-  getSheet(documentID);
-  getSheetNames(documentID);
-});
-
-randomizeBtn.addEventListener('click', () => {
-  let filteredActivities = filterActivities(activities, getFilters()); 
-
-  if(filteredActivities.length > 0) {
-    let random = Math.floor(Math.random()*filteredActivities.length);
-    insertRandomizedActivity(filteredActivities[random]);
-    noActivityContainers.forEach((el) => {
-      el.style.display = 'none';
-    });
-    randomizedActivityContainers.forEach((el) => {
-      el.style.display = 'block';
-    });
-  } else {
-    sheetContentContainer.forEach(ct => ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>');
-    console.log('No activities available');
-  }
-  
-});
-
 const setTimeRangeMaxValue = (activ) => {
+  const timeRangeValue = document.querySelector('[time-range-value]');
+  const timeRangeMaxValueIndicator = document.querySelector('.max');
+  
   timeRange.disabled = true;
   activ = activ || activities;
   let maxTime = null;
@@ -273,14 +252,16 @@ const setTimeRangeMaxValue = (activ) => {
   } 
 }
 
+const getFilters = () => {
+  const filters = {};
+  filters.maxTime = timeRange.value;
+
+  return filters;
+}
+
 const disableFilters = () => {
   timeRange.disabled = true;
 }
-
-timeRange.addEventListener('change', (e) => {
-  const rangeValue = e.target.value;
-  timeRangeValue.textContent = rangeValue;
-});
 
 const filterActivities = (actvts, filters) => {
   // filter based on time
@@ -294,36 +275,81 @@ const filterActivities = (actvts, filters) => {
   return filtered;
 }
 
-removeFiltersBtn.addEventListener('click', () => {
+sheetSubmit.addEventListener('click', () => {  
+  const documentInput = document.getElementById('sheet-input');
+  
+  if((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
+    const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    // sheet link
+    const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
+    documentID = regexResult[1];
+  } else {
+    documentID = documentInput.value == '' ? documentID : documentInput.value;
+  }
+
+  getSheet(documentID);
+  getSheetNames(documentID);
+});
+
+randomizeButton.addEventListener('click', () => {
+  const sheetContentContainers = document.querySelectorAll('[sheet-content]');
+  const noActivityContainers = document.querySelectorAll('.no-activity');
+  const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
+  let filteredActivities = filterActivities(activities, getFilters()); 
+
+  if(filteredActivities.length > 0) {
+    let random = Math.floor(Math.random()*filteredActivities.length);
+    insertRandomizedActivity(filteredActivities[random]);
+    noActivityContainers.forEach((el) => {
+      el.style.display = 'none';
+    });
+    randomizedActivityContainers.forEach((el) => {
+      el.style.display = 'block';
+    });
+  } else {
+    sheetContentContainers.forEach(ct => ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>');
+    console.log('No activities available');
+  }
+  
+});
+
+timeRange.addEventListener('change', (e) => {
+  const rangeValue = e.target.value;
+  const timeRangeValue = document.querySelector('[time-range-value]');
+
+  timeRangeValue.textContent = rangeValue;
+});
+
+removeFiltersButton.addEventListener('click', () => {
   // restore to the original state of the filters
   setTimeRangeMaxValue(activities);
 });
 
-const getFilters = () => {
-  const filters = {};
-  filters.maxTime = timeRange.value;
-
-  return filters;
-}
-
 /**
- * Add a click event listener to every button in viewListBtns
+ * Add a click event listener to every button in viewListButtons
  * Fill the sheetContentContainers (containers that should have the list of activities)
  * with the filtered activities.
  */
-viewListBtns.forEach((btn) => {
+viewListButtons.forEach((btn) => {
+  const sheetContentContainers = document.querySelectorAll('[sheet-content]');
+
   btn.addEventListener('click', (e) => {
     const filteredActivities =  filterActivities(activities, getFilters());
 
     if(filteredActivities.length > 0) {
-      sheetContentContainer.forEach(ct => ct.innerHTML = '');
+      sheetContentContainers.forEach(ct => ct.innerHTML = '');
       filteredActivities.forEach((activity) => {
         appendCol(activity.name, activity.time);
       });
     } else {
-      sheetContentContainer.forEach((ct) => {
+      sheetContentContainers.forEach((ct) => {
         ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>';
       });
     }
   });
 });
+
+
+
+
+
