@@ -130,3 +130,5 @@ const fillCurrentCookieSettings = (cookies, cookieModal) => {
 }
 
 handleCookies(getCookies());
+
+module.exports = { getCookies };

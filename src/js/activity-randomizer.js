@@ -1,5 +1,9 @@
+// import Cookies from 'js-cookie';
+import { getCookies } from './cookies/cookies';
+
 /**
  * TODO: figure out what noActivityContainers does
+ * TODO: JSdoc functions https://code.visualstudio.com/docs/languages/javascript
  */
 
 // Client ID and API key from the Developer Console
@@ -15,9 +19,6 @@ const DISCOVERY_DOCS = [
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
 const SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly";
-
-// documentID is changed when sheetSubmit is clicked. It is the document ID from the google sheets URL.
-let documentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
 
 // The activities array will hold all activities from a sheet
 let activities = [];
@@ -71,8 +72,11 @@ const updateSigninStatus = (isSignedIn) => {
   const signoutButton = document.getElementById('signout-button');
 
   if (isSignedIn) {
+    const documentID = getDocumentID();
+
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'inline-block';
+
     getSheetNames(documentID);
     listActivities(documentID);
   } else {
@@ -135,8 +139,10 @@ const listActivities = (documentID, sheetName) => {
   }).then((response) => {
     const range = response.result;
     
-    // Sometimes range.values has no values so it is not returned from the response
-    // This is why it needs to be checked before the length is checked.
+    /**
+     *  Sometimes range.values has no values so it is not returned from the response
+     * This is why it needs to be checked before the length is checked. 
+     **/
     if (range.values && range.values.length > 0) {      
       // Reset the activities array
       activities = [];
@@ -180,10 +186,12 @@ const getSheetNames = (documentID) => {
   });
 }
 
-const getSheet = (documentID, sheetName) => {
-  listActivities(documentID, sheetName);
-}
 
+
+/**
+ * 
+ * @param {array} sheetNames 
+ */
 const insertSheetNames = (sheetNames) => {
   const sheetButtonContainer = document.querySelector('.sheet-button-container');
   sheetButtonContainer.innerHTML = "";
@@ -211,6 +219,7 @@ const insertSheetNames = (sheetNames) => {
         btn.classList.add('btn-primary');
 
         let sheetName = e.target.value;
+        let documentID = getDocumentID();
         listActivities(documentID, sheetName);
       });
 
@@ -223,11 +232,15 @@ const insertSheetNames = (sheetNames) => {
   });
 }
 
-const insertRandomizedActivity = (pick) => {
+/**
+ * 
+ * @param {activity} activity 
+ */
+const insertRandomizedActivity = (activity) => {
   const pickedActivity = document.getElementById('picked-activity');
 
-  pickedActivity.querySelector('.card-title h2').innerHTML = pick.name;
-  pickedActivity.querySelector('.card-text').innerHTML = pick.description + '<br>' + pick.time + ' minutes.';
+  pickedActivity.querySelector('.card-title h2').innerHTML = activity.name;
+  pickedActivity.querySelector('.card-text').innerHTML = activity.description + '<br>' + activity.time + ' minutes.';
 }
 
 const setTimeRangeMaxValue = (activ) => {
@@ -263,9 +276,9 @@ const disableFilters = () => {
   timeRange.disabled = true;
 }
 
-const filterActivities = (actvts, filters) => {
+const filterActivities = (activities, filters) => {
   // filter based on time
-  const filtered = actvts.filter((activity) => {
+  const filtered = activities.filter((activity) => {
     /**
      * Because activity.time is a string it needs to be converted
      * to a number before comparing it to the value of the time range. 
@@ -275,19 +288,51 @@ const filterActivities = (actvts, filters) => {
   return filtered;
 }
 
-sheetSubmit.addEventListener('click', () => {  
-  const documentInput = document.getElementById('sheet-input');
+/**
+ * Gets the document ID associated with the users Google Sheets.
+ * documentID is changed when sheetSubmit is clicked. It is the document ID from the google sheets URL.
+ */
+const getDocumentID = () => {
+  const cookies = getCookies();
+  let documentID = '';
   
+  if(cookies.preferredSheet !== undefined) {
+    // Check the cookies for a saved document ID
+    documentID = cookies.preferredDoc;
+  } else {
+    // Check the sheet input for a document ID
+    documentID = getDocumentIDFromDocumentInput();
+  }
+
+  return documentID;
+}
+
+/**
+ * @returns example document ID or the ID from the document input
+ */
+const getDocumentIDFromDocumentInput = () => {
+  const documentInput = document.getElementById('sheet-input');
+  const defaultDocumentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
+  let documentID = "";
+  
+  // Use the regex if it is a url, otherwise take the ID
   if((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
     const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
     // sheet link
     const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
     documentID = regexResult[1];
   } else {
-    documentID = documentInput.value == '' ? documentID : documentInput.value;
+    documentID = documentInput.value == '' ? defaultDocumentID : documentInput.value;
   }
 
-  getSheet(documentID);
+  return documentID;
+}
+
+sheetSubmit.addEventListener('click', () => {  
+  const documentInput = document.getElementById('sheet-input');
+  let documentID = getDocumentID();
+
+  listActivities(documentID);
   getSheetNames(documentID);
 });
 
@@ -337,7 +382,7 @@ viewListButtons.forEach((btn) => {
     const filteredActivities =  filterActivities(activities, getFilters());
 
     if(filteredActivities.length > 0) {
-      sheetContentContainers.forEach(ct => ct.innerHTML = '');
+      sheetContentContainers.forEach((ct) => ct.innerHTML = '');
       filteredActivities.forEach((activity) => {
         appendCol(activity.name, activity.time);
       });
