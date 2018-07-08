@@ -12,13 +12,13 @@ const API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 const DISCOVERY_DOCS = [
-  "https://sheets.googleapis.com/$discovery/rest?version=v4",
-  "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+  'https://sheets.googleapis.com/$discovery/rest?version=v4',
+  'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
 ];
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-const SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly";
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly';
 
 // The activities array will hold all activities from a sheet
 let activities = [];
@@ -114,9 +114,9 @@ const appendCol = (activity, time) => {
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
 
   sheetContentContainers.forEach(contentContainer => {
-    const col = document.createElement("div");
-    const textContent = document.createTextNode(activity + ", " + time + " minutes." + '\n');
-    col.classList.add("col-sm-12");
+    const col = document.createElement('div');
+    const textContent = document.createTextNode(activity + ', ' + time + ' minutes.' + '\n');
+    col.classList.add('col-sm-12');
     col.appendChild(textContent);
     contentContainer.appendChild(col);
   });
@@ -194,7 +194,7 @@ const getSheetNames = (documentID) => {
  */
 const insertSheetNames = (sheetNames) => {
   const sheetButtonContainer = document.querySelector('.sheet-button-container');
-  sheetButtonContainer.innerHTML = "";
+  sheetButtonContainer.innerHTML = '';
 
   sheetNames.forEach(sheet => {
     let sheetName = sheet.properties.title.toLowerCase();
@@ -313,7 +313,7 @@ const getDocumentID = () => {
 const getDocumentIDFromDocumentInput = () => {
   const documentInput = document.getElementById('sheet-input');
   const defaultDocumentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
-  let documentID = "";
+  let documentID = '';
   
   // Use the regex if it is a url, otherwise take the ID
   if((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
@@ -343,8 +343,10 @@ randomizeButton.addEventListener('click', () => {
   let filteredActivities = filterActivities(activities, getFilters()); 
 
   if(filteredActivities.length > 0) {
-    let random = Math.floor(Math.random()*filteredActivities.length);
-    insertRandomizedActivity(filteredActivities[random]);
+    let randomIndex = Math.floor(Math.random()*filteredActivities.length);
+
+    insertRandomizedActivity(filteredActivities[randomIndex]);
+
     noActivityContainers.forEach((el) => {
       el.style.display = 'none';
     });
