@@ -1,24 +1,9 @@
-// import Cookies from 'js-cookie';
 import { getCookies } from './cookies/cookies';
 
 /**
  * TODO: figure out what noActivityContainers does
  * TODO: JSdoc functions https://code.visualstudio.com/docs/languages/javascript
  */
-
-// Client ID and API key from the Developer Console
-const CLIENT_ID = '855790869281-iie5tqafurs5179pmr8s236n595o4460.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
-
-// Array of API discovery doc URLs for APIs used by the quickstart
-const DISCOVERY_DOCS = [
-  'https://sheets.googleapis.com/$discovery/rest?version=v4',
-  'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
-];
-
-// Authorization scopes required by the API; multiple scopes can be
-// included, separated by spaces.
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly';
 
 const activityRandomzizer = {
   activitiesFromSheet: [],
@@ -30,13 +15,6 @@ const activityRandomzizer = {
     this.activitiesFromSheet = newActivities;
   }
 }
-
-// Elements with eventlisteners
-const viewListButtons = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
-const timeRange = document.querySelector('[time-range]');
-const randomizeButton = document.getElementById('pick-activity');
-const sheetSubmit = document.getElementById('sheet-submit');
-const removeFiltersButton = document.getElementById('remove-filters');
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -54,6 +32,20 @@ window.handleClientLoad = () => {
 const initClient = () => {
   const authorizeButton = document.getElementById('authorize-button');
   const signoutButton = document.getElementById('signout-button');
+
+  // Client ID and API key from the Developer Console
+  const CLIENT_ID = '855790869281-iie5tqafurs5179pmr8s236n595o4460.apps.googleusercontent.com';
+  const API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
+
+  // Array of API discovery doc URLs for APIs used by the quickstart
+  const DISCOVERY_DOCS = [
+    'https://sheets.googleapis.com/$discovery/rest?version=v4',
+    'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
+  ];
+
+  /* Authorization scopes required by the API; multiple scopes can be
+   included, separated by spaces. */
+  const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly';
 
   gapi.client.init({
     apiKey: API_KEY,
@@ -139,11 +131,12 @@ const listActivities = (documentID, sheetName) => {
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
 
   let sheetPrefix = sheetName ? (sheetName + '!') : '';
+  const sheetCellRange = 'A2:D';
   sheetContentContainers.forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
 
   gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: documentID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
-    range: sheetPrefix + 'A2:D',
+    range: sheetPrefix + sheetCellRange,
   }).then((response) => {
     const range = response.result;
     
@@ -195,8 +188,6 @@ const getSheetNames = (documentID) => {
   });
 }
 
-
-
 /**
  * 
  * @param {array} sheetNames 
@@ -242,66 +233,8 @@ const insertSheetNames = (sheetNames) => {
 }
 
 /**
- * 
- * @param {activity} activity 
- */
-const insertRandomizedActivity = (activity) => {
-  const pickedActivity = document.getElementById('picked-activity');
-
-  pickedActivity.querySelector('.card-title h2').innerHTML = activity.name;
-  pickedActivity.querySelector('.card-text').innerHTML = activity.description + '<br>' + activity.time + ' minutes.';
-}
-
-const setTimeRangeMaxValue = (activities) => {
-  const timeRangeValue = document.querySelector('[time-range-value]');
-  const timeRangeMaxValueIndicator = document.querySelector('.max');
-  
-  timeRange.disabled = true;
-  activities = activities || activityRandomzizer.getActivities();
-  let maxTime = null;
-
-  maxTime = activities.reduce((accumulator, currentActivity) => {
-    let time = Number(currentActivity.time);
-    return time > accumulator ? time : accumulator;        
-  }, null);
-  timeRange.max = maxTime;
-  timeRange.value = maxTime;
-  timeRangeMaxValueIndicator.innerHTML = maxTime;
-  timeRangeValue.textContent = timeRange.value;
-
-  if(timeRange.disabled == true && timeRange.max != 'null') {
-    timeRange.disabled = false;
-  } 
-}
-
-const getFilters = () => {
-  const filters = {
-    
-  };
-  filters.maxTime = timeRange.value;
-
-  return filters;
-}
-
-const disableFilters = () => {
-  timeRange.disabled = true;
-}
-
-const filterActivities = (activities, filters) => {
-  // filter based on time
-  const filtered = activities.filter((activity) => {
-    /**
-     * Because activity.time is a string it needs to be converted
-     * to a number before comparing it to the value of the time range. 
-     */
-    return Number(activity.time) <= filters.maxTime;
-  });
-  return filtered;
-}
-
-/**
  * Gets the document ID associated with the users Google Sheets.
- * documentID is changed when sheetSubmit is clicked. It is the document ID from the google sheets URL.
+ * documentID is changed when the sheetSubmitButton is clicked. It is the document ID from the google sheets URL.
  */
 const getDocumentID = () => {
   const cookies = getCookies();
@@ -339,7 +272,74 @@ const getDocumentIDFromDocumentInput = () => {
   return documentID;
 }
 
-sheetSubmit.addEventListener('click', () => {  
+/**
+ * @description Puts an activity in the picked activity card
+ * @param {activity} activity 
+ */
+const insertRandomizedActivity = (activity) => {
+  const pickedActivity = document.getElementById('picked-activity');
+
+  pickedActivity.querySelector('.card-title h2').innerHTML = activity.name;
+  pickedActivity.querySelector('.card-text').innerHTML = activity.description + '<br>' + activity.time + ' minutes.';
+}
+
+const setTimeRangeMaxValue = (activities) => {
+  const timeRangeValue = document.querySelector('[time-range-value]');
+  const timeRangeMaxValueIndicator = document.querySelector('.max');
+  
+  timeRange.disabled = true;
+  activities = activities || activityRandomzizer.getActivities();
+  let maxTime = null;
+
+  maxTime = activities.reduce((accumulator, currentActivity) => {
+    let time = Number(currentActivity.time);
+    return time > accumulator ? time : accumulator;        
+  }, null);
+  timeRange.max = maxTime;
+  timeRange.value = maxTime;
+  timeRangeMaxValueIndicator.innerHTML = maxTime;
+  timeRangeValue.textContent = timeRange.value;
+
+  if(timeRange.disabled == true && timeRange.max != 'null') {
+    timeRange.disabled = false;
+  } 
+}
+
+const getFilters = () => {
+  const timeRange = document.querySelector('[time-range]');
+
+  const filters = {
+    maxTime: timeRange.value
+  };
+  filters.maxTime = timeRange.value;
+
+  return filters;
+}
+
+const disableFilters = () => {
+  timeRange.disabled = true;
+}
+
+const filterActivities = (activities, filters) => {
+  // filter based on time
+  const filtered = activities.filter((activity) => {
+    /**
+     * Because activity.time is a string it needs to be converted
+     * to a number before comparing it to the value of the time range. 
+     */
+    return Number(activity.time) <= filters.maxTime;
+  });
+  return filtered;
+}
+
+// Elements with eventlisteners
+const viewListButtons = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
+const timeRange = document.querySelector('[time-range]');
+const randomizeButton = document.getElementById('pick-activity');
+const sheetSubmitButton = document.getElementById('sheet-submit');
+const removeFiltersButton = document.getElementById('remove-filters');
+
+sheetSubmitButton.addEventListener('click', () => {  
   let documentID = getDocumentID();
 
   listActivities(documentID);
