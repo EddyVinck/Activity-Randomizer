@@ -20,8 +20,16 @@ const DISCOVERY_DOCS = [
 // included, separated by spaces.
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly';
 
-// The activities array will hold all activities from a sheet
-let activities = [];
+const activityRandomzizer = {
+  activitiesFromSheet: [],
+
+  getActivities() {
+    return this.activitiesFromSheet;
+  },
+  setActivities(newActivities) {
+    this.activitiesFromSheet = newActivities;
+  }
+}
 
 // Elements with eventlisteners
 const viewListButtons = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
@@ -145,7 +153,7 @@ const listActivities = (documentID, sheetName) => {
      **/
     if (range.values && range.values.length > 0) {      
       // Reset the activities array
-      activities = [];
+      const activities = [];
 
       sheetContentContainers.forEach(ct => ct.innerHTML = '');
       for (let i = 0; i < range.values.length; i++) {
@@ -159,9 +167,10 @@ const listActivities = (documentID, sheetName) => {
           time: row[1],
           rating: row[2],
           description: row[3] || 'No description'
-        });
-        
-      }      
+        });        
+      }     
+
+      activityRandomzizer.setActivities(activities);
       setTimeRangeMaxValue();
       documentInput.classList.remove('is-invalid');
     } else {
@@ -243,15 +252,15 @@ const insertRandomizedActivity = (activity) => {
   pickedActivity.querySelector('.card-text').innerHTML = activity.description + '<br>' + activity.time + ' minutes.';
 }
 
-const setTimeRangeMaxValue = (activ) => {
+const setTimeRangeMaxValue = (activities) => {
   const timeRangeValue = document.querySelector('[time-range-value]');
   const timeRangeMaxValueIndicator = document.querySelector('.max');
   
   timeRange.disabled = true;
-  activ = activ || activities;
+  activities = activities || activityRandomzizer.getActivities();
   let maxTime = null;
 
-  maxTime = activ.reduce((accumulator, currentActivity) => {
+  maxTime = activities.reduce((accumulator, currentActivity) => {
     let time = Number(currentActivity.time);
     return time > accumulator ? time : accumulator;        
   }, null);
@@ -266,7 +275,9 @@ const setTimeRangeMaxValue = (activ) => {
 }
 
 const getFilters = () => {
-  const filters = {};
+  const filters = {
+    
+  };
   filters.maxTime = timeRange.value;
 
   return filters;
@@ -329,7 +340,6 @@ const getDocumentIDFromDocumentInput = () => {
 }
 
 sheetSubmit.addEventListener('click', () => {  
-  const documentInput = document.getElementById('sheet-input');
   let documentID = getDocumentID();
 
   listActivities(documentID);
@@ -340,6 +350,7 @@ randomizeButton.addEventListener('click', () => {
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
   const noActivityContainers = document.querySelectorAll('.no-activity');
   const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
+  const activities = activityRandomzizer.getActivities(); 
   let filteredActivities = filterActivities(activities, getFilters()); 
 
   if(filteredActivities.length > 0) {
@@ -369,6 +380,7 @@ timeRange.addEventListener('change', (e) => {
 
 removeFiltersButton.addEventListener('click', () => {
   // restore to the original state of the filters
+  const activities = activityRandomzizer.getActivities();
   setTimeRangeMaxValue(activities);
 });
 
@@ -381,6 +393,7 @@ viewListButtons.forEach((btn) => {
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
 
   btn.addEventListener('click', (e) => {
+    const activities = activityRandomzizer.getActivities();
     const filteredActivities =  filterActivities(activities, getFilters());
 
     if(filteredActivities.length > 0) {
