@@ -22,14 +22,14 @@ const activityRandomzizer = {
  *  It's on the window object because it needs to be accessible to the Google Sheets script.
  */
 window.handleClientLoad = () => {
-  gapi.load('client:auth2', initClient);
+  gapi.load('client:auth2', initClientForGoogleSheetsAPI);
 }
 
 /**
  *  Initializes the API client library and sets up sign-in state
  *  listeners.
  */
-const initClient = () => {
+const initClientForGoogleSheetsAPI = () => {
   const authorizeButton = document.getElementById('authorize-button');
   const signoutButton = document.getElementById('signout-button');
 
@@ -54,12 +54,12 @@ const initClient = () => {
     scope: SCOPES
   }).then(() => {
     // Listen for sign-in state changes.
-    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+    gapi.auth2.getAuthInstance().isSignedIn.listen(updateGoogleAPISignInStatus);
 
     // Handle the initial sign-in state.
-    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-    authorizeButton.onclick = handleAuthClick;
-    signoutButton.onclick = handleSignoutClick;
+    updateGoogleAPISignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    authorizeButton.onclick = handleGoogleAPIAuthClick;
+    signoutButton.onclick = handleGoogleAPISignoutClick;
   });
 }
 
@@ -67,7 +67,7 @@ const initClient = () => {
  *  Called when the signed in status changes, to update the UI
  *  appropriately. After a sign-in, the API is called.
  */
-const updateSigninStatus = (isSignedIn) => {
+const updateGoogleAPISignInStatus = (isSignedIn) => {
   const authorizeButton = document.getElementById('authorize-button');
   const signoutButton = document.getElementById('signout-button');
 
@@ -88,14 +88,14 @@ const updateSigninStatus = (isSignedIn) => {
 /**
  *  Sign in the user upon button click.
  */
-const handleAuthClick = (event) => {
+const handleGoogleAPIAuthClick = (event) => {
   gapi.auth2.getAuthInstance().signIn();
 }
 
 /**
  *  Sign out the user upon button click.
  */
-const handleSignoutClick = (event) => {
+const handleGoogleAPISignoutClick = (event) => {
   gapi.auth2.getAuthInstance().signOut();
 }
 
@@ -123,8 +123,8 @@ const appendCol = (activity, time) => {
 }
 
 /**
- * Print the names and majors of students in a sample spreadsheet:
- * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+ * Lists activities in the sheetContentContainers or shows an error if that fails.
+ * Also calls activityRandomizer.setActivities to set the activities. 
  */
 const listActivities = (documentID, sheetName) => {
   const documentInput = document.getElementById('sheet-input');
@@ -135,7 +135,7 @@ const listActivities = (documentID, sheetName) => {
   sheetContentContainers.forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
 
   gapi.client.sheets.spreadsheets.values.get({
-    spreadsheetId: documentID || '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE',
+    spreadsheetId: documentID,
     range: sheetPrefix + sheetCellRange,
   }).then((response) => {
     const range = response.result;
@@ -173,8 +173,8 @@ const listActivities = (documentID, sheetName) => {
   }, (response) => {
     documentInput.classList.add('is-invalid');
     disableFilters();
+    appendPre('Error: ' + response.result.error.message + '. Make sure your Google Sheets document link is copied correctly.');
     console.log('error: ' + response.result.error.message);
-    appendPre('Error: ' + response.result.error.message);
   });
 }
 
@@ -295,6 +295,7 @@ const setTimeRangeMaxValue = (activities) => {
     let time = Number(currentActivity.time);
     return time > accumulator ? time : accumulator;        
   }, null);
+
   timeRange.max = maxTime;
   timeRange.value = maxTime;
   timeRangeMaxValueIndicator.innerHTML = maxTime;
@@ -317,6 +318,8 @@ const getFilters = () => {
 }
 
 const disableFilters = () => {
+  const timeRange = document.querySelector('[time-range]');
+  
   timeRange.disabled = true;
 }
 
