@@ -158,7 +158,7 @@ const listActivities = (documentID, sheetName) => {
         const row = range.values[i];
 
         // Print columns A and B, which correspond to indices 0 and 1.
-        appendCol(row[0],row[1]);
+        appendCol(row[0], row[1]);
 
         activities.push({
           name: row[0],
@@ -213,17 +213,16 @@ const insertSheetNames = (sheetNames) => {
     const sheetButtons = sheetButtonContainer.querySelectorAll('button');
 
     // Add the click listeners for the buttons
-    sheetButtons.forEach((btn, index, buttons) => {
-      btn.addEventListener('click', (e) => {
+    sheetButtons.forEach((clickedButton, index, buttons) => {
+      clickedButton.addEventListener('click', (e) => {
         /**
          * Change the active button
          * Load activities based on active button
         */
-      //  debugger;
         buttons.forEach((button) => {
           button.classList.remove('btn-primary');
         });
-        btn.classList.add('btn-primary');
+        clickedButton.classList.add('btn-primary');
 
         const sheetToUse = e.target.value;
         const documentID = getDocumentID();
@@ -232,8 +231,8 @@ const insertSheetNames = (sheetNames) => {
 
       if (index === 0) {
         // Manually dispatch a click event
-        btn.dispatchEvent(new Event('click'));
-        btn.classList.add('btn-primary');
+        clickedButton.dispatchEvent(new Event('click'));
+        clickedButton.classList.add('btn-primary');
       }
     });
   });
