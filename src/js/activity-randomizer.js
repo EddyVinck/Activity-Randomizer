@@ -1,4 +1,4 @@
-import { getCookies } from './cookies/cookies';
+import getCookies from './cookies/cookies';
 
 /**
  * TODO: figure out what noActivityContainers does
@@ -13,8 +13,8 @@ const activityRandomzizer = {
   },
   setActivities(newActivities) {
     this.activitiesFromSheet = newActivities;
-  }
-}
+  },
+};
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -23,7 +23,7 @@ const activityRandomzizer = {
  */
 window.handleClientLoad = () => {
   gapi.load('client:auth2', initClientForGoogleSheetsAPI);
-}
+};
 
 /**
  *  Initializes the API client library and sets up sign-in state
@@ -40,7 +40,7 @@ const initClientForGoogleSheetsAPI = () => {
   // Array of API discovery doc URLs for APIs used by the quickstart
   const DISCOVERY_DOCS = [
     'https://sheets.googleapis.com/$discovery/rest?version=v4',
-    'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
+    'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
   ];
 
   /* Authorization scopes required by the API; multiple scopes can be
@@ -51,7 +51,7 @@ const initClientForGoogleSheetsAPI = () => {
     apiKey: API_KEY,
     clientId: CLIENT_ID,
     discoveryDocs: DISCOVERY_DOCS,
-    scope: SCOPES
+    scope: SCOPES,
   }).then(() => {
     // Listen for sign-in state changes.
     gapi.auth2.getAuthInstance().isSignedIn.listen(updateGoogleAPISignInStatus);
@@ -61,7 +61,7 @@ const initClientForGoogleSheetsAPI = () => {
     authorizeButton.onclick = handleGoogleAPIAuthClick;
     signoutButton.onclick = handleGoogleAPISignoutClick;
   });
-}
+};
 
 /**
  *  Called when the signed in status changes, to update the UI
@@ -83,21 +83,22 @@ const updateGoogleAPISignInStatus = (isSignedIn) => {
     authorizeButton.style.display = 'inline-block';
     signoutButton.style.display = 'none';
   }
-}
+};
 
 /**
  *  Sign in the user upon button click.
  */
-const handleGoogleAPIAuthClick = (event) => {
+const handleGoogleAPIAuthClick = () => {
   gapi.auth2.getAuthInstance().signIn();
-}
+};
 
 /**
  *  Sign out the user upon button click.
  */
-const handleGoogleAPISignoutClick = (event) => {
+
+const handleGoogleAPISignoutClick = () => {
   gapi.auth2.getAuthInstance().signOut();
-}
+};
 
 /**
  * Append a pre element to the body containing the given message
@@ -107,20 +108,20 @@ const handleGoogleAPISignoutClick = (event) => {
  */
 const appendPre = (message) => {
   const content = document.querySelectorAll('content');
-  const textContent = document.createTextNode(message + '\n');
+  const textContent = document.createTextNode(`${message} \n`);
   content.appendChild(textContent);
-}
+};
 const appendCol = (activity, time) => {
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
 
-  sheetContentContainers.forEach(contentContainer => {
+  sheetContentContainers.forEach((contentContainer) => {
     const col = document.createElement('div');
-    const textContent = document.createTextNode(activity + ', ' + time + ' minutes.' + '\n');
+    const textContent = document.createTextNode(`${activity}, ${time} minutes.\n`);
     col.classList.add('col-sm-12');
     col.appendChild(textContent);
     contentContainer.appendChild(col);
   });
-}
+};
 
 /**
  * Lists activities in the sheetContentContainers or shows an error if that fails.
@@ -130,26 +131,30 @@ const listActivities = (documentID, sheetName) => {
   const documentInput = document.getElementById('sheet-input');
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
 
-  let sheetPrefix = sheetName ? (sheetName + '!') : '';
+  const sheetPrefix = sheetName ? (`${sheetName}!`) : '';
   const sheetCellRange = 'A2:D';
-  sheetContentContainers.forEach(ct => ct.innerHTML = '<div class="col">Loading data...</div>');
+  sheetContentContainers.forEach((ct) => {
+    ct.innerHTML = '<div class="col">Loading data...</div>';
+  });
 
   gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: documentID,
     range: sheetPrefix + sheetCellRange,
   }).then((response) => {
     const range = response.result;
-    
+
     /**
      *  Sometimes range.values has no values so it is not returned from the response
-     * This is why it needs to be checked before the length is checked. 
-     **/
-    if (range.values && range.values.length > 0) {      
+     * This is why it needs to be checked before the length is checked.
+     * */
+    if (range.values && range.values.length > 0) {
       // Reset the activities array
       const activities = [];
 
-      sheetContentContainers.forEach(ct => ct.innerHTML = '');
-      for (let i = 0; i < range.values.length; i++) {
+      sheetContentContainers.forEach((ct) => {
+        ct.innerHTML = '';
+      });
+      for (let i = 0; i < range.values.length; i += 1) {
         const row = range.values[i];
 
         // Print columns A and B, which correspond to indices 0 and 1.
@@ -159,52 +164,53 @@ const listActivities = (documentID, sheetName) => {
           name: row[0],
           time: row[1],
           rating: row[2],
-          description: row[3] || 'No description'
-        });        
-      }     
+          description: row[3] || 'No description',
+        });
+      }
 
       activityRandomzizer.setActivities(activities);
       setTimeRangeMaxValue();
       documentInput.classList.remove('is-invalid');
     } else {
-      sheetContentContainers.forEach(ct => ct.innerHTML = '<div class="col">No data found. :(</div>');
+      sheetContentContainers.forEach((ct) => { 
+        ct.innerHTML = '<div class="col">No data found. :(</div>';
+      });
       disableFilters();
     }
   }, (response) => {
     documentInput.classList.add('is-invalid');
     disableFilters();
-    appendPre('Error: ' + response.result.error.message + '. Make sure your Google Sheets document link is copied correctly.');
-    console.log('error: ' + response.result.error.message);
+    appendPre(`error: ${response.result.error.message}. Make sure your Google Sheets document link is copied correctly.`);
+    console.log(`error: ${response.result.error.message}`);
   });
-}
+};
 
 const getSheetNames = (documentID) => {
   gapi.client.sheets.spreadsheets.get({
-    spreadsheetId: documentID
+    spreadsheetId: documentID,
   }).then((response) => {
-    insertSheetNames(response.result.sheets); // array        
+    insertSheetNames(response.result.sheets); // array
   }, (reason) => {
-    console.error('error: ' + reason.result.error.message);
+    console.error(`error: ${reason.result.error.message}`);
   });
-}
+};
 
 /**
- * 
- * @param {array} sheetNames 
+ * @param {array} sheetNames
  */
 const insertSheetNames = (sheetNames) => {
   const sheetButtonContainer = document.querySelector('.sheet-button-container');
   sheetButtonContainer.innerHTML = '';
 
-  sheetNames.forEach(sheet => {
-    let sheetName = sheet.properties.title.toLowerCase();
-
+  sheetNames.forEach((sheet) => {
+    const sheetName = sheet.properties.title.toLowerCase();
+    
     // Add the sheets as buttons
-    if(sheetName !== 'info') {
-      sheetButtonContainer.innerHTML += `<button class="btn btn-sm" value="${sheetName}">${sheetName}</button>`;      
+    if (sheetName !== 'info') {
+      sheetButtonContainer.innerHTML += `<button class="btn btn-sm" value="${sheetName}">${sheetName}</button>`;
     }
-
-    let sheetButtons = sheetButtonContainer.querySelectorAll('button');
+    
+    const sheetButtons = sheetButtonContainer.querySelectorAll('button');
 
     // Add the click listeners for the buttons
     sheetButtons.forEach((btn, index, buttons) => {
@@ -213,34 +219,36 @@ const insertSheetNames = (sheetNames) => {
          * Change the active button
          * Load activities based on active button
         */
-        buttons.forEach((btn) => {
-          btn.classList.remove('btn-primary');
+      //  debugger;
+        buttons.forEach((button) => {
+          button.classList.remove('btn-primary');
         });
         btn.classList.add('btn-primary');
 
-        let sheetName = e.target.value;
-        let documentID = getDocumentID();
-        listActivities(documentID, sheetName);
+        const sheetToUse = e.target.value;
+        const documentID = getDocumentID();
+        listActivities(documentID, sheetToUse);
       });
 
-      if(index === 0) {          
+      if (index === 0) {
         // Manually dispatch a click event
         btn.dispatchEvent(new Event('click'));
         btn.classList.add('btn-primary');
       }
-    });   
+    });
   });
-}
+};
 
 /**
  * Gets the document ID associated with the users Google Sheets.
- * documentID is changed when the sheetSubmitButton is clicked. It is the document ID from the google sheets URL.
+ * documentID is changed when the sheetSubmitButton is clicked.
+ * It is the document ID from the google sheets URL.
  */
 const getDocumentID = () => {
   const cookies = getCookies();
   let documentID = '';
-  
-  if(cookies.preferredSheet !== undefined) {
+
+  if (cookies.preferredSheet !== undefined) {
     // Check the cookies for a saved document ID
     documentID = cookies.preferredDoc;
   } else {
@@ -249,7 +257,7 @@ const getDocumentID = () => {
   }
 
   return documentID;
-}
+};
 
 /**
  * @returns example document ID or the ID from the document input
@@ -258,41 +266,42 @@ const getDocumentIDFromDocumentInput = () => {
   const documentInput = document.getElementById('sheet-input');
   const defaultDocumentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
   let documentID = '';
-  
+
   // Use the regex if it is a url, otherwise take the ID
-  if((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
+  if ((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
     const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
     // sheet link
     const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
-    documentID = regexResult[1];
+    [, documentID] = regexResult;
   } else {
-    documentID = documentInput.value == '' ? defaultDocumentID : documentInput.value;
+    documentID = documentInput.value === '' ? defaultDocumentID : documentInput.value;
   }
 
   return documentID;
-}
+};
 
 /**
  * @description Puts an activity in the picked activity card
- * @param {activity} activity 
+ * @param {activity} activity
  */
 const insertRandomizedActivity = (activity) => {
   const pickedActivity = document.getElementById('picked-activity');
 
   pickedActivity.querySelector('.card-title h2').innerHTML = activity.name;
-  pickedActivity.querySelector('.card-text').innerHTML = activity.description + '<br>' + activity.time + ' minutes.';
-}
+  pickedActivity.querySelector('.card-text').innerHTML = `${activity.description}<br>${activity.time} minutes.`;
+};
 
 const setTimeRangeMaxValue = (activities) => {
+  const timeRange = document.querySelector('[time-range]');
   const timeRangeValue = document.querySelector('[time-range-value]');
   const timeRangeMaxValueIndicator = document.querySelector('.max');
-  
+
   timeRange.disabled = true;
-  activities = activities || activityRandomzizer.getActivities();
+  const activitiesToCheckForMaxTime = activities || activityRandomzizer.getActivities();
   let maxTime = null;
 
-  maxTime = activities.reduce((accumulator, currentActivity) => {
-    let time = Number(currentActivity.time);
+  maxTime = activitiesToCheckForMaxTime.reduce((accumulator, currentActivity) => {
+    const time = Number(currentActivity.time);
     return time > accumulator ? time : accumulator;        
   }, null);
 
@@ -301,39 +310,38 @@ const setTimeRangeMaxValue = (activities) => {
   timeRangeMaxValueIndicator.innerHTML = maxTime;
   timeRangeValue.textContent = timeRange.value;
 
-  if(timeRange.disabled == true && timeRange.max != 'null') {
+  if (timeRange.disabled === true && timeRange.max !== 'null') {
     timeRange.disabled = false;
-  } 
-}
+  }
+};
 
 const getFilters = () => {
   const timeRange = document.querySelector('[time-range]');
 
   const filters = {
-    maxTime: timeRange.value
+    maxTime: timeRange.value,
   };
   filters.maxTime = timeRange.value;
 
   return filters;
-}
+};
 
 const disableFilters = () => {
-  const timeRange = document.querySelector('[time-range]');
-  
+  const timeRange = document.querySelector('[time-range]');  
   timeRange.disabled = true;
-}
+};
 
 const filterActivities = (activities, filters) => {
   // filter based on time
-  const filtered = activities.filter((activity) => {
+  const filteredActivities = activities.filter((activity) => {
     /**
      * Because activity.time is a string it needs to be converted
      * to a number before comparing it to the value of the time range. 
      */
     return Number(activity.time) <= filters.maxTime;
   });
-  return filtered;
-}
+  return filteredActivities;
+};
 
 // Elements with eventlisteners
 const viewListButtons = document.querySelectorAll('[data-target="#viewCurrentActivities"]');
@@ -342,8 +350,8 @@ const randomizeButton = document.getElementById('pick-activity');
 const sheetSubmitButton = document.getElementById('sheet-submit');
 const removeFiltersButton = document.getElementById('remove-filters');
 
-sheetSubmitButton.addEventListener('click', () => {  
-  let documentID = getDocumentID();
+sheetSubmitButton.addEventListener('click', () => {
+  const documentID = getDocumentID();
 
   listActivities(documentID);
   getSheetNames(documentID);
@@ -353,11 +361,11 @@ randomizeButton.addEventListener('click', () => {
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
   const noActivityContainers = document.querySelectorAll('.no-activity');
   const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
-  const activities = activityRandomzizer.getActivities(); 
-  let filteredActivities = filterActivities(activities, getFilters()); 
+  const activities = activityRandomzizer.getActivities();
+  const filteredActivities = filterActivities(activities, getFilters());
 
-  if(filteredActivities.length > 0) {
-    let randomIndex = Math.floor(Math.random()*filteredActivities.length);
+  if (filteredActivities.length > 0) {
+    const randomIndex = Math.floor(Math.random() * filteredActivities.length);
 
     insertRandomizedActivity(filteredActivities[randomIndex]);
 
@@ -368,10 +376,11 @@ randomizeButton.addEventListener('click', () => {
       el.style.display = 'block';
     });
   } else {
-    sheetContentContainers.forEach(ct => ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>');
+    sheetContentContainers.forEach((ct) => {
+      ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>';
+    });
     console.log('No activities available');
   }
-  
 });
 
 timeRange.addEventListener('change', (e) => {
@@ -395,12 +404,14 @@ removeFiltersButton.addEventListener('click', () => {
 viewListButtons.forEach((btn) => {
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
 
-  btn.addEventListener('click', (e) => {
+  btn.addEventListener('click', () => {
     const activities = activityRandomzizer.getActivities();
-    const filteredActivities =  filterActivities(activities, getFilters());
+    const filteredActivities = filterActivities(activities, getFilters());
 
-    if(filteredActivities.length > 0) {
-      sheetContentContainers.forEach((ct) => ct.innerHTML = '');
+    if (filteredActivities.length > 0) {
+      sheetContentContainers.forEach((ct) => {
+        ct.innerHTML = '';
+      });
       filteredActivities.forEach((activity) => {
         appendCol(activity.name, activity.time);
       });
@@ -411,8 +422,3 @@ viewListButtons.forEach((btn) => {
     }
   });
 });
-
-
-
-
-

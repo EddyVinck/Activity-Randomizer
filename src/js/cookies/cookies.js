@@ -1,8 +1,9 @@
 import Cookies from 'js-cookie';
 
 /**
- * TODO: Return cookies as a boolean if possible so you don't have to check for === 'true' instead of === true
- */ 
+ * TODO: Return cookies as a boolean if possible so you don't have 
+ * to check for === 'true' instead of === true
+ */
 const getCookies = () => {
   const cookies = {};
 
@@ -15,15 +16,13 @@ const getCookies = () => {
 };
 
 /**
- * 
  * @param {} cookies from the getCookies function
- * 
  * It is called when the page loads.
  */
 const handleCookies = (cookies) => {
   if (cookies) {
     if (cookies.hasConfiguredCookies === undefined) {
-      if(Cookies.get('_cookies_configured') !== 'true') {
+      if (Cookies.get('_cookies_configured') !== 'true') {
         showCookieModal(cookies);
       }
     } else if (cookies.hasConfiguredCookies === 'true') {   
@@ -32,7 +31,7 @@ const handleCookies = (cookies) => {
       // cookies probably edited or removed
     }
   }
-}
+};
 
 const showCookieModal = (cookies) => {
   let cookieModal = document.querySelector('.cookie-modal-wrapper');
@@ -41,7 +40,19 @@ const showCookieModal = (cookies) => {
   disableScrolling();
   addCookieModalEventListeners(cookieModal);
   cookieModal.classList.add('opened');  
-}
+};
+
+const fillCurrentCookieSettings = (cookies, cookieModal) => {
+  if (cookies.allowPreferences === 'true') {
+    cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = true;
+  } else {
+    cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = false;
+  }
+};
+
+const disableScrolling = () => {
+  document.querySelector('body').style.overflow = 'hidden';
+};
 
 const addCookieModalEventListeners = (cookieModal) => {
   const cookieClose = cookieModal.querySelector('[data-cookie-modal-close]');
@@ -59,56 +70,53 @@ const addCookieModalEventListeners = (cookieModal) => {
     enableScrolling();
     cookieModal.classList.remove('opened');
   });
-}
+};
+
+const enableScrolling = () => {
+  document.querySelector('body').style.overflow = '';
+};
+
 
 const checkCookieCheckboxes = (cookieModal) => {
   const cookiePreferenceCheckbox = cookieModal.querySelector('[data-cookie-preferences-checkbox]');
   const preferencesAllowed = cookiePreferenceCheckbox.checked;
 
   const cookieSettingsFromPopUp = {
-    preferences: preferencesAllowed
-  }
+    preferences: preferencesAllowed,
+  };
 
   return cookieSettingsFromPopUp;
-}
-
-const setNewCookieSettings = (settings) => {
-  Cookies.set('_allow_preferences', settings.preferences);  
-}
+};
 
 /**
  * @param {*} cookies
- * 
- * @description shows or hides elements based on a user's cookies 
+ * @description shows or hides elements based on a user's cookies
  */
 const handleCookieElements = (cookies) => {
-  if(cookies.hasConfiguredCookies !== undefined) {
+  if (cookies.hasConfiguredCookies !== undefined) {
     /** Remove hidden class if preference cookies are allowed
      *  Else add the class
-     */ 
-    if(cookies.allowPreferences === 'true') {
-      document.querySelectorAll('[data-preference-cookie]').forEach(element => {
+     */
+    if (cookies.allowPreferences === 'true') {
+      document.querySelectorAll('[data-preference-cookie]').forEach((element) => {
         element.classList.remove('hidden');
       });
     } else {
-      document.querySelectorAll('[data-preference-cookie]').forEach(element => {
+      document.querySelectorAll('[data-preference-cookie]').forEach((element) => {
         element.classList.add('hidden');
       });
     }
   } else {
     // hasConfiguredCookies === undefined
   }
-}
+};
 
-const disableScrolling = () => {
-  document.querySelector('body').style.overflow = 'hidden';
-}
-const enableScrolling = () => {
-  document.querySelector('body').style.overflow = '';
-}
+const setNewCookieSettings = (settings) => {
+  Cookies.set('_allow_preferences', settings.preferences);  
+};
 
-/** 
- * Event listener for every element that has the 
+/**
+ * Event listener for every element that has the
  * open-cookies attribute.
  * It opens the cookie modal.
  * */
@@ -118,17 +126,8 @@ openCookies.forEach((openCookiesButton) => {
   openCookiesButton.addEventListener('click', () => {
     showCookieModal(getCookies());
   });
-}); 
-
-const fillCurrentCookieSettings = (cookies, cookieModal) => {
-  if (cookies.allowPreferences === 'true') {
-    cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = true;
-  }
-  else {
-    cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = false;
-  }
-}
+});
 
 handleCookies(getCookies());
 
-module.exports = { getCookies };
+module.exports = getCookies;
