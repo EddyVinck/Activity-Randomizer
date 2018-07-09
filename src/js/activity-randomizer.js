@@ -204,12 +204,12 @@ const insertSheetNames = (sheetNames) => {
 
   sheetNames.forEach((sheet) => {
     const sheetName = sheet.properties.title.toLowerCase();
-    
+
     // Add the sheets as buttons
     if (sheetName !== 'info') {
       sheetButtonContainer.innerHTML += `<button class="btn btn-sm" value="${sheetName}">${sheetName}</button>`;
     }
-    
+
     const sheetButtons = sheetButtonContainer.querySelectorAll('button');
 
     // Add the click listeners for the buttons

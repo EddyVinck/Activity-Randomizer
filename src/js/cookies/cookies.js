@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 
 /**
- * TODO: Return cookies as a boolean if possible so you don't have 
+ * TODO: Return cookies as a boolean if possible so you don't have
  * to check for === 'true' instead of === true
  */
 const getCookies = () => {
@@ -58,11 +58,11 @@ const addCookieModalEventListeners = (cookieModal) => {
   const cookieClose = cookieModal.querySelector('[data-cookie-modal-close]');
   const cookieSubmit = cookieModal.querySelector('[data-cookies-submit]');
   
-  cookieClose.addEventListener('click',(e) => {
+  cookieClose.addEventListener('click', () => {
     cookieModal.classList.remove('opened');
     enableScrolling();
   });
-  cookieSubmit.addEventListener('click',(e) => {
+  cookieSubmit.addEventListener('click', () => {
     Cookies.set('_cookies_configured', true);
     const cookieSettings = checkCookieCheckboxes(cookieModal);
     setNewCookieSettings(cookieSettings);
@@ -112,7 +112,7 @@ const handleCookieElements = (cookies) => {
 };
 
 const setNewCookieSettings = (settings) => {
-  Cookies.set('_allow_preferences', settings.preferences);  
+  Cookies.set('_allow_preferences', settings.preferences);
 };
 
 /**
