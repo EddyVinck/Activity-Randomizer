@@ -25,7 +25,7 @@ const handleCookies = (cookies) => {
       if (Cookies.get('_cookies_configured') !== 'true') {
         showCookieModal(cookies);
       }
-    } else if (cookies.hasConfiguredCookies === 'true') {   
+    } else if (cookies.hasConfiguredCookies === 'true') {
       handleCookieElements(cookies);
     } else {
       // cookies probably edited or removed
@@ -34,12 +34,12 @@ const handleCookies = (cookies) => {
 };
 
 const showCookieModal = (cookies) => {
-  let cookieModal = document.querySelector('.cookie-modal-wrapper');
+  const cookieModal = document.querySelector('.cookie-modal-wrapper');
 
   fillCurrentCookieSettings(cookies, cookieModal);
   disableScrolling();
   addCookieModalEventListeners(cookieModal);
-  cookieModal.classList.add('opened');  
+  cookieModal.classList.add('opened');
 };
 
 const fillCurrentCookieSettings = (cookies, cookieModal) => {
@@ -57,7 +57,7 @@ const disableScrolling = () => {
 const addCookieModalEventListeners = (cookieModal) => {
   const cookieClose = cookieModal.querySelector('[data-cookie-modal-close]');
   const cookieSubmit = cookieModal.querySelector('[data-cookies-submit]');
-  
+
   cookieClose.addEventListener('click', () => {
     cookieModal.classList.remove('opened');
     enableScrolling();
@@ -75,7 +75,6 @@ const addCookieModalEventListeners = (cookieModal) => {
 const enableScrolling = () => {
   document.querySelector('body').style.overflow = '';
 };
-
 
 const checkCookieCheckboxes = (cookieModal) => {
   const cookiePreferenceCheckbox = cookieModal.querySelector('[data-cookie-preferences-checkbox]');

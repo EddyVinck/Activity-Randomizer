@@ -5,18 +5,19 @@ const initNav = () => {
   // Check if the hamburger needs to be an X or not
   const fixHamburgerState = (isOpen = false) => {
     hamburger.checked = isOpen;
-  }
+  };
 
-  hamburger.addEventListener('click', (e) => {
+  hamburger.addEventListener('click', () => {
     $(navContents).collapse('toggle');
   });
 
-  $(navContents).on('shown.bs.collapse', function (e) {
+  $(navContents).on('shown.bs.collapse', () => {
     fixHamburgerState(true);
   });
-  $(navContents).on('hidden.bs.collapse', function (e) {
+
+  $(navContents).on('hidden.bs.collapse', () => {
     fixHamburgerState(false);
   });
-}
+};
 
 module.exports = initNav;

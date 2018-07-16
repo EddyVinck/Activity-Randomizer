@@ -45,22 +45,25 @@ const initClientForGoogleSheetsAPI = () => {
 
   /* Authorization scopes required by the API; multiple scopes can be
    included, separated by spaces. */
-  const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly';
+  const SCOPES =
+    'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly';
 
-  gapi.client.init({
-    apiKey: API_KEY,
-    clientId: CLIENT_ID,
-    discoveryDocs: DISCOVERY_DOCS,
-    scope: SCOPES,
-  }).then(() => {
-    // Listen for sign-in state changes.
-    gapi.auth2.getAuthInstance().isSignedIn.listen(updateGoogleAPISignInStatus);
+  gapi.client
+    .init({
+      apiKey: API_KEY,
+      clientId: CLIENT_ID,
+      discoveryDocs: DISCOVERY_DOCS,
+      scope: SCOPES,
+    })
+    .then(() => {
+      // Listen for sign-in state changes.
+      gapi.auth2.getAuthInstance().isSignedIn.listen(updateGoogleAPISignInStatus);
 
-    // Handle the initial sign-in state.
-    updateGoogleAPISignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-    authorizeButton.onclick = handleGoogleAPIAuthClick;
-    signoutButton.onclick = handleGoogleAPISignoutClick;
-  });
+      // Handle the initial sign-in state.
+      updateGoogleAPISignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      authorizeButton.onclick = handleGoogleAPIAuthClick;
+      signoutButton.onclick = handleGoogleAPISignoutClick;
+    });
 };
 
 /**
@@ -131,68 +134,82 @@ const listActivities = (documentID, sheetName) => {
   const documentInput = document.getElementById('sheet-input');
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
 
-  const sheetPrefix = sheetName ? (`${sheetName}!`) : '';
+  const sheetPrefix = sheetName ? `${sheetName}!` : '';
   const sheetCellRange = 'A2:D';
   sheetContentContainers.forEach((ct) => {
     ct.innerHTML = '<div class="col">Loading data...</div>';
   });
 
-  gapi.client.sheets.spreadsheets.values.get({
-    spreadsheetId: documentID,
-    range: sheetPrefix + sheetCellRange,
-  }).then((response) => {
-    const range = response.result;
+  gapi.client.sheets.spreadsheets.values
+    .get({
+      spreadsheetId: documentID,
+      range: sheetPrefix + sheetCellRange,
+    })
+    .then(
+      (response) => {
+        const range = response.result;
 
-    /**
-     *  Sometimes range.values has no values so it is not returned from the response
-     * This is why it needs to be checked before the length is checked.
-     * */
-    if (range.values && range.values.length > 0) {
-      // Reset the activities array
-      const activities = [];
+        /**
+         *  Sometimes range.values has no values so it is not returned from the response
+         * This is why it needs to be checked before the length is checked.
+         * */
+        if (range.values && range.values.length > 0) {
+          // Reset the activities array
+          const activities = [];
 
-      sheetContentContainers.forEach((ct) => {
-        ct.innerHTML = '';
-      });
-      for (let i = 0; i < range.values.length; i += 1) {
-        const row = range.values[i];
+          sheetContentContainers.forEach((ct) => {
+            ct.innerHTML = '';
+          });
+          for (let i = 0; i < range.values.length; i += 1) {
+            const cellRow = range.values[i];
 
-        // Print columns A and B, which correspond to indices 0 and 1.
-        appendCol(row[0], row[1]);
+            // Print columns A and B, which correspond to indices 0 and 1.
+            appendCol(cellRow[0], cellRow[1]);
 
-        activities.push({
-          name: row[0],
-          time: row[1],
-          rating: row[2],
-          description: row[3] || 'No description',
-        });
+            activities.push({
+              name: cellRow[0],
+              time: cellRow[1],
+              rating: cellRow[2],
+              description: cellRow[3] || 'No description',
+            });
+          }
+
+          activityRandomzizer.setActivities(activities);
+          setTimeRangeMaxValue();
+          documentInput.classList.remove('is-invalid');
+        } else {
+          sheetContentContainers.forEach((ct) => {
+            ct.innerHTML = '<div class="col">No data found. :(</div>';
+          });
+          disableFilters();
+        }
+      },
+      (response) => {
+        documentInput.classList.add('is-invalid');
+        disableFilters();
+        appendPre(
+          `error: ${
+            response.result.error.message
+          }. Make sure your Google Sheets document link is copied correctly.`
+        );
+        console.log(`error: ${response.result.error.message}`);
       }
-
-      activityRandomzizer.setActivities(activities);
-      setTimeRangeMaxValue();
-      documentInput.classList.remove('is-invalid');
-    } else {
-      sheetContentContainers.forEach((ct) => {
-        ct.innerHTML = '<div class="col">No data found. :(</div>';
-      });
-      disableFilters();
-    }
-  }, (response) => {
-    documentInput.classList.add('is-invalid');
-    disableFilters();
-    appendPre(`error: ${response.result.error.message}. Make sure your Google Sheets document link is copied correctly.`);
-    console.log(`error: ${response.result.error.message}`);
-  });
+    );
 };
 
 const getSheetNames = (documentID) => {
-  gapi.client.sheets.spreadsheets.get({
-    spreadsheetId: documentID,
-  }).then((response) => {
-    insertSheetNames(response.result.sheets); // array
-  }, (reason) => {
-    console.error(`error: ${reason.result.error.message}`);
-  });
+  gapi.client.sheets.spreadsheets
+    .get({
+      spreadsheetId: documentID,
+    })
+    .then(
+      (response) => {
+        insertSheetNames(response.result.sheets); // array
+      },
+      (reason) => {
+        console.error(`error: ${reason.result.error.message}`);
+      }
+    );
 };
 
 /**
@@ -218,7 +235,7 @@ const insertSheetNames = (sheetNames) => {
         /**
          * Change the active button
          * Load activities based on active button
-        */
+         */
         buttons.forEach((button) => {
           button.classList.remove('btn-primary');
         });
@@ -267,7 +284,7 @@ const getDocumentIDFromDocumentInput = () => {
   let documentID = '';
 
   // Use the regex if it is a url, otherwise take the ID
-  if ((documentInput.value).indexOf('docs.google.com/spreadsheets') > 0) {
+  if (documentInput.value.indexOf('docs.google.com/spreadsheets') > 0) {
     const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
     // sheet link
     const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
@@ -287,7 +304,8 @@ const insertRandomizedActivity = (activity) => {
   const pickedActivity = document.getElementById('picked-activity');
 
   pickedActivity.querySelector('.card-title h2').innerHTML = activity.name;
-  pickedActivity.querySelector('.card-text').innerHTML = `${activity.description}<br>${activity.time} minutes.`;
+  pickedActivity.querySelector('.card-text').innerHTML = `${activity.description}<br>
+  ${activity.time} minutes.`;
 };
 
 const setTimeRangeMaxValue = (activities) => {
@@ -332,12 +350,13 @@ const disableFilters = () => {
 
 const filterActivities = (activities, filters) => {
   /**
-    * // filter based on time
-    * Because activity.time is a string it needs to be converted
-    * to a number before comparing it to the value of the time range.
-    */
-  const filteredActivities = activities
-    .filter(activity => Number(activity.time) <= filters.maxTime);
+   * // filter based on time
+   * Because activity.time is a string it needs to be converted
+   * to a number before comparing it to the value of the time range.
+   */
+  const filteredActivities = activities.filter(
+    (activity) => Number(activity.time) <= filters.maxTime
+  );
   return filteredActivities;
 };
 
