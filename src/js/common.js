@@ -7,4 +7,3 @@ import './cookies/cookies';
 import initNav from './components/navbar';
 
 initNav();
-// import dataToggleHeights from './frameworks/custom-bootstrap/data-toggle';
