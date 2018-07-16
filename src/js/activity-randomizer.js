@@ -125,7 +125,7 @@ const appendCol = (activity, time) => {
 
 /**
  * Lists activities in the sheetContentContainers or shows an error if that fails.
- * Also calls activityRandomizer.setActivities to set the activities. 
+ * Also calls activityRandomizer.setActivities to set the activities.
  */
 const listActivities = (documentID, sheetName) => {
   const documentInput = document.getElementById('sheet-input');
@@ -172,7 +172,7 @@ const listActivities = (documentID, sheetName) => {
       setTimeRangeMaxValue();
       documentInput.classList.remove('is-invalid');
     } else {
-      sheetContentContainers.forEach((ct) => { 
+      sheetContentContainers.forEach((ct) => {
         ct.innerHTML = '<div class="col">No data found. :(</div>';
       });
       disableFilters();
@@ -301,7 +301,7 @@ const setTimeRangeMaxValue = (activities) => {
 
   maxTime = activitiesToCheckForMaxTime.reduce((accumulator, currentActivity) => {
     const time = Number(currentActivity.time);
-    return time > accumulator ? time : accumulator;        
+    return time > accumulator ? time : accumulator;
   }, null);
 
   timeRange.max = maxTime;
@@ -326,19 +326,18 @@ const getFilters = () => {
 };
 
 const disableFilters = () => {
-  const timeRange = document.querySelector('[time-range]');  
+  const timeRange = document.querySelector('[time-range]');
   timeRange.disabled = true;
 };
 
 const filterActivities = (activities, filters) => {
-  // filter based on time
-  const filteredActivities = activities.filter((activity) => {
-    /**
-     * Because activity.time is a string it needs to be converted
-     * to a number before comparing it to the value of the time range. 
-     */
-    return Number(activity.time) <= filters.maxTime;
-  });
+  /**
+    * // filter based on time
+    * Because activity.time is a string it needs to be converted
+    * to a number before comparing it to the value of the time range.
+    */
+  const filteredActivities = activities
+    .filter(activity => Number(activity.time) <= filters.maxTime);
   return filteredActivities;
 };
 
