@@ -1,8 +1,8 @@
 import getCookies from './cookies/cookies';
 
 /**
- * TODO: figure out what noActivityContainers does
  * TODO: JSdoc functions https://code.visualstudio.com/docs/languages/javascript
+ * TODO: Handle console.error cases and look for other possible failing cases
  */
 
 const activityRandomzizer = {
@@ -17,90 +17,96 @@ const activityRandomzizer = {
 };
 
 /**
- *  On load, called to load the auth2 library and API client library.
- *  Calls initClient.
- *  It's on the window object because it needs to be accessible to the Google Sheets script.
+ * @returns example document ID or the ID from the document input
  */
-window.handleClientLoad = () => {
-  gapi.load('client:auth2', initClientForGoogleSheetsAPI);
-};
+const getDocumentIDFromDocumentInput = () => {
+  const documentInput = document.getElementById('sheet-input');
+  const defaultDocumentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
+  let documentID = '';
 
-/**
- *  Initializes the API client library and sets up sign-in state
- *  listeners.
- */
-const initClientForGoogleSheetsAPI = () => {
-  const authorizeButton = document.getElementById('authorize-button');
-  const signoutButton = document.getElementById('signout-button');
-
-  // Client ID and API key from the Developer Console
-  const CLIENT_ID = '855790869281-iie5tqafurs5179pmr8s236n595o4460.apps.googleusercontent.com';
-  const API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
-
-  // Array of API discovery doc URLs for APIs used by the quickstart
-  const DISCOVERY_DOCS = [
-    'https://sheets.googleapis.com/$discovery/rest?version=v4',
-    'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
-  ];
-
-  /* Authorization scopes required by the API; multiple scopes can be
-   included, separated by spaces. */
-  const SCOPES =
-    'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly';
-
-  gapi.client
-    .init({
-      apiKey: API_KEY,
-      clientId: CLIENT_ID,
-      discoveryDocs: DISCOVERY_DOCS,
-      scope: SCOPES,
-    })
-    .then(() => {
-      // Listen for sign-in state changes.
-      gapi.auth2.getAuthInstance().isSignedIn.listen(updateGoogleAPISignInStatus);
-
-      // Handle the initial sign-in state.
-      updateGoogleAPISignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-      authorizeButton.onclick = handleGoogleAPIAuthClick;
-      signoutButton.onclick = handleGoogleAPISignoutClick;
-    });
-};
-
-/**
- *  Called when the signed in status changes, to update the UI
- *  appropriately. After a sign-in, the API is called.
- */
-const updateGoogleAPISignInStatus = (isSignedIn) => {
-  const authorizeButton = document.getElementById('authorize-button');
-  const signoutButton = document.getElementById('signout-button');
-
-  if (isSignedIn) {
-    const documentID = getDocumentID();
-
-    authorizeButton.style.display = 'none';
-    signoutButton.style.display = 'inline-block';
-
-    getSheetNames(documentID);
-    listActivities(documentID);
+  // Use the regex if it is a url, otherwise take the ID
+  if (documentInput.value.indexOf('docs.google.com/spreadsheets') > 0) {
+    const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    // sheet link
+    const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
+    [, documentID] = regexResult;
   } else {
-    authorizeButton.style.display = 'inline-block';
-    signoutButton.style.display = 'none';
+    documentID = documentInput.value === '' ? defaultDocumentID : documentInput.value;
+  }
+
+  return documentID;
+};
+
+/**
+ * Gets the document ID associated with the users Google Sheets.
+ * documentID is changed when the sheetSubmitButton is clicked.
+ * It is the document ID from the google sheets URL.
+ */
+const getDocumentID = () => {
+  const cookies = getCookies();
+  let documentID = '';
+
+  if (cookies.preferredSheet !== undefined) {
+    // Check the cookies for a saved document ID
+    documentID = cookies.preferredDoc;
+  } else {
+    // Check the sheet input for a document ID
+    documentID = getDocumentIDFromDocumentInput();
+  }
+
+  return documentID;
+};
+
+const setTimeRangeMaxValue = (activities) => {
+  const timeRange = document.querySelector('[time-range]');
+  const timeRangeValue = document.querySelector('[time-range-value]');
+  const timeRangeMaxValueIndicator = document.querySelector('.max');
+
+  timeRange.disabled = true;
+  const activitiesToCheckForMaxTime = activities || activityRandomzizer.getActivities();
+  let maxTime = null;
+
+  maxTime = activitiesToCheckForMaxTime.reduce((accumulator, currentActivity) => {
+    const time = Number(currentActivity.time);
+    return time > accumulator ? time : accumulator;
+  }, null);
+
+  timeRange.max = maxTime;
+  timeRange.value = maxTime;
+  timeRangeMaxValueIndicator.innerHTML = maxTime;
+  timeRangeValue.textContent = timeRange.value;
+
+  if (timeRange.disabled === true && timeRange.max !== 'null') {
+    timeRange.disabled = false;
   }
 };
 
-/**
- *  Sign in the user upon button click.
- */
-const handleGoogleAPIAuthClick = () => {
-  gapi.auth2.getAuthInstance().signIn();
+const getFilters = () => {
+  const timeRange = document.querySelector('[time-range]');
+
+  const filters = {
+    maxTime: timeRange.value,
+  };
+  filters.maxTime = timeRange.value;
+
+  return filters;
 };
 
-/**
- *  Sign out the user upon button click.
- */
+const disableFilters = () => {
+  const timeRange = document.querySelector('[time-range]');
+  timeRange.disabled = true;
+};
 
-const handleGoogleAPISignoutClick = () => {
-  gapi.auth2.getAuthInstance().signOut();
+const filterActivities = (activities, filters) => {
+  /**
+   * // filter based on time
+   * Because activity.time is a string it needs to be converted
+   * to a number before comparing it to the value of the time range.
+   */
+  const filteredActivities = activities.filter(
+    (activity) => Number(activity.time) <= filters.maxTime
+  );
+  return filteredActivities;
 };
 
 /**
@@ -197,21 +203,6 @@ const listActivities = (documentID, sheetName) => {
     );
 };
 
-const getSheetNames = (documentID) => {
-  gapi.client.sheets.spreadsheets
-    .get({
-      spreadsheetId: documentID,
-    })
-    .then(
-      (response) => {
-        insertSheetNames(response.result.sheets); // array
-      },
-      (reason) => {
-        console.error(`error: ${reason.result.error.message}`);
-      }
-    );
-};
-
 /**
  * @param {array} sheetNames
  */
@@ -255,45 +246,106 @@ const insertSheetNames = (sheetNames) => {
   });
 };
 
-/**
- * Gets the document ID associated with the users Google Sheets.
- * documentID is changed when the sheetSubmitButton is clicked.
- * It is the document ID from the google sheets URL.
- */
-const getDocumentID = () => {
-  const cookies = getCookies();
-  let documentID = '';
-
-  if (cookies.preferredSheet !== undefined) {
-    // Check the cookies for a saved document ID
-    documentID = cookies.preferredDoc;
-  } else {
-    // Check the sheet input for a document ID
-    documentID = getDocumentIDFromDocumentInput();
-  }
-
-  return documentID;
+const getSheetNames = (documentID) => {
+  gapi.client.sheets.spreadsheets
+    .get({
+      spreadsheetId: documentID,
+    })
+    .then(
+      (response) => {
+        insertSheetNames(response.result.sheets); // array
+      },
+      (reason) => {
+        console.error(`error: ${reason.result.error.message}`);
+      }
+    );
 };
 
 /**
- * @returns example document ID or the ID from the document input
+ *  Called when the signed in status changes, to update the UI
+ *  appropriately. After a sign-in, the API is called.
  */
-const getDocumentIDFromDocumentInput = () => {
-  const documentInput = document.getElementById('sheet-input');
-  const defaultDocumentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
-  let documentID = '';
+const updateGoogleAPISignInStatus = (isSignedIn) => {
+  const authorizeButton = document.getElementById('authorize-button');
+  const signoutButton = document.getElementById('signout-button');
 
-  // Use the regex if it is a url, otherwise take the ID
-  if (documentInput.value.indexOf('docs.google.com/spreadsheets') > 0) {
-    const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-    // sheet link
-    const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
-    [, documentID] = regexResult;
+  if (isSignedIn) {
+    const documentID = getDocumentID();
+
+    authorizeButton.style.display = 'none';
+    signoutButton.style.display = 'inline-block';
+
+    getSheetNames(documentID);
+    listActivities(documentID);
   } else {
-    documentID = documentInput.value === '' ? defaultDocumentID : documentInput.value;
+    authorizeButton.style.display = 'inline-block';
+    signoutButton.style.display = 'none';
   }
+};
 
-  return documentID;
+/**
+ *  Sign in the user upon button click.
+ */
+const handleGoogleAPIAuthClick = () => {
+  gapi.auth2.getAuthInstance().signIn();
+};
+
+/**
+ *  Sign out the user upon button click.
+ */
+
+const handleGoogleAPISignoutClick = () => {
+  gapi.auth2.getAuthInstance().signOut();
+};
+
+/**
+ *  Initializes the API client library and sets up sign-in state
+ *  listeners.
+ */
+const initClientForGoogleSheetsAPI = () => {
+  const authorizeButton = document.getElementById('authorize-button');
+  const signoutButton = document.getElementById('signout-button');
+
+  // Client ID and API key from the Developer Console
+  const CLIENT_ID = '855790869281-iie5tqafurs5179pmr8s236n595o4460.apps.googleusercontent.com';
+  const API_KEY = 'AIzaSyDxKJyIUDRnU7xTz6_CWAGxZkDiytZtpA4';
+
+  // Array of API discovery doc URLs for APIs used by the quickstart
+  const DISCOVERY_DOCS = [
+    'https://sheets.googleapis.com/$discovery/rest?version=v4',
+    'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
+  ];
+
+  /* Authorization scopes required by the API; multiple scopes can be
+   included, separated by spaces. */
+  const SCOPES =
+    'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/calendar.readonly';
+
+  gapi.client
+    .init({
+      apiKey: API_KEY,
+      clientId: CLIENT_ID,
+      discoveryDocs: DISCOVERY_DOCS,
+      scope: SCOPES,
+    })
+    .then(() => {
+      // Listen for sign-in state changes.
+      gapi.auth2.getAuthInstance().isSignedIn.listen(updateGoogleAPISignInStatus);
+
+      // Handle the initial sign-in state.
+      updateGoogleAPISignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      authorizeButton.onclick = handleGoogleAPIAuthClick;
+      signoutButton.onclick = handleGoogleAPISignoutClick;
+    });
+};
+
+/**
+ *  On load, called to load the auth2 library and API client library.
+ *  Calls initClient.
+ *  It's on the window object because it needs to be accessible to the Google Sheets script.
+ */
+window.handleClientLoad = () => {
+  gapi.load('client:auth2', initClientForGoogleSheetsAPI);
 };
 
 /**
@@ -306,58 +358,6 @@ const insertRandomizedActivity = (activity) => {
   pickedActivity.querySelector('.card-title h2').innerHTML = activity.name;
   pickedActivity.querySelector('.card-text').innerHTML = `${activity.description}<br>
   ${activity.time} minutes.`;
-};
-
-const setTimeRangeMaxValue = (activities) => {
-  const timeRange = document.querySelector('[time-range]');
-  const timeRangeValue = document.querySelector('[time-range-value]');
-  const timeRangeMaxValueIndicator = document.querySelector('.max');
-
-  timeRange.disabled = true;
-  const activitiesToCheckForMaxTime = activities || activityRandomzizer.getActivities();
-  let maxTime = null;
-
-  maxTime = activitiesToCheckForMaxTime.reduce((accumulator, currentActivity) => {
-    const time = Number(currentActivity.time);
-    return time > accumulator ? time : accumulator;
-  }, null);
-
-  timeRange.max = maxTime;
-  timeRange.value = maxTime;
-  timeRangeMaxValueIndicator.innerHTML = maxTime;
-  timeRangeValue.textContent = timeRange.value;
-
-  if (timeRange.disabled === true && timeRange.max !== 'null') {
-    timeRange.disabled = false;
-  }
-};
-
-const getFilters = () => {
-  const timeRange = document.querySelector('[time-range]');
-
-  const filters = {
-    maxTime: timeRange.value,
-  };
-  filters.maxTime = timeRange.value;
-
-  return filters;
-};
-
-const disableFilters = () => {
-  const timeRange = document.querySelector('[time-range]');
-  timeRange.disabled = true;
-};
-
-const filterActivities = (activities, filters) => {
-  /**
-   * // filter based on time
-   * Because activity.time is a string it needs to be converted
-   * to a number before comparing it to the value of the time range.
-   */
-  const filteredActivities = activities.filter(
-    (activity) => Number(activity.time) <= filters.maxTime
-  );
-  return filteredActivities;
 };
 
 // Elements with eventlisteners
@@ -376,6 +376,7 @@ sheetSubmitButton.addEventListener('click', () => {
 
 randomizeButton.addEventListener('click', () => {
   const sheetContentContainers = document.querySelectorAll('[sheet-content]');
+  // Containers with content for when a user has not generated an activity yet
   const noActivityContainers = document.querySelectorAll('.no-activity');
   const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
   const activities = activityRandomzizer.getActivities();
@@ -393,10 +394,10 @@ randomizeButton.addEventListener('click', () => {
       el.style.display = 'block';
     });
   } else {
+    // When there are no activities available
     sheetContentContainers.forEach((ct) => {
       ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>';
     });
-    console.log('No activities available');
   }
 });
 

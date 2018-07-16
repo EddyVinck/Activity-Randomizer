@@ -15,33 +15,6 @@ const getCookies = () => {
   return cookies;
 };
 
-/**
- * @param {} cookies from the getCookies function
- * It is called when the page loads.
- */
-const handleCookies = (cookies) => {
-  if (cookies) {
-    if (cookies.hasConfiguredCookies === undefined) {
-      if (Cookies.get('_cookies_configured') !== 'true') {
-        showCookieModal(cookies);
-      }
-    } else if (cookies.hasConfiguredCookies === 'true') {
-      handleCookieElements(cookies);
-    } else {
-      // cookies probably edited or removed
-    }
-  }
-};
-
-const showCookieModal = (cookies) => {
-  const cookieModal = document.querySelector('.cookie-modal-wrapper');
-
-  fillCurrentCookieSettings(cookies, cookieModal);
-  disableScrolling();
-  addCookieModalEventListeners(cookieModal);
-  cookieModal.classList.add('opened');
-};
-
 const fillCurrentCookieSettings = (cookies, cookieModal) => {
   if (cookies.allowPreferences === 'true') {
     cookieModal.querySelector('[data-cookie-preferences-checkbox]').checked = true;
@@ -53,27 +26,11 @@ const fillCurrentCookieSettings = (cookies, cookieModal) => {
 const disableScrolling = () => {
   document.querySelector('body').style.overflow = 'hidden';
 };
-
-const addCookieModalEventListeners = (cookieModal) => {
-  const cookieClose = cookieModal.querySelector('[data-cookie-modal-close]');
-  const cookieSubmit = cookieModal.querySelector('[data-cookies-submit]');
-
-  cookieClose.addEventListener('click', () => {
-    cookieModal.classList.remove('opened');
-    enableScrolling();
-  });
-  cookieSubmit.addEventListener('click', () => {
-    Cookies.set('_cookies_configured', true);
-    const cookieSettings = checkCookieCheckboxes(cookieModal);
-    setNewCookieSettings(cookieSettings);
-    handleCookieElements(getCookies());
-    enableScrolling();
-    cookieModal.classList.remove('opened');
-  });
-};
-
 const enableScrolling = () => {
   document.querySelector('body').style.overflow = '';
+};
+const setNewCookieSettings = (settings) => {
+  Cookies.set('_allow_preferences', settings.preferences);
 };
 
 const checkCookieCheckboxes = (cookieModal) => {
@@ -110,8 +67,49 @@ const handleCookieElements = (cookies) => {
   }
 };
 
-const setNewCookieSettings = (settings) => {
-  Cookies.set('_allow_preferences', settings.preferences);
+const addCookieModalEventListeners = (cookieModal) => {
+  const cookieClose = cookieModal.querySelector('[data-cookie-modal-close]');
+  const cookieSubmit = cookieModal.querySelector('[data-cookies-submit]');
+
+  cookieClose.addEventListener('click', () => {
+    cookieModal.classList.remove('opened');
+    enableScrolling();
+  });
+  cookieSubmit.addEventListener('click', () => {
+    Cookies.set('_cookies_configured', true);
+    const cookieSettings = checkCookieCheckboxes(cookieModal);
+    setNewCookieSettings(cookieSettings);
+    handleCookieElements(getCookies());
+    enableScrolling();
+    cookieModal.classList.remove('opened');
+  });
+};
+
+const showCookieModal = (cookies) => {
+  const cookieModal = document.querySelector('.cookie-modal-wrapper');
+
+  fillCurrentCookieSettings(cookies, cookieModal);
+  disableScrolling();
+  addCookieModalEventListeners(cookieModal);
+  cookieModal.classList.add('opened');
+};
+
+/**
+ * @param {} cookies from the getCookies function
+ * It is called when the page loads.
+ */
+const handleCookies = (cookies) => {
+  if (cookies) {
+    if (cookies.hasConfiguredCookies === undefined) {
+      if (Cookies.get('_cookies_configured') !== 'true') {
+        showCookieModal(cookies);
+      }
+    } else if (cookies.hasConfiguredCookies === 'true') {
+      handleCookieElements(cookies);
+    } else {
+      // cookies probably edited or removed
+    }
+  }
 };
 
 /**
