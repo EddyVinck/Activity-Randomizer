@@ -1,4 +1,4 @@
-import getCookies from '../../cookies/cookies';
+import getCookies from '../cookies/cookies';
 
 /**
  * @returns example document ID or the ID from the document input

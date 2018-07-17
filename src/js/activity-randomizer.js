@@ -1,7 +1,7 @@
-import activityRandomzizer from './partials/activity-randomizer/state/activity-randomizer';
-import { getFilters, filterActivities } from './partials/activity-randomizer/filters/filters';
-import { setTimeRangeMaxValue, disableFilters } from './partials/activity-randomizer/filters/dom';
-import { getDocumentID, appendPre, appendCol } from './partials/activity-randomizer/dom';
+import activityRandomzizer from './modules/activity-randomizer/state/activity-randomizer';
+import { getFilters, filterActivities } from './modules/activity-randomizer/filters/filters';
+import { setTimeRangeMaxValue, disableFilters } from './modules/activity-randomizer/filters/dom';
+import { getDocumentID, appendPre, appendCol } from './modules/activity-randomizer/dom';
 
 // Lists activities in the activityListContainers or shows an error
 const listActivities = (documentID, sheetName) => {
@@ -265,10 +265,7 @@ removeFiltersButton.addEventListener('click', () => {
   setTimeRangeMaxValue(activities);
 });
 
-/**
- * Add a click event listener to every button in viewListButtons
- *
- */
+// Add a click event listener to every button in viewListButtons
 viewListButtons.forEach((btn) => {
   const activityListContainers = document.querySelectorAll('[sheet-content]');
 

@@ -1,9 +1,5 @@
 import Cookies from 'js-cookie';
 
-/**
- * TODO: Return cookies as a boolean if possible so you don't have
- * to check for === 'true' instead of === true
- */
 const getCookies = () => {
   const cookies = {};
 
