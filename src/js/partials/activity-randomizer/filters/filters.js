@@ -23,4 +23,4 @@ const filterActivities = (activities, filters) => {
 
 const handleCompletelyFilteredOutActivities = () => {};
 
-module.exports = { getFilters, filterActivities, handleCompletelyFilteredOutActivities };
+export { getFilters, filterActivities, handleCompletelyFilteredOutActivities };

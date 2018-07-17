@@ -9,4 +9,4 @@ const activityRandomzizer = {
   },
 };
 
-module.exports = activityRandomzizer;
+export default activityRandomzizer;

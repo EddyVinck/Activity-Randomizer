@@ -1,6 +1,6 @@
 import activityRandomzizer from '../state/activity-randomizer';
 
-export const setTimeRangeMaxValue = (activities) => {
+const setTimeRangeMaxValue = (activities) => {
   const timeRange = document.querySelector('[time-range]');
   const timeRangeValue = document.querySelector('[time-range-value]');
   const timeRangeMaxValueIndicator = document.querySelector('.max');
@@ -24,7 +24,9 @@ export const setTimeRangeMaxValue = (activities) => {
   }
 };
 
-export const disableFilters = () => {
+const disableFilters = () => {
   const timeRange = document.querySelector('[time-range]');
   timeRange.disabled = true;
 };
+
+export { setTimeRangeMaxValue, disableFilters };

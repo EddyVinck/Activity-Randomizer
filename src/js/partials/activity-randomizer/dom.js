@@ -64,4 +64,4 @@ const appendCol = (activity, time) => {
   });
 };
 
-module.exports = { getDocumentID, appendPre, appendCol };
+export { getDocumentID, appendPre, appendCol };

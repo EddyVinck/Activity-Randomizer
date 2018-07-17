@@ -33,6 +33,7 @@
     }
   },
   "settings": {
-    "import/resolver": "node"
+    "import/resolver": "node",
+    "import/no-commonjs": true
   }
 }
