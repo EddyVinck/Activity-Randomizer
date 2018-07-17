@@ -3,19 +3,19 @@ import getCookies from '../../cookies/cookies';
 /**
  * @returns example document ID or the ID from the document input
  */
-const getDocumentIDFromDocumentInput = () => {
-  const documentInput = document.getElementById('sheet-input');
+const getDocumentIDFromdocumentLinkInput = () => {
+  const documentLinkInput = document.getElementById('sheet-input');
   const defaultDocumentID = '1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE';
   let documentID = '';
 
   // Use the regex if it is a url, otherwise take the ID
-  if (documentInput.value.indexOf('docs.google.com/spreadsheets') > 0) {
+  if (documentLinkInput.value.indexOf('docs.google.com/spreadsheets') > 0) {
     const googleSheetsDocumentIDRegex = new RegExp(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
     // sheet link
-    const regexResult = documentInput.value.match(googleSheetsDocumentIDRegex);
+    const regexResult = documentLinkInput.value.match(googleSheetsDocumentIDRegex);
     [, documentID] = regexResult;
   } else {
-    documentID = documentInput.value === '' ? defaultDocumentID : documentInput.value;
+    documentID = documentLinkInput.value === '' ? defaultDocumentID : documentLinkInput.value;
   }
 
   return documentID;
@@ -35,7 +35,7 @@ const getDocumentID = () => {
     documentID = cookies.preferredDoc;
   } else {
     // Check the sheet input for a document ID
-    documentID = getDocumentIDFromDocumentInput();
+    documentID = getDocumentIDFromdocumentLinkInput();
   }
 
   return documentID;
