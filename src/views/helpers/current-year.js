@@ -1,8 +1,8 @@
-module.exports = function() { 
-  var currentYear = (new Date()).getFullYear(); 
-  var copyRightStartingYear = 2018;
+export default () => {
+  const currentYear = new Date().getFullYear();
+  const copyRightStartingYear = 2018;
 
-  if(currentYear === copyRightStartingYear) {
+  if (currentYear === copyRightStartingYear) {
     return copyRightStartingYear;
   }
 

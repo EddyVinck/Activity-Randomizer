@@ -25,12 +25,18 @@ module.exports = (env, argv) => {
           test: /\.js$/,
           exclude: /node_modules/,
           include: path.resolve(__dirname, 'src'),
-          loader: 'babel-loader',
-
-          options: {
-            presets: ['env'],
-            plugins: ['syntax-dynamic-import'],
-          },
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['env'],
+                plugins: ['syntax-dynamic-import'],
+              },
+            },
+            {
+              loader: 'eslint-loader',
+            },
+          ],
         },
         {
           test: /\.(png|svg|jpg|gif|ico|webmanifest)$/,

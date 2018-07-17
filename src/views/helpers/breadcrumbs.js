@@ -1,12 +1,12 @@
-const getBreadcrumbs = (req, res, next) => {
+const getBreadcrumbs = () => {
   const fakeBreadcrumbs = ['path', 'to', 'page'];
-  let breadCrumbList = "<ol>"
+  let breadCrumbList = '<ol>';
 
-  fakeBreadcrumbs.forEach(crumb => {
+  fakeBreadcrumbs.forEach((crumb) => {
     breadCrumbList += `<li><a href="/">${crumb}</a></li>`;
   });
 
   return breadCrumbList;
-}
+};
 
-module.exports = getBreadcrumbs;
+export default getBreadcrumbs;
