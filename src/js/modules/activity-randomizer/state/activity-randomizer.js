@@ -1,4 +1,4 @@
-const activityRandomzizer = {
+const activityRandomizer = {
   activitiesFromSheet: [],
 
   getActivities() {
@@ -9,4 +9,4 @@ const activityRandomzizer = {
   },
 };
 
-export default activityRandomzizer;
+export default activityRandomizer;

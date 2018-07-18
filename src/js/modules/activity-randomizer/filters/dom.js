@@ -1,4 +1,4 @@
-import activityRandomzizer from '../state/activity-randomizer';
+import activityRandomizer from '../state/activity-randomizer';
 
 const setTimeRangeMaxValue = (activities) => {
   const timeRange = document.querySelector('[time-range]');
@@ -6,7 +6,7 @@ const setTimeRangeMaxValue = (activities) => {
   const timeRangeMaxValueIndicator = document.querySelector('.max');
 
   timeRange.disabled = true;
-  const activitiesToCheckForMaxTime = activities || activityRandomzizer.getActivities();
+  const activitiesToCheckForMaxTime = activities || activityRandomizer.getActivities();
   let maxTime = null;
 
   maxTime = activitiesToCheckForMaxTime.reduce((accumulator, currentActivity) => {
