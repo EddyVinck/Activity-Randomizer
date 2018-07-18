@@ -123,4 +123,4 @@ openCookies.forEach((openCookiesButton) => {
 
 handleCookies(getCookies());
 
-module.exports = getCookies;
+export default getCookies;

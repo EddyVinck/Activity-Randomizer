@@ -20,4 +20,4 @@ const initNav = () => {
   });
 };
 
-module.exports = initNav;
+export default initNav;

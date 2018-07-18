@@ -1,9 +1,9 @@
 {
   "extends": 
-    [
-      "airbnb-base", 
-      "prettier"
-    ],
+  [
+    "airbnb-base", 
+    "prettier"
+  ],
   "rules": {
     "linebreak-style": 0,
     "no-param-reassign": 0,
@@ -14,8 +14,23 @@
         "classes": true,
         "variables": true
       }
-    ]
+    ],
+    "import/no-unresolved": "error",
+    "import/named": "error",
+    "import/no-absolute-path": "error",
+    "import/no-self-import": "error",
+    "import/no-useless-path-segments": "error",
+    "import/no-commonjs": "error",
+    "import/no-amd": "error",
+    "import/export": "warn",
+    "import/no-named-as-default": "warn",
+    "import/dynamic-import-chunkname": "error",
+    "import/no-cycle": "off",
+    "prettier/prettier": "error"
   },
+  "plugins": [
+    "prettier"
+  ],
   "env": {
     "browser": true,
     "node": true,
@@ -33,7 +48,6 @@
     }
   },
   "settings": {
-    "import/resolver": "node",
-    "import/no-commonjs": true
+    "import/resolver": "node"
   }
 }
