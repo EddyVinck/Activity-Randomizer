@@ -72,4 +72,10 @@ const removeActivityListContainersInnerHTML = () => {
   setActivityContainerContent('');
 };
 
-export { getDocumentID, appendMessage, appendActivity, removeActivityListContainersInnerHTML };
+export {
+  getDocumentID,
+  appendMessage,
+  appendActivity,
+  removeActivityListContainersInnerHTML,
+  setActivityContainerContent,
+};

@@ -6,18 +6,16 @@ import {
   appendMessage,
   appendActivity,
   removeActivityListContainersInnerHTML,
+  setActivityContainerContent,
 } from './modules/activity-randomizer/dom';
 
 // Lists activities in the activityListContainers or shows an error
 const listActivities = (documentID, sheetName) => {
   const documentLinkInput = document.getElementById('sheet-input');
-  const activityListContainers = document.querySelectorAll('[sheet-content]');
   const sheetCellRange = 'A2:D';
 
   const sheetPrefix = sheetName ? `${sheetName}!` : '';
-  activityListContainers.forEach((ct) => {
-    ct.innerHTML = '<div class="col">Loading data...</div>';
-  });
+  setActivityContainerContent('<div class="col">Loading data...</div>');
 
   gapi.client.sheets.spreadsheets.values
     .get({
@@ -52,9 +50,7 @@ const listActivities = (documentID, sheetName) => {
           setTimeRangeMaxValue();
           documentLinkInput.classList.remove('is-invalid');
         } else {
-          activityListContainers.forEach((container) => {
-            container.innerHTML = '<div class="col">No data found. :(</div>';
-          });
+          setActivityContainerContent('<div class="col">No data found. :(</div>');
           disableFilters();
         }
       },
@@ -62,7 +58,7 @@ const listActivities = (documentID, sheetName) => {
         documentLinkInput.classList.add('is-invalid');
         activityRandomizer.setDocumentValidity(false);
         removeActivityListContainersInnerHTML();
-        appendMessage(`error: Make sure your Google Sheets document link is copied correctly.`);
+        appendMessage('error: Make sure your Google Sheets document link is copied correctly.');
         disableFilters();
       }
     );
@@ -107,8 +103,8 @@ const insertSheetNames = (sheetNames) => {
   });
 };
 
-const getSheetNames = (documentID) => {
-  const promise = new Promise((resolve, reject) => {
+const getSheetNames = (documentID) =>
+  new Promise((resolve, reject) => {
     gapi.client.sheets.spreadsheets
       .get({
         spreadsheetId: documentID,
@@ -123,9 +119,6 @@ const getSheetNames = (documentID) => {
         }
       );
   });
-
-  return promise;
-};
 
 /**
  *  Called when the signed in status changes, to update the UI
@@ -237,7 +230,6 @@ sheetSubmitButton.addEventListener('click', () => {
 });
 
 randomizeButton.addEventListener('click', () => {
-  const activityListContainers = document.querySelectorAll('[sheet-content]');
   const noActivitySelectedContainers = document.querySelectorAll('.no-activity');
   const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
   const activities = activityRandomizer.getActivities();
@@ -256,9 +248,9 @@ randomizeButton.addEventListener('click', () => {
     });
   } else {
     // When there are no activities available
-    activityListContainers.forEach((container) => {
-      container.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>';
-    });
+    setActivityContainerContent(
+      '<div class="col">You filtered out all activities in your sheet.</div>'
+    );
   }
 });
 
@@ -277,8 +269,6 @@ removeFiltersButton.addEventListener('click', () => {
 
 // Add a click event listener to every button in viewListButtons
 viewListButtons.forEach((btn) => {
-  const activityListContainers = document.querySelectorAll('[sheet-content]');
-
   btn.addEventListener('click', () => {
     const sheetIsValid = activityRandomizer.sgtDocumentValidity();
 
@@ -293,10 +283,9 @@ viewListButtons.forEach((btn) => {
           appendActivity(activity.name, activity.time);
         });
       } else {
-        activityListContainers.forEach((container) => {
-          container.innerHTML =
-            '<div class="col">You filtered out all activities in your sheet.</div>';
-        });
+        setActivityContainerContent(
+          '<div class="col">You filtered out all activities in your sheet.</div>'
+        );
       }
     }
   });
