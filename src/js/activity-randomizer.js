@@ -1,7 +1,12 @@
 import activityRandomizer from './modules/activity-randomizer/state/activity-randomizer';
 import { getFilters, filterActivities } from './modules/activity-randomizer/filters/filters';
 import { setTimeRangeMaxValue, disableFilters } from './modules/activity-randomizer/filters/dom';
-import { getDocumentID, appendMessage, appendActivity } from './modules/activity-randomizer/dom';
+import {
+  getDocumentID,
+  appendMessage,
+  appendActivity,
+  removeActivityListContainersInnerHTML,
+} from './modules/activity-randomizer/dom';
 
 // Lists activities in the activityListContainers or shows an error
 const listActivities = (documentID, sheetName) => {
@@ -28,9 +33,7 @@ const listActivities = (documentID, sheetName) => {
           const activities = [];
           activityRandomizer.setDocumentValidity(true);
 
-          activityListContainers.forEach((container) => {
-            container.innerHTML = '';
-          });
+          removeActivityListContainersInnerHTML();
           for (let i = 0; i < range.values.length; i += 1) {
             const cellRow = range.values[i];
 
@@ -58,9 +61,7 @@ const listActivities = (documentID, sheetName) => {
       () => {
         documentLinkInput.classList.add('is-invalid');
         activityRandomizer.setDocumentValidity(false);
-        activityListContainers.forEach((container) => {
-          container.innerHTML = '';
-        });
+        removeActivityListContainersInnerHTML();
         appendMessage(`error: Make sure your Google Sheets document link is copied correctly.`);
         disableFilters();
       }
@@ -107,18 +108,23 @@ const insertSheetNames = (sheetNames) => {
 };
 
 const getSheetNames = (documentID) => {
-  gapi.client.sheets.spreadsheets
-    .get({
-      spreadsheetId: documentID,
-    })
-    .then(
-      (response) => {
-        insertSheetNames(response.result.sheets);
-      },
-      () => {
-        // Sheets could not be loaded, but this is handled in listActivities
-      }
-    );
+  const promise = new Promise((resolve, reject) => {
+    gapi.client.sheets.spreadsheets
+      .get({
+        spreadsheetId: documentID,
+      })
+      .then(
+        (response) => {
+          resolve(response.result.sheets);
+        },
+        (response) => {
+          // Sheets could not be loaded, but this is handled in listActivities
+          reject(response.result.error.message);
+        }
+      );
+  });
+
+  return promise;
 };
 
 /**
@@ -135,7 +141,11 @@ const updateGoogleAPISignInStatus = (isSignedIn) => {
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'inline-block';
 
-    getSheetNames(documentID);
+    getSheetNames(documentID)
+      .then(insertSheetNames)
+      .catch((error) => {
+        appendMessage(`Promise failed: ${error}`);
+      });
     listActivities(documentID);
   } else {
     authorizeButton.style.display = 'inline-block';
@@ -219,12 +229,15 @@ sheetSubmitButton.addEventListener('click', () => {
   const documentID = getDocumentID();
 
   listActivities(documentID);
-  getSheetNames(documentID);
+  getSheetNames(documentID)
+    .then(insertSheetNames)
+    .catch((error) => {
+      appendMessage(`Promise failed: ${error}`);
+    });
 });
 
 randomizeButton.addEventListener('click', () => {
   const activityListContainers = document.querySelectorAll('[sheet-content]');
-  // Containers with content for when a user has not generated an activity yet
   const noActivitySelectedContainers = document.querySelectorAll('.no-activity');
   const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
   const activities = activityRandomizer.getActivities();
@@ -268,15 +281,14 @@ viewListButtons.forEach((btn) => {
 
   btn.addEventListener('click', () => {
     const sheetIsValid = activityRandomizer.sgtDocumentValidity();
-    const activities = activityRandomizer.getActivities();
-    const filteredActivities = filterActivities(activities, getFilters());
 
     if (sheetIsValid) {
+      const activities = activityRandomizer.getActivities();
+      const filteredActivities = filterActivities(activities, getFilters());
+
       if (filteredActivities.length > 0) {
         // Fill the activityListContainers with the filtered activities.
-        activityListContainers.forEach((container) => {
-          container.innerHTML = '';
-        });
+        removeActivityListContainersInnerHTML();
         filteredActivities.forEach((activity) => {
           appendActivity(activity.name, activity.time);
         });

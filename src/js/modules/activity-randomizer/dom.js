@@ -61,5 +61,15 @@ const appendMessage = (message) => {
 const appendActivity = (activity, time) => {
   appendMessage(`${activity}, ${time} minutes.\n`);
 };
+const setActivityContainerContent = (content) => {
+  const activityListContainers = document.querySelectorAll('[sheet-content]');
 
-export { getDocumentID, appendMessage, appendActivity };
+  activityListContainers.forEach((container) => {
+    container.innerHTML = content;
+  });
+};
+const removeActivityListContainersInnerHTML = () => {
+  setActivityContainerContent('');
+};
+
+export { getDocumentID, appendMessage, appendActivity, removeActivityListContainersInnerHTML };
