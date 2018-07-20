@@ -47,21 +47,19 @@ const getDocumentID = () => {
  *
  * @param {string} message Text to be placed in pre element.
  */
-const appendPre = (message) => {
-  const content = document.querySelectorAll('content');
-  const textContent = document.createTextNode(`${message} \n`);
-  content.appendChild(textContent);
-};
-const appendCol = (activity, time) => {
-  const sheetContentContainers = document.querySelectorAll('[sheet-content]');
+const appendMessage = (message) => {
+  const activityListContainers = document.querySelectorAll('[sheet-content]');
 
-  sheetContentContainers.forEach((contentContainer) => {
+  activityListContainers.forEach((contentContainer) => {
     const col = document.createElement('div');
-    const textContent = document.createTextNode(`${activity}, ${time} minutes.\n`);
+    const textContent = document.createTextNode(message);
     col.classList.add('col-sm-12');
     col.appendChild(textContent);
     contentContainer.appendChild(col);
   });
 };
+const appendActivity = (activity, time) => {
+  appendMessage(`${activity}, ${time} minutes.\n`);
+};
 
-export { getDocumentID, appendPre, appendCol };
+export { getDocumentID, appendMessage, appendActivity };

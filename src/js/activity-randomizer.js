@@ -1,7 +1,7 @@
 import activityRandomizer from './modules/activity-randomizer/state/activity-randomizer';
 import { getFilters, filterActivities } from './modules/activity-randomizer/filters/filters';
 import { setTimeRangeMaxValue, disableFilters } from './modules/activity-randomizer/filters/dom';
-import { getDocumentID, appendPre, appendCol } from './modules/activity-randomizer/dom';
+import { getDocumentID, appendMessage, appendActivity } from './modules/activity-randomizer/dom';
 
 // Lists activities in the activityListContainers or shows an error
 const listActivities = (documentID, sheetName) => {
@@ -26,15 +26,16 @@ const listActivities = (documentID, sheetName) => {
         // Sometimes range.values empty and then it is not returned from the response
         if (range.values && range.values.length > 0) {
           const activities = [];
+          activityRandomizer.setDocumentValidity(true);
 
-          activityListContainers.forEach((ct) => {
-            ct.innerHTML = '';
+          activityListContainers.forEach((container) => {
+            container.innerHTML = '';
           });
           for (let i = 0; i < range.values.length; i += 1) {
             const cellRow = range.values[i];
 
             // Print columns A and B, which correspond to indices 0 and 1.
-            appendCol(cellRow[0], cellRow[1]);
+            appendActivity(cellRow[0], cellRow[1]);
 
             activities.push({
               name: cellRow[0],
@@ -54,14 +55,14 @@ const listActivities = (documentID, sheetName) => {
           disableFilters();
         }
       },
-      (response) => {
+      () => {
         documentLinkInput.classList.add('is-invalid');
+        activityRandomizer.setDocumentValidity(false);
+        activityListContainers.forEach((container) => {
+          container.innerHTML = '';
+        });
+        appendMessage(`error: Make sure your Google Sheets document link is copied correctly.`);
         disableFilters();
-        appendPre(
-          `error: ${
-            response.result.error.message
-          }. Make sure your Google Sheets document link is copied correctly.`
-        );
       }
     );
 };
@@ -76,7 +77,7 @@ const insertSheetNames = (sheetNames) => {
   sheetNames.forEach((sheet) => {
     const sheetName = sheet.properties.title.toLowerCase();
 
-    // Add the sheets as buttons
+    // Add the sheets as buttons, except for the info sheet
     if (sheetName !== 'info') {
       sheetButtonContainer.innerHTML += `<button class="btn btn-sm" value="${sheetName}">${sheetName}</button>`;
     }
@@ -114,12 +115,8 @@ const getSheetNames = (documentID) => {
       (response) => {
         insertSheetNames(response.result.sheets);
       },
-      (reason) => {
-        appendPre(
-          `error: ${
-            reason.result.error.message
-          }. Make sure your Google Sheets document link is copied correctly.`
-        );
+      () => {
+        // Sheets could not be loaded, but this is handled in listActivities
       }
     );
 };
@@ -270,22 +267,25 @@ viewListButtons.forEach((btn) => {
   const activityListContainers = document.querySelectorAll('[sheet-content]');
 
   btn.addEventListener('click', () => {
+    const sheetIsValid = activityRandomizer.sgtDocumentValidity();
     const activities = activityRandomizer.getActivities();
     const filteredActivities = filterActivities(activities, getFilters());
 
-    if (filteredActivities.length > 0) {
-      // Fill the activityListContainers with the filtered activities.
-      activityListContainers.forEach((container) => {
-        container.innerHTML = '';
-      });
-      filteredActivities.forEach((activity) => {
-        appendCol(activity.name, activity.time);
-      });
-    } else {
-      activityListContainers.forEach((container) => {
-        container.innerHTML =
-          '<div class="col">You filtered out all activities in your sheet.</div>';
-      });
+    if (sheetIsValid) {
+      if (filteredActivities.length > 0) {
+        // Fill the activityListContainers with the filtered activities.
+        activityListContainers.forEach((container) => {
+          container.innerHTML = '';
+        });
+        filteredActivities.forEach((activity) => {
+          appendActivity(activity.name, activity.time);
+        });
+      } else {
+        activityListContainers.forEach((container) => {
+          container.innerHTML =
+            '<div class="col">You filtered out all activities in your sheet.</div>';
+        });
+      }
     }
   });
 });

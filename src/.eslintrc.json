@@ -15,6 +15,7 @@
         "variables": true
       }
     ],
+    "no-debugger": "warn",
     "import/no-unresolved": "error",
     "import/named": "error",
     "import/no-absolute-path": "error",
