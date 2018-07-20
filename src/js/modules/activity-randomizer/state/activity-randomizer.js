@@ -1,18 +1,20 @@
 const activityRandomizer = {
   activitiesFromSheet: [],
-  sheetValid: false,
+  documentValid: false,
 
   getActivities() {
     return this.activitiesFromSheet;
   },
   setActivities(newActivities) {
     this.activitiesFromSheet = newActivities;
+    return this;
   },
-  sgtDocumentValidity() {
-    return this.sheetValid;
+  getDocumentValidity() {
+    return this.documentValid;
   },
   setDocumentValidity(validity) {
-    this.sheetValid = validity;
+    this.documentValid = validity;
+    return this;
   },
 };
 

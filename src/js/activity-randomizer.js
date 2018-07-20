@@ -207,8 +207,9 @@ const insertRandomizedActivity = (activity) => {
   const pickedActivity = document.getElementById('picked-activity');
 
   pickedActivity.querySelector('.card-title h2').innerHTML = activity.name;
-  pickedActivity.querySelector('.card-text').innerHTML = `${activity.description}<br>
-  ${activity.time} minutes.`;
+  pickedActivity.querySelector('.card-text').innerHTML = `${activity.description}<br>${
+    activity.time
+  } minutes.`;
 };
 
 // Elements with eventlisteners
@@ -270,7 +271,7 @@ removeFiltersButton.addEventListener('click', () => {
 // Add a click event listener to every button in viewListButtons
 viewListButtons.forEach((btn) => {
   btn.addEventListener('click', () => {
-    const sheetIsValid = activityRandomizer.sgtDocumentValidity();
+    const sheetIsValid = activityRandomizer.getDocumentValidity();
 
     if (sheetIsValid) {
       const activities = activityRandomizer.getActivities();
