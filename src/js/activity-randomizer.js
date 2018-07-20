@@ -1,4 +1,4 @@
-import activityRandomzizer from './modules/activity-randomizer/state/activity-randomizer';
+import activityRandomizer from './modules/activity-randomizer/state/activity-randomizer';
 import { getFilters, filterActivities } from './modules/activity-randomizer/filters/filters';
 import { setTimeRangeMaxValue, disableFilters } from './modules/activity-randomizer/filters/dom';
 import { getDocumentID, appendPre, appendCol } from './modules/activity-randomizer/dom';
@@ -7,9 +7,9 @@ import { getDocumentID, appendPre, appendCol } from './modules/activity-randomiz
 const listActivities = (documentID, sheetName) => {
   const documentLinkInput = document.getElementById('sheet-input');
   const activityListContainers = document.querySelectorAll('[sheet-content]');
+  const sheetCellRange = 'A2:D';
 
   const sheetPrefix = sheetName ? `${sheetName}!` : '';
-  const sheetCellRange = 'A2:D';
   activityListContainers.forEach((ct) => {
     ct.innerHTML = '<div class="col">Loading data...</div>';
   });
@@ -44,12 +44,12 @@ const listActivities = (documentID, sheetName) => {
             });
           }
 
-          activityRandomzizer.setActivities(activities);
+          activityRandomizer.setActivities(activities);
           setTimeRangeMaxValue();
           documentLinkInput.classList.remove('is-invalid');
         } else {
-          activityListContainers.forEach((ct) => {
-            ct.innerHTML = '<div class="col">No data found. :(</div>';
+          activityListContainers.forEach((container) => {
+            container.innerHTML = '<div class="col">No data found. :(</div>';
           });
           disableFilters();
         }
@@ -230,7 +230,7 @@ randomizeButton.addEventListener('click', () => {
   // Containers with content for when a user has not generated an activity yet
   const noActivitySelectedContainers = document.querySelectorAll('.no-activity');
   const randomizedActivityContainers = document.querySelectorAll('.randomized-activity');
-  const activities = activityRandomzizer.getActivities();
+  const activities = activityRandomizer.getActivities();
   const filteredActivities = filterActivities(activities, getFilters());
 
   if (filteredActivities.length > 0) {
@@ -246,8 +246,8 @@ randomizeButton.addEventListener('click', () => {
     });
   } else {
     // When there are no activities available
-    activityListContainers.forEach((ct) => {
-      ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>';
+    activityListContainers.forEach((container) => {
+      container.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>';
     });
   }
 });
@@ -261,7 +261,7 @@ timeRange.addEventListener('change', (e) => {
 
 removeFiltersButton.addEventListener('click', () => {
   // restore to the original state of the filters
-  const activities = activityRandomzizer.getActivities();
+  const activities = activityRandomizer.getActivities();
   setTimeRangeMaxValue(activities);
 });
 
@@ -270,20 +270,21 @@ viewListButtons.forEach((btn) => {
   const activityListContainers = document.querySelectorAll('[sheet-content]');
 
   btn.addEventListener('click', () => {
-    const activities = activityRandomzizer.getActivities();
+    const activities = activityRandomizer.getActivities();
     const filteredActivities = filterActivities(activities, getFilters());
 
     if (filteredActivities.length > 0) {
       // Fill the activityListContainers with the filtered activities.
-      activityListContainers.forEach((ct) => {
-        ct.innerHTML = '';
+      activityListContainers.forEach((container) => {
+        container.innerHTML = '';
       });
       filteredActivities.forEach((activity) => {
         appendCol(activity.name, activity.time);
       });
     } else {
-      activityListContainers.forEach((ct) => {
-        ct.innerHTML = '<div class="col">You filtered out all activities in your sheet.</div>';
+      activityListContainers.forEach((container) => {
+        container.innerHTML =
+          '<div class="col">You filtered out all activities in your sheet.</div>';
       });
     }
   });
