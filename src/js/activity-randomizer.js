@@ -54,6 +54,7 @@ const listActivities = (documentID, sheetName) => {
           disableFilters();
         }
       },
+      // Handle rejected document
       () => {
         documentLinkInput.classList.add('is-invalid');
         activityRandomizer.setDocumentValidity(false);
@@ -103,6 +104,13 @@ const insertSheetNames = (sheetNames) => {
   });
 };
 
+const handleNoSheetNames = (error) => {
+  insertSheetNames([]);
+  disableFilters();
+  activityRandomizer.setDocumentValidity(false);
+  appendMessage(`Getting sheet names failed: ${error}`);
+};
+
 const getSheetNames = (documentID) =>
   new Promise((resolve, reject) => {
     gapi.client.sheets.spreadsheets
@@ -114,7 +122,6 @@ const getSheetNames = (documentID) =>
           resolve(response.result.sheets);
         },
         (response) => {
-          // Sheets could not be loaded, but this is handled in listActivities
           reject(response.result.error.message);
         }
       );
@@ -137,7 +144,7 @@ const updateGoogleAPISignInStatus = (isSignedIn) => {
     getSheetNames(documentID)
       .then(insertSheetNames)
       .catch((error) => {
-        appendMessage(`Promise failed: ${error}`);
+        handleNoSheetNames(error);
       });
     listActivities(documentID);
   } else {
@@ -226,7 +233,7 @@ sheetSubmitButton.addEventListener('click', () => {
   getSheetNames(documentID)
     .then(insertSheetNames)
     .catch((error) => {
-      appendMessage(`Promise failed: ${error}`);
+      handleNoSheetNames(error);
     });
 });
 
@@ -271,9 +278,9 @@ removeFiltersButton.addEventListener('click', () => {
 // Add a click event listener to every button in viewListButtons
 viewListButtons.forEach((btn) => {
   btn.addEventListener('click', () => {
-    const sheetIsValid = activityRandomizer.getDocumentValidity();
+    const documentIsValid = activityRandomizer.getDocumentValidity();
 
-    if (sheetIsValid) {
+    if (documentIsValid) {
       const activities = activityRandomizer.getActivities();
       const filteredActivities = filterActivities(activities, getFilters());
 
@@ -288,6 +295,11 @@ viewListButtons.forEach((btn) => {
           '<div class="col">You filtered out all activities in your sheet.</div>'
         );
       }
+    } else {
+      // sheet is invalid, do error handling
+      setActivityContainerContent(
+        '<div class="col">The currently selected sheet does not contain activities.</div>'
+      );
     }
   });
 });
