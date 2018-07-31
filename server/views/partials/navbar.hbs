@@ -1,0 +1,122 @@
+<header class="navigation">
+  <div class="main-nav">
+    <div class="container">
+      <div class="row">
+        <div class="branding col-12 col-md-12 col-lg-4">
+          <a href="/">
+            <div class="logo">
+              <img src="../../assets/img/activity-randomizer-logo.png" alt="Activity Randomizer logo">
+            </div>
+            <div class="name-slogan">
+              <span class="name">Activity Randomizer</span>
+              <span class="slogan">Helps you pick something to do.</span>
+            </div>            
+          </a>
+          <div class="hamburger-wrapper">
+            {{!-- <a href="#hamburger-toggle" class="hamburger"><span></span><span></span><span></span></a> --}}
+            <input hamburger-toggle type="checkbox" name="" id="">
+            <div class="bun">
+              <div class="burger"></div>
+            </div>
+          </div>
+        </div>
+        <div nav-contents class="col-12 col-md-12 col-lg-8">
+          <div class="navigation-mobile-flex-wrapper">
+            <div class="row">
+
+              <div class="col">
+                <div class="navigation-secondary">
+                  <nav class="nav-items">
+                    <ul>
+                      <li><a href="">Example Sheet</a></li>
+                      <li><a data-toggle="modal" data-target="#viewSettings" ><i class="icon-cog"></i></a></li>
+                      <li>
+                        <button id="authorize-button" style="display: none;" class="btn btn-secondary">Allow Google services</button>
+                        <button id="signout-button" class="btn btn-outline-secondary">Sign out of Google services</button>
+                      </li>
+                      <li><a class="btn btn-info" href="">Get newsletters</a></li>
+                      {{!-- <li>
+                        <div class="language-dropdown">
+                          <div class="current-language">
+                            <img src="" alt="">
+                          </div>
+                          <div class="language-options">
+                            <ul>
+                              <li>[English]</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </li> --}}
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col">
+
+                <div class="navigation-primary">
+                  <nav class="nav-items">
+                    <ul>
+                      <li><a href="">Profile</a></li>
+                      <li class="active"><a href="">Pricing</a></li>
+                      <li><a href="">Features</a></li>
+                      <li><a href="">Help</a></li>
+                      <li><a href="">News</a></li>                      
+                      <li><a class="btn btn-outline-primary" href="">Log in</a></li>
+                      <li><a class="btn btn-primary" href="">Sign up</a></li>
+                    </ul>
+                  </nav>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{!--
+  <div class="under-nav">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+
+          <div class="under-nav-message">Check out the latest news!</div>
+          <div class="tab-under">
+            <a href="">Friends</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  --}}
+</header>
+
+{{!-- <nav class="navbar navbar-expand-md navbar-light site-nav sticky-top py-1">
+  <a class=" navbar-brand " href="/">
+    Activity Randomizer v0.1
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="flex-flow navbar-nav flex-flow navbar-nav mb-2 mb-md-0">
+      <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+      <li class="nav-item"><a href="/help" class="nav-link">Help</a></li>
+      <li class="nav-item"><a href="/example-sheet" class="nav-link">Example Sheet</a></li>
+      <li class="nav-item"><a href="/pricing" class="nav-link">Pricing</a></li>
+      <li class="nav-item"><a data-toggle="modal" data-target="#viewSettings" href="/" class="nav-link">Settings</a></li>
+    </ul>
+    <ul class="navbar-nav ml-md-auto d-md-flex align-items-md-center">
+      <li class="nav-item mb-2 mb-md-0"><a href="/pricing" class="btn btn-info">Get updates</a></li>
+      <li class="nav-item ml-md-2">
+        <button class="btn btn-primary" id="authorize-button" style="display: none;">Authorize</button>
+        <button class="btn btn-outline-secondary  " id="signout-button" style="display: none;">Sign Out</button>
+      </li>
+      <li class="nav-item"></li>
+    </ul>
+  </div>
+</nav>   --}}

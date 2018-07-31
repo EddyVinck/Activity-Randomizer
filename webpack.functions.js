@@ -19,7 +19,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // 	'src/views/index.hbs'
 // ];
 
-const createPages = () => [
+const createPages = (mode) => [
   new HtmlWebpackPlugin({
     filename: 'index.html',
     template: 'src/views/index.hbs',

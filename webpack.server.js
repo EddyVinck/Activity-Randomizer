@@ -4,6 +4,7 @@ const path = require('path');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 const createPages = require('./webpack.functions');
 // const devMode = process.env.NODE_ENV !== 'production';
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, argv) => {
   console.log(`mode: ${argv.mode}`);
@@ -16,7 +17,7 @@ module.exports = (env, argv) => {
 
     output: {
       filename: '[name].entry.js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'server'),
     },
 
     module: {
@@ -80,28 +81,9 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.hbs$/,
-          loader: 'handlebars-loader',
-
-          options: {
-            inlineRequires: '/assets/img',
-            precompileOptions: {
-              knownHelpersOnly: false,
-            },
-            helpersDirs: ['src/views/helpers'],
-          },
+          loader: 'raw-loader',
         },
       ],
-    },
-
-    devServer: {
-      contentBase: './dist',
-      compress: true,
-      port: '9000',
-    },
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000,
-      ignored: /node_modules/,
     },
     resolve: {
       alias: {
@@ -114,8 +96,10 @@ module.exports = (env, argv) => {
       new webpack.ProvidePlugin({
         $: 'jquery',
       }),
-    ].concat(createPages()),
+      new CopyWebpackPlugin([{ context: './src/views/', from: `**/*`, to: 'views' }]),
+    ],
   };
+  console.log(path.resolve(`${__dirname}/server/views`));
 
   return myWebpackConfig;
 };

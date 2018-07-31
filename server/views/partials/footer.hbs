@@ -1,0 +1,36 @@
+<footer class="footer">
+  <div class="container">
+    <div class="row">      
+      <div class="col-12 col-md-3 col-lg-3">
+        <ul class="list-unstyled text-small">
+          <li><a href="/">Home</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/pricing">Get updates</a></li>
+        </ul>
+      </div>
+      <div class="col-12 col-md-3 col-lg-3">
+        <ul class="list-unstyled text-small">
+          <li><a href="/help">Help</a></li>
+          <li><a href="/example-sheet">Example sheet</a></li>
+          <li><a href="/google-sheet-tutorial">Google Sheet Import Tutorial</a></li>
+        </ul>
+      </div>
+      <div class="col-12 col-md-3 col-lg-3">
+        <ul class="list-unstyled text-small">
+          <li><a href="/privacy-policy">Privacy & Cookie policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        {{!-- 
+          (unregistered?) Handlebars helpers must receive a parameter. 
+          Helpers don't work otherwise. 
+          This is because the compiler has no other way of distinguishing the variables from the helpers.
+          In this case, a dot will do the trick.  
+        --}}
+        <span class="text-muted">© Eddy Vinck {{[../helpers/current-year.js] . }}</span>
+      </div>
+    </div>
+  </div>
+</footer>
