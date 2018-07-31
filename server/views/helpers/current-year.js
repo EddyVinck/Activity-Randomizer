@@ -1,4 +1,4 @@
-export default () => {
+module.exports = () => {
   const currentYear = new Date().getFullYear();
   const copyRightStartingYear = 2018;
 

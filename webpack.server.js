@@ -99,7 +99,6 @@ module.exports = (env, argv) => {
       new CopyWebpackPlugin([{ context: './src/views/', from: `**/*`, to: 'views' }]),
     ],
   };
-  console.log(path.resolve(`${__dirname}/server/views`));
 
   return myWebpackConfig;
 };

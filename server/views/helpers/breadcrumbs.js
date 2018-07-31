@@ -9,4 +9,4 @@ const getBreadcrumbs = () => {
   return breadCrumbList;
 };
 
-export default getBreadcrumbs;
+module.exports = getBreadcrumbs;
