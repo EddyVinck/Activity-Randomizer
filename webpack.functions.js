@@ -22,16 +22,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const createPages = (mode) => [
   new HtmlWebpackPlugin({
     filename: 'index.html',
-    template: 'src/views/index.hbs',
+    template: 'src/views/index.pug',
     hash: true,
     inject: false,
   }),
-  new HtmlWebpackPlugin({
-    filename: 'google-sheet-tutorial.html',
-    template: 'src/views/google-sheet-tutorial.hbs',
-    hash: true,
-    inject: false,
-  }),
+  // new HtmlWebpackPlugin({
+  //   filename: 'google-sheet-tutorial.html',
+  //   template: 'src/views/google-sheet-tutorial.hbs',
+  //   hash: true,
+  //   inject: false,
+  // }),
 ];
 
 module.exports = createPages;

@@ -3,6 +3,7 @@ const path = require('path');
 // const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 const createPages = require('./webpack.functions');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = (env, argv) => {
@@ -68,7 +69,8 @@ module.exports = (env, argv) => {
           test: /\.(scss|css)$/,
           use: [
             {
-              loader: 'style-loader',
+              loader: MiniCssExtractPlugin.loader,
+              options: { publicPath: '../' },
             },
             {
               loader: 'css-loader',
@@ -79,16 +81,10 @@ module.exports = (env, argv) => {
           ],
         },
         {
-          test: /\.hbs$/,
-          loader: 'handlebars-loader',
+          test: /\.pug$/,
+          loader: 'pug-loader',
 
-          options: {
-            inlineRequires: '/assets/img',
-            precompileOptions: {
-              knownHelpersOnly: false,
-            },
-            helpersDirs: ['src/views/helpers'],
-          },
+          options: {},
         },
       ],
     },
@@ -114,8 +110,14 @@ module.exports = (env, argv) => {
       new webpack.ProvidePlugin({
         $: 'jquery',
       }),
+      new MiniCssExtractPlugin({
+        filename: 'styles/[name].[hash].css',
+        chunkFilename: 'styles/[id].[hash].css',
+      }),
     ].concat(createPages()),
   };
+
+  console.log();
 
   return myWebpackConfig;
 };
