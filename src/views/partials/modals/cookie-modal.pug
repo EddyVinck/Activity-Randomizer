@@ -1,0 +1,51 @@
+// Cookie modal
+.cookie-modal-wrapper
+  .cookie-modal-container
+    .container
+      .row
+        .col-12.col-lg-8.offset-lg-2
+          .cookie-modal
+            .cookie-modal-content
+              span.h5 Activity Randomizer uses cookies.
+              |               
+              p
+                | Some cookies are necessary, while other cookies are not but they will improve your experience.
+              |               
+              span.h6 Necessary Cookies
+              |               
+              p
+                | Necessary cookies are required for the site to work properly or cookies required to provide online services you as a user request.
+              |               
+              span.h6 Anonymous analytical Cookies
+              |                 
+              |               
+              p These cookies allow us to measure the usage of the website.
+              |               
+              span.h6 Preference Cookies
+              |                 
+              |               
+              p Preference cookies will allow us to improve your experience on the website:
+              |               
+              ul
+                li You can save the Google Sheets link
+                |                 
+                li You can save your preferred sheet
+              |               
+              .custom-control.custom-checkbox.mb-2
+                input#customCheck1.custom-control-input(data-cookie-preferences-checkbox="", type="checkbox")
+                |                 
+                label.custom-control-label(for="customCheck1") Allow preference cookies
+              |               
+              .mb-2
+                button.btn.btn-primary(data-cookies-submit="") Change cookie settings
+                |                 
+                button.btn-light.btn(data-cookie-modal-close="", type="button", aria-label="Close")
+                  | Decide later
+                  span.close
+                    span(aria-hidden="true") ×
+              |               
+              p
+                | You can read the Privacy & Cookie Policy 
+                a(href="/privacy-policy") here
+                |  to learn more.
+// end modal

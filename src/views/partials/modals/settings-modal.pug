@@ -1,0 +1,27 @@
+// Settings Modal
+#viewSettings.modal.fade(tabindex="-1", role="dialog", aria-labelledby="viewSettings", aria-hidden="true")
+  .modal-dialog.modal-dialog-centered(role="document")
+    .modal-content
+      .modal-header
+        h5#exampleModalLongTitle.modal-title Your settings
+        |         
+        button.close(type="button", data-dismiss="modal", aria-label="Close")
+          span(aria-hidden="true") ×
+      |       
+      .modal-body
+        p
+          strong Remember your Google Sheets document link:
+        |         
+        p
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam quisquam distinctio doloremque illo assumenda, corrupti incidunt vel nesciunt quibusdam culpa magni molestiae ipsum nemo ab eum voluptatem labore minima placeat!
+        |         
+        p
+          i Your settings are currently stored in a cookie.
+        |         
+        p Do you want to edit your cookies?
+        |         
+        button.btn.btn-outline-info(open-cookies="", data-toggle="tooltip", data-placement="top", title="The site will forget any saved settings you might have set.") Open cookie settings
+      |       
+      .modal-footer
+        button.btn.btn-secondary(type="button", data-dismiss="modal") Close
+// end modal
