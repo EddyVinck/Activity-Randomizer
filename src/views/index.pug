@@ -1,200 +1,199 @@
-<!DOCTYPE html>
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    meta(http-equiv="X-UA-Compatible", content="ie=edge")
-    title Document
-    link(rel="stylesheet", href=htmlWebpackPlugin.files.chunks.common.css[0])
-  body
-    .background-lightgray.pt-4.pb-3
-      .container
-        .row
-          .col-12
-            // partials/breadcrumbs
-            h1 Activity Randomizer
-        |         
-        .row.justify-content-start
-          .col-12.col-sm-10.col-md-6.col-lg-7
-            h2 Helps you stop wasting time when picking things to do in your spare time.
-            |             
-            .section-intro
-              p
-                | You can filter your own activity lists or our pre-made lists.
-              |               
-              p
-                | Picking something to do is hard. Activity Randomizer makes it easy.
-          |           
-          .col-12.col-sm-10.col-md-6.col-lg-5
-            //
-              <div class="video-thumbnail">
-              <a href="">
-              <img src="../assets/img/tut-copy-document.jpg" alt="">
-              </a>
-              </div>
-    // end intro block
-    // Activity Randomizer block
-    .pt-4.pb-3
-      .container
-        .row
-          .col-12
-            h2 Start generating activities here.
-          |           
-          .col-12.col-sm-10.col-md-6.col-lg-7
-            h3
-              | Step 1/5: Copy 
-              a(href="") this
-              |  Google Sheet
-            |             
+extends ./layouts/default.pug
+block before-nav
+  include ./partials/modals/activities-modal.pug
+block content
+  .background-lightgray.pt-4.pb-3
+    .container
+      .row
+        .col-12
+          include partials/breadcrumbs
+          h1 Activity Randomizer
+      |         
+      .row.justify-content-start
+        .col-12.col-sm-10.col-md-6.col-lg-7
+          h2 Helps you stop wasting time when picking things to do in your spare time.
+          |             
+          .section-intro
             p
-              a(href="") The Activity Randomizer Example Sheet
-            |             
-            .help-text(data-toggle="collapse", data-target="#helpCard", aria-expanded="false", aria-controls="helpCard")
-              p
-                button.btn.btn-dark.btn-circle
-                  i.icon-help
-                |  
-                span
-                  | Need 
-                  strong help
-                  | ? click here!
-            |             
-            .row
-              .col-lg-10
-                #helpCard.collapse.help-card
-                  .card-content
-                    ol
-                      li
-                        | Do you have a Google or Gmail account? You can create an account 
-                        a(href="https://accounts.google.com/signup") here
-                        | .
-                      |                       
-                      li
-                        | Allow Activity Randomizer to use your sheets by clicking 
-                        a(href="") here
-                        | .
-                      |                       
-                      li
-                        | Go to 
-                        a(href="") this example sheet template
-                        |  and follow the 'Getting Started' steps.
-                      |                       
-                      li
-                        | Copy the link of your document into the input field at step 1 above and click 'Load Sheets link.'
-                      |                       
-                      li Continue at step 2/5.
-                    |                     
-                    p Want a more detailed tutorial with pictures?
-                    |                     
-                    a.btn.btn-info.btn-sm(href="/sheet-import-tutorial") Detailed tutorial with pictures
-                    |                     
-                    button.btn.btn-primary.btn-circle.btn-circle-large.btn-floating(data-toggle="collapse", data-target="#helpCard")
-                      i.icon-up-open
-            |             
-            h3
-              | Step 2/5: Copy and paste your link here
-              i.icon-link
-            |             
-            |             
-            .form-row.mb-1
-              .col-12.col-md-7.mb-md-0
-                input#sheet-input.form-control(type="text", placeholder="docs.google.com/spreadsheets/. . .", name="sheet-input")
-              |               
-              .col-12.col-md-5.mb-md-0
-                button#sheet-submit.btn.btn-primary(type="button") Load Sheets link
-            // <label class="d-block d-sm-inline-block" for="sheet-input">Sheet:</label>
-            .input-container.checkbox-container(data-preference-cookie="")
-              .custom-control.custom-checkbox
-                input#remember-sheets-link.custom-control-input(type="checkbox", name="")
-                |                 
-                label.custom-control-label(for="remember-sheets-link")
-                  span Remember Sheets link (settings)
-            // The dropdown with the sheets in the document
-            h3 Step 3/5: Pick a sheet
+              | You can filter your own activity lists or our pre-made lists.
             |               
-            |             
-            .input-container
-              .form-row
-                .col-12.col-md-8
-                  .sheet-button-container
-                    p No sheets available.
-                |                 
-                .col-12(data-preference-cookie="")
-                  .input-container.checkbox-container
-                    .custom-control.custom-checkbox
-                      input#remember-sheet-name.custom-control-input(type="checkbox", name="remember-sheet-name")
-                      |                       
-                      label.custom-control-label(for="remember-sheet-name")
-                        span Remember sheet (settings)
-            |             
-            h3 Step 4/5: Filter (optional)
-            |             
-            .input-container.range-container
-              label.d-block
-                | Maximum time: 
-                span(time-range-value="")
-                |  (minutes)
-              |               
-              span.min 0
-              |               
-              input(time-range="", disabled="", type="range", min="0", max="", step="5")
-              |               
-              span.max 12
-            |             
-            .input-container
-              // Button trigger modal
-              button.btn.btn-light(type="button", data-toggle="modal", data-target="#viewCurrentActivities")
-                i.icon-list-bullet
-                | View your filtered list
-              |               
-              button#remove-filters.btn.btn-secondary
-                | Reset filters
-          // end left col
-          .col-12.col-sm-10.col-md-6.offset-md-0.col-lg-5.offset-lg-0
-            h3 Step 5: Choose an activity
-            |             
-            |             
-            .input-container
-              button#pick-activity.btn.btn-primary
-                | Random
-                i.icon-shuffle
-              |               
-              button.btn.btn-light(type="button", data-toggle="modal", data-target="#viewCurrentActivities")
-                i.icon-list-bullet
-                | Choose from list
-            |             
-            .activity-wrapper
-              .no-activity
-                p
-                  | Your activity will appear right here!
-                  .icon-wrapper.text-richblack
-                    i.icon-doc-inv.text-deepgreen
-                    |                     
-                    i.icon-right-bold
-                    |                     
-                    i.icon-shuffle.text-deepgreen
-                    |                     
-                    i.icon-right-bold
-                    |                     
-                    i.icon-smile.text-deepgreen
-              |               
-              .randomized-activity(style="display: none;")
-                .mt-3.mb-2
-                  h2.card-explanation Your randomized activity:
-                  |                   
-                  #picked-activity.card
-                    .card-img-top
-                      // https://developers.google.com/custom-search/
-                      // <img src="https://picsum.photos/200/100" width="100%" alt="">
-                    |                     
-                    .card-body
-                      .card-title
-                        h2.activity-title Picked activity name
-                      |                       
-                      .card-text
-                        // TODO
-                        // <a href="#" disabled class="btn btn-primary btn-block disabled">Add to Google Calendar</a>
-          // end right col
-        // end row
-      // end container
-    // end activity randomizer block
+            p
+              | Picking something to do is hard. Activity Randomizer makes it easy.
+        |           
+        .col-12.col-sm-10.col-md-6.col-lg-5
+          //-
+            <div class="video-thumbnail">
+            <a href="">
+            <img src="../assets/img/tut-copy-document.jpg" alt="">
+            </a>
+            </div>
+  //- end intro block
+  //- Activity Randomizer block
+  .pt-4.pb-3
+    .container
+      .row
+        .col-12
+          h2 Start generating activities here.
+        |           
+        .col-12.col-sm-10.col-md-6.col-lg-7
+          h3
+            | Step 1/5: Copy 
+            a(href="") this
+            |  Google Sheet
+          |             
+          p
+            a(href="") The Activity Randomizer Example Sheet
+          |             
+          .help-text(data-toggle="collapse", data-target="#helpCard", aria-expanded="false", aria-controls="helpCard")
+            p
+              button.btn.btn-dark.btn-circle
+                i.icon-help
+              |  
+              span
+                | Need 
+                strong help
+                | ? click here!
+          |             
+          .row
+            .col-lg-10
+              #helpCard.collapse.help-card
+                .card-content
+                  ol
+                    li
+                      | Do you have a Google or Gmail account? You can create an account 
+                      a(href="https://accounts.google.com/signup") here
+                      | .
+                    |                       
+                    li
+                      | Allow Activity Randomizer to use your sheets by clicking 
+                      a(href="") here
+                      | .
+                    |                       
+                    li
+                      | Go to 
+                      a(href="") this example sheet template
+                      |  and follow the 'Getting Started' steps.
+                    |                       
+                    li
+                      | Copy the link of your document into the input field at step 1 above and click 'Load Sheets link.'
+                    |                       
+                    li Continue at step 2/5.
+                  |                     
+                  p Want a more detailed tutorial with pictures?
+                  |                     
+                  a.btn.btn-info.btn-sm(href="/sheet-import-tutorial") Detailed tutorial with pictures
+                  |                     
+                  button.btn.btn-primary.btn-circle.btn-circle-large.btn-floating(data-toggle="collapse", data-target="#helpCard")
+                    i.icon-up-open
+          |             
+          h3
+            | Step 2/5: Copy and paste your link here
+            i.icon-link
+          |             
+          |             
+          .form-row.mb-1
+            .col-12.col-md-7.mb-md-0
+              input#sheet-input.form-control(type="text", placeholder="docs.google.com/spreadsheets/. . .", name="sheet-input")
+            |               
+            .col-12.col-md-5.mb-md-0
+              button#sheet-submit.btn.btn-primary(type="button") Load Sheets link
+          // <label class="d-block d-sm-inline-block" for="sheet-input">Sheet:</label>
+          .input-container.checkbox-container(data-preference-cookie="")
+            .custom-control.custom-checkbox
+              input#remember-sheets-link.custom-control-input(type="checkbox", name="")
+              |                 
+              label.custom-control-label(for="remember-sheets-link")
+                span Remember Sheets link (settings)
+          // The dropdown with the sheets in the document
+          h3 Step 3/5: Pick a sheet
+          |               
+          |             
+          .input-container
+            .form-row
+              .col-12.col-md-8
+                .sheet-button-container
+                  p No sheets available.
+              |                 
+              .col-12(data-preference-cookie="")
+                .input-container.checkbox-container
+                  .custom-control.custom-checkbox
+                    input#remember-sheet-name.custom-control-input(type="checkbox", name="remember-sheet-name")
+                    |                       
+                    label.custom-control-label(for="remember-sheet-name")
+                      span Remember sheet (settings)
+          |             
+          h3 Step 4/5: Filter (optional)
+          |             
+          .input-container.range-container
+            label.d-block
+              | Maximum time: 
+              span(time-range-value="")
+              |  (minutes)
+            |               
+            span.min 0
+            |               
+            input(time-range="", disabled="", type="range", min="0", max="", step="5")
+            |               
+            span.max 12
+          |             
+          .input-container
+            // Button trigger modal
+            button.btn.btn-light(type="button", data-toggle="modal", data-target="#viewCurrentActivities")
+              i.icon-list-bullet
+              | View your filtered list
+            |               
+            button#remove-filters.btn.btn-secondary
+              | Reset filters
+        // end left col
+        .col-12.col-sm-10.col-md-6.offset-md-0.col-lg-5.offset-lg-0
+          h3 Step 5: Choose an activity
+          |             
+          |             
+          .input-container
+            button#pick-activity.btn.btn-primary
+              | Random
+              i.icon-shuffle
+            |               
+            button.btn.btn-light(type="button", data-toggle="modal", data-target="#viewCurrentActivities")
+              i.icon-list-bullet
+              | Choose from list
+          |             
+          .activity-wrapper
+            .no-activity
+              p
+                | Your activity will appear right here!
+                .icon-wrapper.text-richblack
+                  i.icon-doc-inv.text-deepgreen
+                  |                     
+                  i.icon-right-bold
+                  |                     
+                  i.icon-shuffle.text-deepgreen
+                  |                     
+                  i.icon-right-bold
+                  |                     
+                  i.icon-smile.text-deepgreen
+            |               
+            .randomized-activity(style="display: none;")
+              .mt-3.mb-2
+                h2.card-explanation Your randomized activity:
+                |                   
+                #picked-activity.card
+                  .card-img-top
+                    // https://developers.google.com/custom-search/
+                    // <img src="https://picsum.photos/200/100" width="100%" alt="">
+                  |                     
+                  .card-body
+                    .card-title
+                      h2.activity-title Picked activity name
+                    |                       
+                    .card-text
+                      // TODO
+                      // <a href="#" disabled class="btn btn-primary btn-block disabled">Add to Google Calendar</a>
+        // end right col
+      // end row
+    // end container
+  // end activity randomizer block
+block after-scripts
+  script(async="", defer="", src="https://apis.google.com/js/api.js", onload="this.onload=function(){};handleClientLoad()", onreadystatechange="if (this.readyState === 'complete') this.onload()")
+  //- script(src=htmlWebpackPlugin.files.js.activityrandomizer.entry)
+  //- |     

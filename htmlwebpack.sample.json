@@ -1,0 +1,43 @@
+{
+  "files": {
+    "publicPath": "",
+    "chunks": {
+      "activityrandomizer": {
+        "size": 344595,
+        "entry": "activityrandomizer.entry.js?5413214d9b2f3c183bb9",
+        "hash": "6f913d96cd1679ea191c",
+        "css": []
+      },
+      "common": {
+        "size": 1211342,
+        "entry": "common.entry.js?5413214d9b2f3c183bb9",
+        "hash": "5de9c0f68b4eda02d461",
+        "css": [
+          "styles/common.5413214d9b2f3c183bb9.css?5413214d9b2f3c183bb9"
+        ]
+      }
+    },
+    "js": [
+      "activityrandomizer.entry.js?5413214d9b2f3c183bb9",
+      "common.entry.js?5413214d9b2f3c183bb9"
+    ],
+    "css": [
+      "styles/common.5413214d9b2f3c183bb9.css?5413214d9b2f3c183bb9"
+    ]
+  },
+  "options": {
+    "template": "C:\\usbWebserver\\root\\www-activityrandomizer-com\\node_modules\\html-webpack-plugin\\lib\\loader.js!C:\\usbWebserver\\root\\www-activityrandomizer-com\\src\\views\\index.pug",
+    "filename": "index.html",
+    "hash": true,
+    "inject": false,
+    "compile": true,
+    "favicon": false,
+    "minify": false,
+    "cache": true,
+    "showErrors": true,
+    "chunks": "all",
+    "excludeChunks": [],
+    "title": "Webpack App",
+    "xhtml": false
+  }
+}

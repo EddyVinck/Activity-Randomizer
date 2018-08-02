@@ -1,10 +1,4 @@
 doctype html
-//
-  This default layout utilizes partial-blocks that can be replaced by inline-blocks.
-  See: http://handlebarsjs.com/partials.html and
-  https://cloudfour.com/thinks/the-hidden-power-of-handlebars-partials/
-  Usage: check page-boilerplate.hbs
-  --
 html(lang="en")
   head
     meta(charset="UTF-8")
@@ -17,20 +11,23 @@ html(lang="en")
     |   
     meta(description="Plan activities picked from your own Google Sheet.")
     |   
-    link(rel="stylesheet", href="htmlWebpackPlugin.files.chunks.common.css")
-    // ../partials/scripts/tagmanagerscript
-    // ../partials/favicon
+    if htmlWebpackPlugin
+      each css in htmlWebpackPlugin.files.css
+        link(href=css, rel='stylesheet')
+    else
+      p htmlWebpackPlugin is NOT available.
+    include ../partials/scripts/tagmanagerscript
+    include ../partials/favicon
   body
-    // ../partials/scripts/tagmanageriframe
-    // ../partials/modals/cookie-modal
-    // ../partials/modals/settings-modal
-    // before-nav
-    // Content such as page specific modals comes here
-    // before-nav
-    // ../partials/navbar
+    include ../partials/scripts/tagmanageriframe
+    include ../partials/modals/cookie-modal
+    include ../partials/modals/settings-modal
+    block before-nav
+      //- Content such as page specific modals comes here
+    include ../partials/navbar
     main
-      // body-block
-      // Body content goes here. --
+      //- debugging htmlWebpackPlugin:
+      //- pre=JSON.stringify(htmlWebpackPlugin, null, 2)
       block content
         h1
           | If you can see this text then you forgot the body-block partial-block in your template. 
@@ -38,9 +35,11 @@ html(lang="en")
           | See 
           a(href="http://handlebarsjs.com/partials.html") http://handlebarsjs.com/partials.html
           |  for more info.
-        // body-block
-    // ../partials/footer
-    script(src="htmlWebpackPlugin.files.chunks.common.entry")
-    // after-scripts
-    // scripts that come after the common entry script come here --
-    // after-scripts
+    include ../partials/footer
+    if htmlWebpackPlugin
+      each js in htmlWebpackPlugin.files.js
+        script(type='text/javascript', src=js)
+    else
+      p htmlWebpackPlugin is NOT available.
+    block after-scripts
+      // scripts that come after the common entry script come here --
