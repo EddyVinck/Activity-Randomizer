@@ -17,7 +17,7 @@ module.exports = (env, argv) => {
 
     output: {
       filename: '[name].entry.js',
-      path: path.resolve(__dirname, 'server'),
+      path: path.resolve(__dirname, 'server/public/js'),
     },
 
     module: {
@@ -47,7 +47,7 @@ module.exports = (env, argv) => {
               loader: 'file-loader',
               options: {
                 name: '[name].[ext]',
-                outputPath: 'assets/img/',
+                outputPath: 'public/assets/img/',
               },
             },
           ],
@@ -60,7 +60,7 @@ module.exports = (env, argv) => {
               loader: 'file-loader',
               options: {
                 name: '[name].[ext]',
-                outputPath: 'assets/fonts/',
+                outputPath: 'public/assets/fonts/',
               },
             },
           ],
@@ -69,7 +69,8 @@ module.exports = (env, argv) => {
           test: /\.(scss|css)$/,
           use: [
             {
-              loader: 'style-loader',
+              loader: MiniCssExtractPlugin.loader,
+              options: { publicPath: '../' },
             },
             {
               loader: 'css-loader',
@@ -91,7 +92,6 @@ module.exports = (env, argv) => {
         img: path.resolve(__dirname, 'src/assets/img'),
       },
     },
-    devtool: 'source-map', // 	CSS source not shown in devtools
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',
