@@ -17,7 +17,7 @@ module.exports = (env, argv) => {
     },
 
     output: {
-      filename: 'public/js/[name].entry.js',
+      filename: 'public/js/[name].js',
       path: path.resolve(__dirname, 'server'),
       publicPath: '/',
     },
@@ -63,6 +63,7 @@ module.exports = (env, argv) => {
               options: {
                 name: '[name].[ext]',
                 outputPath: 'public/assets/fonts/',
+                publicPath: '/static/assets/fonts/',
               },
             },
           ],
@@ -72,7 +73,7 @@ module.exports = (env, argv) => {
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
-              options: { publicPath: '../' },
+              options: { publicPath: '/static/css/' },
             },
             {
               loader: 'css-loader',
@@ -101,9 +102,13 @@ module.exports = (env, argv) => {
         $: 'jquery',
       }),
       new MiniCssExtractPlugin({
-        filename: 'public/css/[name].[hash].css',
-        chunkFilename: 'public/css/[id].[hash].css',
+        filename: 'public/css/[name].css',
+        chunkFilename: 'public/css/[id].css',
       }),
+      new CopyWebpackPlugin([
+        { context: './src/assets/img', from: `*.+(png|jpg)`, to: 'public/assets/img' },
+        { context: './src/assets/img', from: 'favicon/', to: 'public/assets/img/favicon' },
+      ]),
     ],
   };
 

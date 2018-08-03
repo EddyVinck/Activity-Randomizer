@@ -6,7 +6,7 @@
   "scripts": {
     "test": "test",
     "build": "webpack-dev-server --config webpack.config.js --mode development",
-    "build-server": "webpack --config webpack.server.js --mode development",
+    "build:server-assets": "webpack --config webpack.server.js --mode development",
     "prod": "webpack --config webpack.prod.js --mode production",
     "serve": "nodemon server/app.js -e js,pug"
   },
