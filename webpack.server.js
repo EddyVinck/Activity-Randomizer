@@ -104,7 +104,7 @@ module.exports = (env, argv) => {
         filename: 'public/css/[name].[hash].css',
         chunkFilename: 'public/css/[id].[hash].css',
       }),
-    ].concat(createPages()),
+    ],
   };
 
   return myWebpackConfig;
