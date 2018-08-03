@@ -26,12 +26,12 @@ const createPages = (mode) => [
     hash: true,
     inject: false,
   }),
-  // new HtmlWebpackPlugin({
-  //   filename: 'google-sheet-tutorial.html',
-  //   template: 'src/views/google-sheet-tutorial.hbs',
-  //   hash: true,
-  //   inject: false,
-  // }),
+  new HtmlWebpackPlugin({
+    filename: 'google-sheet-tutorial.html',
+    template: 'src/views/google-sheet-tutorial.pug',
+    hash: true,
+    inject: false,
+  }),
 ];
 
 module.exports = createPages;
