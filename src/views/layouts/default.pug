@@ -2,26 +2,24 @@ doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
-    |   
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    |   
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
-    |   
     title meta-title
-    |   
     meta(description="Plan activities picked from your own Google Sheet.")
-    |   
+
     if htmlWebpackPlugin
       each css in htmlWebpackPlugin.files.css
         link(href=css, rel='stylesheet')
     else
       p htmlWebpackPlugin is NOT available.
+
     include ../partials/scripts/tagmanagerscript
     include ../partials/favicon
   body
     include ../partials/scripts/tagmanageriframe
     include ../partials/modals/cookie-modal
     include ../partials/modals/settings-modal
+    
     block before-nav
       //- Content such as page specific modals comes here
     include ../partials/navbar
