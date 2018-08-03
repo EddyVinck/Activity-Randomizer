@@ -4,6 +4,7 @@ const path = require('path');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 const createPages = require('./webpack.functions');
 // const devMode = process.env.NODE_ENV !== 'production';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, argv) => {
@@ -16,8 +17,9 @@ module.exports = (env, argv) => {
     },
 
     output: {
-      filename: '[name].entry.js',
-      path: path.resolve(__dirname, 'server/public/js'),
+      filename: 'public/js/[name].entry.js',
+      path: path.resolve(__dirname, 'server'),
+      publicPath: '/',
     },
 
     module: {
@@ -81,8 +83,10 @@ module.exports = (env, argv) => {
           ],
         },
         {
-          test: /\.hbs$/,
-          loader: 'raw-loader',
+          test: /\.pug$/,
+          loader: 'pug-loader',
+
+          options: {},
         },
       ],
     },
@@ -96,8 +100,11 @@ module.exports = (env, argv) => {
       new webpack.ProvidePlugin({
         $: 'jquery',
       }),
-      new CopyWebpackPlugin([{ context: './src/views/', from: `**/*`, to: 'views' }]),
-    ],
+      new MiniCssExtractPlugin({
+        filename: 'public/css/[name].[hash].css',
+        chunkFilename: 'public/css/[id].[hash].css',
+      }),
+    ].concat(createPages()),
   };
 
   return myWebpackConfig;

@@ -25,12 +25,14 @@ const createPages = (mode) => [
     template: 'src/views/index.pug',
     hash: true,
     inject: false,
+    minify: false,
   }),
   new HtmlWebpackPlugin({
     filename: 'google-sheet-tutorial.html',
     template: 'src/views/google-sheet-tutorial.pug',
     hash: true,
     inject: false,
+    minify: false,
   }),
 ];
 
