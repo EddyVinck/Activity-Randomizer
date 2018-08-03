@@ -74,9 +74,15 @@ module.exports = (env, argv) => {
             },
             {
               loader: 'css-loader',
+              options: {
+                sourceMap: true,
+              },
             },
             {
               loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+              },
             },
           ],
         },
@@ -105,7 +111,7 @@ module.exports = (env, argv) => {
         img: path.resolve(__dirname, 'src/assets/img'),
       },
     },
-    devtool: 'source-map', // 	CSS source not shown in devtools
+    devtool: 'source-map',
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',
