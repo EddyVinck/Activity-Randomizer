@@ -1,0 +1,71 @@
+header.navigation
+  .main-nav
+    .container
+      .row
+        .branding.col-12.col-md-12.col-lg-4
+          a(href="/")
+            .logo
+              img(src=("/static/assets/img/activity-randomizer-logo.png"), alt="Activity Randomizer logo")     
+            .name-slogan
+              span.name Activity Randomizer
+              span.slogan Helps you pick something to do.
+          .hamburger-wrapper
+            a.hamburger(href="#hamburger-toggle")
+              span
+              span
+              span     
+            input(hamburger-toggle="", type="checkbox", name="", id="")
+            .bun
+              .burger
+        .col-12.col-md-12.col-lg-8(nav-contents="")
+          .navigation-mobile-flex-wrapper
+            .row
+              .col
+                .navigation-secondary
+                  nav.nav-items
+                    ul
+                      li
+                        a(href="") Example Sheet
+                      li
+                        a(data-toggle="modal", data-target="#viewSettings")
+                          i.icon-cog             
+                      li
+                        button#authorize-button.btn.btn-secondary(style="display: none;") Allow Google services                      
+                        button#signout-button.btn.btn-outline-secondary Sign out of Google services
+                      li
+                        a.btn.btn-info(href="") Get newsletters   
+                      //- li
+                      //-   .language-dropdown
+                      //-     .current-language
+                      //-       img(src="", alt="")
+                      //-     |                           
+                      //-     .language-options
+                      //-       ul
+                      //-         li [English]
+            .row
+              .col
+                .navigation-primary
+                  nav.nav-items
+                    ul
+                      li
+                        a(href="") Profile
+                      li.active
+                        a(href="") Pricing
+                      li
+                        a(href="") Features
+                      li
+                        a(href="") Help
+                      li
+                        a(href="") News
+                      li
+                        a.btn.btn-outline-primary(href="") Log in
+                      li
+                        a.btn.btn-primary(href="") Sign up
+  //- .under-nav
+  //-   .container
+  //-     .row
+  //-       .col
+  //-         .under-nav-message Check out the latest news!
+  //-         |           
+  //-         .tab-under
+  //-           a(href="") Friends

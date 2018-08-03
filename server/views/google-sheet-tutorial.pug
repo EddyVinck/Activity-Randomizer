@@ -1,0 +1,40 @@
+extends layouts/default.pug
+
+block content
+  .container
+    .row
+      .col-12.col-lg-8.col-xl-7.pt-2
+        include ./partials/breadcrumbs.pug
+        article.mb-5
+          h1 Google Sheet Tutorial
+          p
+            strong Thank you for trying Activity Randomizer!
+            br
+          p This tutorial will walk you through the process of setting up a Google Sheets document. After this tutorial you will be able to use Activity Randomizer with your Google Sheets.
+          p Activity Randomizer requires you to have a Google account. A Google Play Store or Gmail account is the same thing. You can create a free account here if you don’t have an account yet.
+          p Google Sheets is a lot like Microsoft Excel if you have ever used that. It is used to do all sorts of things, but Activity Randomizer simply uses Google Sheets as an easy way to make lists of activities.
+          p
+            strong Let's get started!
+          p
+            | Let’s start with copying the example template. Open 
+            a(href='https://docs.google.com/spreadsheets/d/1hqNuYTfAguDAXDWA9L14BarfqwVOWSGsd6IpuWNX2BE/edit#gid=0') this example template
+            | . Click on ‘file’ under the document title in the top left corner.
+          p
+            img(src=('/static/assets/img/tut-copy-document.jpg'), alt="Copy the document by clicking 'file' and then 'Make a copy'")
+          p Then click on ‘make a copy.’ You can change the location where your sheet is saved in Google Drive if you want to. Click the blue ‘Ok’ button and your document will now open in a new window.
+          p
+            img(src=('/static/assets/img/tut-copy-document-ok.jpg'), alt="Click 'ok' to save a copy of the example document")
+          p
+            | Congratulations! You now have your own personal copy of the Activity Randomizer Template! You can always find your sheets at 
+            a(href='https://docs.google.com/spreadsheets/') https://docs.google.com/spreadsheets/
+            |  or at 
+            a(href='https://drive.google.com') https://drive.google.com
+            | .
+          p
+            strong Adding your own activities & creating new sheets
+          p Now you can start adding your own activities to the different sheets. You can also create new sheets in your document by clicking the ‘+’ in the bottom left. Copy the column names from the example sheet when you create a new sheet.
+          p
+            img(src=('/static/assets/img/tut-add-sheet.jpg'), alt='Click the plus sign in the bottom left to add a sheet.')
+          p When you’re done you can copy the link to your document and paste it into the input field at step 1 on the homepage.
+          p
+            a(href='/') Click here to go to the homepage and start randomizing activities!

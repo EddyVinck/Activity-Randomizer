@@ -16,7 +16,7 @@ module.exports = (env, argv) => {
     },
 
     output: {
-      filename: '[name].entry.js',
+      filename: '[name].js',
       path: path.resolve(__dirname, 'dist'),
     },
 
