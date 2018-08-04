@@ -154,7 +154,7 @@ block content
   // end activity randomizer block
   
 block after-scripts
-  script(src="/static/js/activityrandomizer.js")
+  +js('activityrandomizer.js')
   script(async="", defer="", src="https://apis.google.com/js/api.js", onload="this.onload=function(){};handleClientLoad()", onreadystatechange="if (this.readyState === 'complete') this.onload()")
   //- script(src=htmlWebpackPlugin.files.js.activityrandomizer.entry)
   //- |     

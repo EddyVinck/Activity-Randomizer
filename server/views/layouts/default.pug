@@ -1,3 +1,5 @@
+include ../mixins/mixins.pug
+
 doctype html
 html(lang="en")
   head
@@ -11,7 +13,7 @@ html(lang="en")
       each css in htmlWebpackPlugin.files.css
         link(href=css, rel='stylesheet')
     else
-      link(rel="stylesheet", href="/static/css/common.css")
+      +css('common.css')
     include ../partials/scripts/tagmanagerscript
     include ../partials/favicon
   body
@@ -37,6 +39,6 @@ html(lang="en")
       each js in htmlWebpackPlugin.files.js
         script(type='text/javascript', src=js)
     else
-      script(type='text/javascript', src='/static/js/common.js')
+      +js('common.js')
     block after-scripts
       // scripts that come after the common entry script come here --

@@ -4,6 +4,7 @@ const path = require('path');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 const createPages = require('./webpack.functions');
 // const devMode = process.env.NODE_ENV !== 'production';
+const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -17,7 +18,7 @@ module.exports = (env, argv) => {
     },
 
     output: {
-      filename: 'public/js/[name].js',
+      filename: 'public/js/[name].[hash].js',
       path: path.resolve(__dirname, 'server'),
       publicPath: '/',
     },
@@ -83,12 +84,6 @@ module.exports = (env, argv) => {
             },
           ],
         },
-        {
-          test: /\.pug$/,
-          loader: 'pug-loader',
-
-          options: {},
-        },
       ],
     },
     resolve: {
@@ -102,13 +97,21 @@ module.exports = (env, argv) => {
         $: 'jquery',
       }),
       new MiniCssExtractPlugin({
-        filename: 'public/css/[name].css',
+        filename: 'public/css/[name].[hash].css',
         chunkFilename: 'public/css/[id].css',
       }),
       new CopyWebpackPlugin([
         { context: './src/assets/img', from: `*.+(png|jpg)`, to: 'public/assets/img' },
         { context: './src/assets/img', from: 'favicon/', to: 'public/assets/img/favicon' },
       ]),
+      new ManifestPlugin({
+        publicPath: '/static/',
+        map: (file) => {
+          // remove the public/ folder from the path, resulting in /static/folder/file
+          file.path = file.path.replace('public/', '');
+          return file;
+        },
+      }),
     ],
   };
 
