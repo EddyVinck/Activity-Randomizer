@@ -14,8 +14,6 @@ const getFileFromManifest = (file) => {
   return manifest[file];
 };
 
-console.log(getFileFromManifest('activityrandomizer.js'));
-
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, '/views'));
 
