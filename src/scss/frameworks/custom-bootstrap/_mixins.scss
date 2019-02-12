@@ -2,6 +2,11 @@
 //
 // Used in conjunction with global variables to enable certain theme features.
 
+@import "~bootstrap/scss/vendor/rfs";
+
+// Deprecate
+@import "~bootstrap/scss/mixins/deprecate";
+
 // Utilities
 @import "~bootstrap/scss/mixins/breakpoints";
 @import "~bootstrap/scss/mixins/hover";
